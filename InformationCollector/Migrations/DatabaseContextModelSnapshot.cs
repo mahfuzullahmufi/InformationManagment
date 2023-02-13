@@ -38,7 +38,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
 
                     b.HasData(
                         new
@@ -93,7 +93,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countrys");
+                    b.ToTable("Countrys", (string)null);
 
                     b.HasData(
                         new
@@ -147,7 +147,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Informations");
+                    b.ToTable("Informations", (string)null);
 
                     b.HasData(
                         new

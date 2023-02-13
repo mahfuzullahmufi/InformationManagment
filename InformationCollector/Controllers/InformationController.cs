@@ -23,6 +23,7 @@ namespace InformationCollector.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetInformations()
         {
             var infos = await _unitOfWork.Informations.GetAll();
@@ -32,7 +33,7 @@ namespace InformationCollector.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInformation(int id)
         {
-            var info = await _unitOfWork.Informations.Get(q => q.Id == id, new List<string> {  });
+            var info = await _unitOfWork.Informations.Get(q => q.Id == id, new List<string> { });
             return Ok(info);
         }
 
@@ -44,7 +45,7 @@ namespace InformationCollector.Controllers
                 _logger.LogError($"Invalid POST attempt in {nameof(CreateInformation)}");
                 return BadRequest(ModelState);
             }
-            
+
             await _unitOfWork.Informations.Insert(information);
             await _unitOfWork.Save();
 

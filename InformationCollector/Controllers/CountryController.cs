@@ -20,13 +20,14 @@ namespace InformationCollector.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("get-all-country")]
         public async Task<IActionResult> GetCountries()
         {
             var countries = await _unitOfWork.Countries.GetAll();
             return Ok(countries);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-country-by-id/{id}")]
         public async Task<IActionResult> GetCountry(int id)
         {
             var country = await _unitOfWork.Countries.Get(q => q.Id == id, new List<string> { });

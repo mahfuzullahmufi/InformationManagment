@@ -25,7 +25,7 @@ namespace InformationCollector.Data
                     Name = "Md. Mahfuzullah",
                     Country = "BD",
                     City = "Dhaka",
-                    Language = "C#, Javascipt, HTML, CSS",
+                    //Language = "C#, Javascipt, HTML, CSS",
                     ResumeUrl = "resume/Resume of Mahfuzullah.pdf",
                     DateOfBirth = "2000-11-01"
                 },
@@ -35,7 +35,7 @@ namespace InformationCollector.Data
                     Name = "Asif",
                     Country = "JS",
                     City = "Jessure",
-                    Language = "C#, Javascipt, HTML, CSS",
+                    //Language = "C#, Javascipt, HTML, CSS",
                     ResumeUrl = "resume/Asif Hasan Resume.pdf",
                     DateOfBirth = "1999-03-26"
                 },
@@ -45,7 +45,7 @@ namespace InformationCollector.Data
                     Name = "Md. Mahfuzullah",
                     Country = "BD",
                     City = "Dhaka",
-                    Language = "C#, Javascipt, HTML, CSS",
+                    //Language = "C#, Javascipt, HTML, CSS",
                     ResumeUrl = "resume/Resume of Mahfuzullah.pdf",
                     DateOfBirth = "2000-11-01"
                 }
