@@ -406,3 +406,4 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+/Frontend/.angular/cache/14.2.9
