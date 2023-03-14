@@ -16,7 +16,7 @@ namespace InformationCollector.Models
         //public string? FileNames { get; set; }
         //public string? FileTypes { get; set; }
         //public byte[]? FileList { get; set; }
-        public FileSaveDTO? Files { get; set; }
+        //public FileSaveDTO? Files { get; set; }
 
 
     }

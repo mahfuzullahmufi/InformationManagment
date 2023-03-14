@@ -12,10 +12,10 @@ export class GetInfoService {
   constructor(private http: HttpClient) { }
 
   getCountries(){
-    return this.http.get<ICountry>(this.baseUrl + 'Country');
+    return this.http.get<ICountry>(this.baseUrl + 'Country/get-all-country');
   }
 
   getCities(){
-    return this.http.get<ICity>(this.baseUrl + 'City')
+    return this.http.get<ICity>(this.baseUrl + 'City/get-all-cities')
   }
 }

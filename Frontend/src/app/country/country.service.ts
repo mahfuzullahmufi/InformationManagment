@@ -7,12 +7,12 @@ import { ICountry } from '../models/country';
 })
 export class CountryService {
 
-  baseUrl = 'https://localhost:7258/api/Country';
+  baseUrl = 'https://localhost:7258/api/Country/';
 
   constructor(private http: HttpClient) { }
   
   getCountries(){
-    return this.http.get<ICountry>(this.baseUrl);
+    return this.http.get<ICountry>(this.baseUrl+'get-all-country');
   }
 
   createCountry(data : any) {
@@ -24,10 +24,11 @@ export class CountryService {
   }
 
   getCountryById(id :any) {
-    return this.http.get(`${this.baseUrl}/${id}`);
+    return this.http.get(`${this.baseUrl}get-country-by-id/${id}`);
   }
 
   updateCountry(id : any, data : any) {
-    return this.http.put(`${this.baseUrl}/${id}`, data);
+    debugger;
+    return this.http.put(`${this.baseUrl}${id}`, data);
   }
 }

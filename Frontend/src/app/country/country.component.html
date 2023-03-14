@@ -12,7 +12,8 @@
           <input type="text" class="form-control" placeholder="Country Name" formControlName="countryName">
       </div>
       <div class="form-group">
-          <button class="form-control btn btn-danger btn-block btn-lg" type="submit">Create Country</button>
+          <button *ngIf="isSubmit" class="form-control btn btn-danger btn-block btn-lg" type="submit">Create Country</button>
+          <button *ngIf="isSubmit==false" class="form-control btn btn-danger btn-block btn-lg" (click)="updateCountry()" >Update Country</button>
       </div>
   </form>
 </div>
@@ -35,7 +36,7 @@
           <td>
             <button (click)="deleteCountry(item.id)" type="button" class="btn btn-danger btn-sm">Delete</button>
             &nbsp;
-            <a (click)="editCountry(item.id)"><button class="fa fa-edit p-2 m-2 bg-primary rounded text-white"></button></a>
+            <a (click)="editCountry(item)"><button class="fa fa-edit p-2 m-2 bg-primary rounded text-white"></button></a>
             <!-- <a routerLink="/editCountry/{{item.id}} "><i class="fa fa-edit p-2 m-2 bg-primary rounded text-white"></i></a> -->
           </td>
         </tr>
