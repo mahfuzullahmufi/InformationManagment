@@ -1,0 +1,8 @@
+.tData{
+    position: relative;
+}
+
+.fileInfo{
+    position: absolute;
+    transform: translate(-0%, -50%);
+}
