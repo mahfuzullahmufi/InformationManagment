@@ -4,7 +4,7 @@
 
 namespace InformationCollector.Migrations
 {
-    public partial class SeedingData : Migration
+    public partial class SeedInitialData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -12,7 +12,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./get-info.component.css']
 })
 export class GetInfoComponent implements OnInit {
-  form: FormGroup;
+  infoSaveform: FormGroup;
   countries: ICountry[];
   cities: ICity[];
   city: ICity[];
@@ -50,6 +50,10 @@ getCities(){
 onSelect(countries){
   // console.log(countrys.target.value);
   this.city = this.cities.filter(e => e.countryID == countries.target.value);
+}
+
+submitForm(){
+  
 }
 
 }

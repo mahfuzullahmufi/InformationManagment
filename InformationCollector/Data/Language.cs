@@ -1,9 +1,8 @@
-﻿namespace InformationCollector.Models
+﻿namespace InformationCollector.Data
 {
-    public class LanguageDTO
+    public class Language
     {
         public int Id { get; set; }
         public string? LanguageName { get; set; }
-
     }
 }
