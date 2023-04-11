@@ -10,6 +10,7 @@ namespace InformationCollector.Repository
         private IGenericRepository<Information> _informations;
         private IGenericRepository<Country> _countries;
         private IGenericRepository<City> _cities;
+        private IGenericRepository<Language> _languages;
 
         public UnitOfWork(DatabaseContext context)
         {
@@ -20,6 +21,7 @@ namespace InformationCollector.Repository
         public IGenericRepository<Country> Countries => _countries ??= new GenericRepository<Country>(_context);
 
         public IGenericRepository<City> Cities => _cities ??= new GenericRepository<City>(_context);
+        public IGenericRepository<Language> Languages => _languages ??= new GenericRepository<Language>(_context);
 
         public void Dispose()
         {

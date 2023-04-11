@@ -18,4 +18,8 @@ export class GetInfoService {
   getCities(){
     return this.http.get<ICity>(this.baseUrl + 'City/get-all-cities')
   }
+
+  getAllLanguage(){
+    return this.http.get(this.baseUrl + 'Language/get-all-Language')
+  }
 }
