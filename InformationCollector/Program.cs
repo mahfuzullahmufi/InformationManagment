@@ -27,13 +27,6 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader());
 });
 
-//builder.Services.AddCors(opt =>
-//{
-//    opt.AddPolicy("CorsPolicy", policy =>
-//    {
-//        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
-//    });
-//});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -46,9 +39,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-DateOnly date = DateOnly.Parse("2000-11-01");
-Console.WriteLine(date);
 
 app.UseHttpsRedirection();
 

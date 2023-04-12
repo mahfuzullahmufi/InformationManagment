@@ -13,49 +13,17 @@ namespace InformationCollector.Data
         public DbSet<Information> Informations { get; set; }
         public DbSet<Country> Countrys { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Language> Languages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<Information>().HasData(
-                new Information
-                {
-                    Id = 1,
-                    Name = "Md. Mahfuzullah",
-                    Country = "BD",
-                    City = "Dhaka",
-                    //Language = "C#, Javascipt, HTML, CSS",
-                    ResumeUrl = "resume/Resume of Mahfuzullah.pdf",
-                    DateOfBirth = "2000-11-01"
-                },
-                new Information
-                {
-                    Id = 2,
-                    Name = "Asif",
-                    Country = "JS",
-                    City = "Jessure",
-                    //Language = "C#, Javascipt, HTML, CSS",
-                    ResumeUrl = "resume/Asif Hasan Resume.pdf",
-                    DateOfBirth = "1999-03-26"
-                },
-                new Information
-                {
-                    Id = 3,
-                    Name = "Md. Mahfuzullah",
-                    Country = "BD",
-                    City = "Dhaka",
-                    //Language = "C#, Javascipt, HTML, CSS",
-                    ResumeUrl = "resume/Resume of Mahfuzullah.pdf",
-                    DateOfBirth = "2000-11-01"
-                }
-                );
             builder.Entity<Country>().HasData(
                 new Country
                 {
                     Id = 1,
                     CountryName = "Bangladesh",
-                    
+
                 },
                 new Country
                 {
@@ -105,6 +73,41 @@ namespace InformationCollector.Data
                     Id = 6,
                     CityName = "Dilhi",
                     CountryID = 3
+                }
+                );
+
+            builder.Entity<Language>().HasData(
+                new Language
+                {
+                    Id = 1,
+                    LanguageName = "C#",
+
+                },
+                new Language
+                {
+                    Id = 2,
+                    LanguageName = "Angualar"
+                },
+                new Language
+                {
+                    Id = 3,
+                    LanguageName = "TypeScript"
+                },
+                new Language
+                {
+                    Id = 4,
+                    LanguageName = "JavaScript",
+
+                },
+                new Language
+                {
+                    Id = 5,
+                    LanguageName = "C"
+                },
+                new Language
+                {
+                    Id = 6,
+                    LanguageName = "Java"
                 }
                 );
         }

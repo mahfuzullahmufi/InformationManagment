@@ -10,6 +10,7 @@ namespace InformationCollector.IRepository
         IGenericRepository<Information> Informations { get; }
         IGenericRepository<Country> Countries { get; }
         IGenericRepository<City> Cities { get; }
+        IGenericRepository<Language> Languages { get; }
 
         Task Save();
     }
