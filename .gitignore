@@ -407,3 +407,6 @@ testem.log
 .DS_Store
 Thumbs.db
 /Frontend/.angular/cache/14.2.9
+
+
+InformationCollector/appsettings.Development.json
