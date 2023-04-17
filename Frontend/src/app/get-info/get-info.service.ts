@@ -22,4 +22,8 @@ export class GetInfoService {
   getAllLanguage(){
     return this.http.get(this.baseUrl + 'Language/get-all-Language')
   }
+
+  infoSave(data:any){
+    return this.http.post(this.baseUrl+'Information',data);
+  }
 }

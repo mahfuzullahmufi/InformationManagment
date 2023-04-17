@@ -20,6 +20,12 @@ export class GetInfoComponent implements OnInit {
   city: ICity[];
   languageList: LanguageModel[];
 
+  file : {
+    fileBase64: any,
+    fileTypes: any,
+    fileNames: any
+  };
+
   constructor(
     private _getInfoService: GetInfoService, 
     private http : HttpClient,
@@ -97,8 +103,40 @@ changeHandler(item: any) {
 }
 
 submitForm(){
-  
+  console.log("this.saveInfoForm",this.formVal);
+  this._getInfoService.infoSave(this.formVal).subscribe(
+    (res: any) => {
+      console.log("res",res);
+      
+    },
+    (er) => {
+      //this._toasterService.danger(er.message);
+    }
+  );
 }
+
+onFileSelected(event) {
+  if (event.target.files) {
+    for (let i = 0; i < event.target.files.length; i++) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[i]);
+      reader.onload = (reader: any) => {
+        const result = reader.target.result;
+        const base64 = reader.target.result.split(",");
+
+        this.file = {
+          fileBase64: base64[1],
+          fileTypes: base64[0],
+          fileNames: event.target.files[i].name,
+        };
+        this.saveInfoForm.patchValue({
+          document: this.file
+        })        
+      };
+    }
+  }
+}
+
 
 creatForm(){
   this.saveInfoForm=this.fb.group({

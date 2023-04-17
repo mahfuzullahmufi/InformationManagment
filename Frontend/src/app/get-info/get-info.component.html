@@ -16,14 +16,14 @@
             class="custom-select my-1 mr-sm-2 p-2 rounded" formControlName="countryId"
              (change)="onSelect($event)">
             <option disabled selected>Select Country *</option>
-            <option *ngFor="let item of countries; let i = index" value=" {{item.id}} ">{{item.countryName}}</option>
+            <option *ngFor="let item of countries; let i = index" [value]="item.id">{{item.countryName}}</option>
           </select> 
     </div>
     <div class="row m-1">
       <select
             class="custom-select my-1 mr-sm-2 p-2 rounded" formControlName="cityId">
             <option disabled selected>Select City *</option>
-            <option *ngFor="let item of city; let i = index" value=" {{item.id}} ">{{item.cityName}}</option>
+            <option *ngFor="let item of city; let i = index" [value]="item.id">{{item.cityName}}</option>
           </select> 
     </div>
     <h6>Language Skils *</h6>
@@ -43,7 +43,8 @@
           <label class="custom-file-label" for="customFile">Upload Resume *</label>
         </div>
         <div class="col-4" >
-          <input type="file" class="custom-file-input col-sm align-self-end" id="customFile" formControlName="imageFile">
+          <!-- <input type="file" class="custom-file-input col-sm align-self-end" id="customFile" formControlName="imageFile"> -->
+          <input id="file-input" type="file" class="btn btn-secondary" (change)="onFileSelected($event)"/>
         </div>
       </div>
     </div>
