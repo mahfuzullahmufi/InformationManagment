@@ -39,7 +39,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
 
                     b.HasData(
                         new
@@ -94,7 +94,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countrys");
+                    b.ToTable("Countrys", (string)null);
 
                     b.HasData(
                         new
@@ -127,7 +127,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Languages");
+                    b.ToTable("Languages", (string)null);
 
                     b.HasData(
                         new
@@ -195,7 +195,7 @@ namespace InformationCollector.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Informations");
+                    b.ToTable("Informations", (string)null);
                 });
 
             modelBuilder.Entity("InformationCollector.Models.LanguageDTO", b =>
@@ -216,7 +216,7 @@ namespace InformationCollector.Migrations
 
                     b.HasIndex("InformationId");
 
-                    b.ToTable("LanguageDTO");
+                    b.ToTable("LanguageDTO", (string)null);
                 });
 
             modelBuilder.Entity("InformationCollector.Models.LanguageDTO", b =>

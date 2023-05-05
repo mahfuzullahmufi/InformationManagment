@@ -1,5 +1,6 @@
 using AutoMapper;
 using InformationCollector.Configuration;
+using InformationCollector.Context;
 using InformationCollector.Data;
 using InformationCollector.IRepository;
 using InformationCollector.Repository;
@@ -16,8 +17,11 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 });
 
+builder.Services.AddSingleton<DapperContext>();
+
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IInfoRepository, InfoRepository>();
 
 builder.Services.AddCors(options =>
 {

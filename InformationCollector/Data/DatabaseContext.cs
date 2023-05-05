@@ -14,6 +14,7 @@ namespace InformationCollector.Data
         public DbSet<Country> Countrys { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<LanguageData> LanguageData { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

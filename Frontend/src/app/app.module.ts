@@ -27,7 +27,7 @@ import { EditCountryComponent } from './edit-country/edit-country.component';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

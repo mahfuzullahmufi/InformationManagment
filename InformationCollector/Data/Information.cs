@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InformationCollector.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace InformationCollector.Models
 {
@@ -8,11 +9,10 @@ namespace InformationCollector.Models
         public string? Name { get; set; }
         public string? CountryId { get; set; }
         public string? CityId { get; set; }
-        public List<LanguageDTO>? LanguageList { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public FileSaveDTO? Document { get; set; }
-        //public byte[]? File { get; set; }
-        //public string? FileTypes { get; set; }
-        //public string? FileNames { get; set; }
+        public List<LanguageData>? LanguageList { get; set; }
+        public string? DateOfBirth { get; set; }
+        public string? FileNames { get; set; }
+        public string? FileTypes { get; set; }
+        public byte[]? FileBase64 { get; set; }
     }
 }

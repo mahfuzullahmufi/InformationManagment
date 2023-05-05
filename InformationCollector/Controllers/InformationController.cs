@@ -5,6 +5,7 @@ using InformationCollector.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace InformationCollector.Controllers
 {
@@ -16,11 +17,13 @@ namespace InformationCollector.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<InformationController> _logger;
-        public InformationController(IUnitOfWork unitOfWork, ILogger<InformationController> logger, IMapper mapper)
+        private readonly IInfoRepository _infoRepository;
+        public InformationController(IUnitOfWork unitOfWork, ILogger<InformationController> logger, IMapper mapper, IInfoRepository infoRepository)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
+            _infoRepository = infoRepository;
         }
 
         [HttpGet]
@@ -38,7 +41,7 @@ namespace InformationCollector.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateInformation([FromBody] Information information)
+        public async Task<IActionResult> CreateInformation([FromBody] CreateInfoDTO information)
         {
             if (!ModelState.IsValid)
             {
@@ -46,10 +49,22 @@ namespace InformationCollector.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _unitOfWork.Informations.Insert(information);
-            await _unitOfWork.Save();
+            //await _unitOfWork.Informations.Insert(information);
+            //await _unitOfWork.Save();
 
-            return CreatedAtRoute(new { id = information.Id }, information);
+            //return CreatedAtRoute(new { id = information.Id }, information);
+
+            try
+            {
+                var createInfo = await _infoRepository.CreateInfoAsync(information);
+                return Ok(createInfo);
+                
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return StatusCode(500, ex.Message);
+            }
 
         }
 

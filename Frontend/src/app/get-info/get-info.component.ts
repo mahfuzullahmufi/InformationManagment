@@ -18,7 +18,9 @@ export class GetInfoComponent implements OnInit {
   countries: ICountry[];
   cities: ICity[];
   city: ICity[];
-  languageList: LanguageModel[];
+  lstLanguage: LanguageModel[];
+  selectionLanguage:LanguageModel[]=[];
+  
 
   file : {
     fileBase64: any,
@@ -30,7 +32,6 @@ export class GetInfoComponent implements OnInit {
     private _getInfoService: GetInfoService, 
     private http : HttpClient,
     private fb:FormBuilder,
-    
     ) { }
 
   addCountry = new FormGroup ( {
@@ -41,7 +42,7 @@ export class GetInfoComponent implements OnInit {
     this.getCountries();
     this.getCities();
     this.getAllLanguages();
-    this.creatForm();
+    this.createForm();
 }
 
 getCountries(){
@@ -63,26 +64,25 @@ getCities(){
 
 getAllLanguages(){
   this._getInfoService.getAllLanguage().subscribe(res => {
-    this.languageList = res as LanguageModel[];
+    this.lstLanguage = res as LanguageModel[];
   });
 }
 
 onSelect(countries){
-  // console.log(countrys.target.value);
   this.city = this.cities.filter(e => e.countryID == countries.target.value);
 }
 
 getSelection(item:any) {
-  return this.languageList.findIndex(s => s.id === item.id) !== -1;
+  return this.selectionLanguage.findIndex(s => s.id === item.id) !== -1;
 }
 
 changeHandler(item: any) {
   const id = item.id;
-  const index = this.languageList.findIndex(u => u.id === id);
+  const index = this.selectionLanguage.findIndex(u => u.id === id);
   if (index === -1) {
-    this.languageList = [...this.languageList, item];
+    this.selectionLanguage = [...this.selectionLanguage, item];
     this.languageFormArray = this.fb.array([]);
-    this.languageList.forEach(p=>{
+    this.selectionLanguage.forEach(p=>{
       this.languageFormArray.push(new FormGroup({
         id: new FormControl(p.id),
         languageName: new FormControl(p.languageName),
@@ -90,10 +90,10 @@ changeHandler(item: any) {
     })
 
   } else {
-    this.languageList = this.languageList.filter(language => language.id !== item.id)
+    this.selectionLanguage = this.selectionLanguage.filter(language => language.id !== item.id)
     this.languageFormArray = this.fb.array([]);
 
-    this.languageList.forEach(p=>{
+    this.selectionLanguage.forEach(p=>{
       this.languageFormArray.push(new FormGroup({
         id: new FormControl(p.id),
         languageName: new FormControl(p.languageName),
@@ -103,11 +103,24 @@ changeHandler(item: any) {
 }
 
 submitForm(){
+  this.saveInfoForm.patchValue({
+    languageList: this.languageFormArray.value,
+  })
   console.log("this.saveInfoForm",this.formVal);
+  // if (this.saveInfoForm?.invalid) {
+  //   //this._toasterService.error("Please fill the all required fields", "Invalid submission");
+  //   console.log("Please fill the all required fields", "Invalid submission");
+    
+  //   return;
+  // }
+  
   this._getInfoService.infoSave(this.formVal).subscribe(
     (res: any) => {
-      console.log("res",res);
-      
+      if(res){
+        console.log("Success!");
+        
+        this.createForm();
+      }      
     },
     (er) => {
       //this._toasterService.danger(er.message);
@@ -138,16 +151,15 @@ onFileSelected(event) {
 }
 
 
-creatForm(){
+createForm(){
   this.saveInfoForm=this.fb.group({
    id:[0,[]],
    name:[,[Validators.required]],
    countryId:[,[]],
    cityId:[,[Validators.required]],
-   date:[,[Validators.required]],
+   dateOfBirth:[,[Validators.required]],
    languageList:[[],[Validators.required]],
    document:[,[]],
-   imageFile:[,[Validators.required]]
   })
 this.languageFormArray = this.fb.array([]);
 

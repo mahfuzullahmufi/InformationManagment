@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InformationCollector.Data;
 using InformationCollector.Models;
 
 namespace InformationCollector.Configuration
@@ -7,8 +8,7 @@ namespace InformationCollector.Configuration
     {
         public MapperInitializer()
         {
-            CreateMap<Information, InformationDTO>();
-            
+            CreateMap<Information, InformationDTO>();            
         }
     }
 }
