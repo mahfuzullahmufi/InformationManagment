@@ -24,6 +24,7 @@ export class GetInfoService {
   }
 
   infoSave(data:any){
+    debugger;
     return this.http.post(this.baseUrl+'Information',data);
   }
 }

@@ -5,6 +5,8 @@ import { ICountry } from '../models/country';
 import { GetInfoService } from './get-info.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LanguageModel } from '../models/language.model';
+import { InfoModel } from '../models/info.model';
+import { ShowInfoService } from '../show-info/show-info.service';
  
 
 @Component({
@@ -14,12 +16,13 @@ import { LanguageModel } from '../models/language.model';
 })
 export class GetInfoComponent implements OnInit {
   saveInfoForm: FormGroup;
-  public languageFormArray:FormArray;
+  languageFormArray:FormArray;
   countries: ICountry[];
   cities: ICity[];
   city: ICity[];
   lstLanguage: LanguageModel[];
   selectionLanguage:LanguageModel[]=[];
+  infodata: InfoModel[];
   
 
   file : {
@@ -30,8 +33,8 @@ export class GetInfoComponent implements OnInit {
 
   constructor(
     private _getInfoService: GetInfoService, 
-    private http : HttpClient,
-    private fb:FormBuilder,
+    private _fb:FormBuilder,
+    private _showInfoService : ShowInfoService
     ) { }
 
   addCountry = new FormGroup ( {
@@ -42,6 +45,7 @@ export class GetInfoComponent implements OnInit {
     this.getCountries();
     this.getCities();
     this.getAllLanguages();
+    this.getInformations();
     this.createForm();
 }
 
@@ -76,12 +80,20 @@ getSelection(item:any) {
   return this.selectionLanguage.findIndex(s => s.id === item.id) !== -1;
 }
 
+getInformations() {
+  this._showInfoService.getInfo().subscribe((response : any) => {
+    this.infodata = response;
+  }, error => {
+    console.log(error);
+  })
+}
+
 changeHandler(item: any) {
   const id = item.id;
   const index = this.selectionLanguage.findIndex(u => u.id === id);
   if (index === -1) {
     this.selectionLanguage = [...this.selectionLanguage, item];
-    this.languageFormArray = this.fb.array([]);
+    this.languageFormArray = this._fb.array([]);
     this.selectionLanguage.forEach(p=>{
       this.languageFormArray.push(new FormGroup({
         id: new FormControl(p.id),
@@ -91,7 +103,7 @@ changeHandler(item: any) {
 
   } else {
     this.selectionLanguage = this.selectionLanguage.filter(language => language.id !== item.id)
-    this.languageFormArray = this.fb.array([]);
+    this.languageFormArray = this._fb.array([]);
 
     this.selectionLanguage.forEach(p=>{
       this.languageFormArray.push(new FormGroup({
@@ -100,6 +112,11 @@ changeHandler(item: any) {
  }))
     })
   }
+}
+
+refresh(){
+  this.createForm();
+  this.getInformations();
 }
 
 submitForm(){
@@ -116,10 +133,12 @@ submitForm(){
   
   this._getInfoService.infoSave(this.formVal).subscribe(
     (res: any) => {
+      console.log(res);
+      
       if(res){
         console.log("Success!");
-        
-        this.createForm();
+        this.ngOnInit();
+        //this.refresh();
       }      
     },
     (er) => {
@@ -152,7 +171,7 @@ onFileSelected(event) {
 
 
 createForm(){
-  this.saveInfoForm=this.fb.group({
+  this.saveInfoForm=this._fb.group({
    id:[0,[]],
    name:[,[Validators.required]],
    countryId:[,[]],
@@ -161,7 +180,7 @@ createForm(){
    languageList:[[],[Validators.required]],
    document:[,[]],
   })
-this.languageFormArray = this.fb.array([]);
+this.languageFormArray = this._fb.array([]);
 
 }
 
@@ -173,6 +192,16 @@ get formVal(){
 }
 get detailsFormAllVal() {
   return this.languageFormArray.value;
+}
+
+fileDownload(id) {
+  let fullFIle =
+    this.infodata[id].fileTypes + "," + this.infodata[id].fileBase64;
+
+  let a = document.createElement("a");
+  a.download = `${this.infodata[id].fileNames}`;
+  a.href = fullFIle;
+  a.click();
 }
 
 }

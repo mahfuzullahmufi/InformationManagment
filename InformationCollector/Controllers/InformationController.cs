@@ -29,7 +29,8 @@ namespace InformationCollector.Controllers
         [HttpGet]
         public async Task<IActionResult> GetInformations()
         {
-            var infos = await _unitOfWork.Informations.GetAll();
+            //var infos = await _unitOfWork.Informations.GetAll();
+            var infos = await _infoRepository.GetAllInformation();
             return Ok(infos);
         }
 

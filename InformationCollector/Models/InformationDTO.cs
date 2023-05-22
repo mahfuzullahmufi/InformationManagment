@@ -20,7 +20,13 @@ namespace InformationCollector.Models
 
     public class InformationDTO : CreateInfoDTO
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
+        public string? CountryName { get; set; }
+        public string? CityName { get; set; }
+        public byte[]? FileBase64 { get; set; }
+        public string? FileTypes { get; set; }
+        public string? FileNames { get; set; }
+
 
     }
 }

@@ -27,9 +27,13 @@ namespace InformationCollector.Repository
                 parameters.Add("CountryId", model.CountryId, DbType.String);
                 parameters.Add("CityId", model.CityId, DbType.String);
                 parameters.Add("DateOfBirth", model.DateOfBirth, DbType.String);
-                parameters.Add("FileNames", model.Document.FileNames, DbType.String);
-                parameters.Add("FileTypes", model.Document.FileTypes, DbType.String);
-                parameters.Add("FileBase64", model.Document.FileBase64, DbType.Binary);
+                if(model.Document != null)
+                {
+                    parameters.Add("FileNames", model.Document.FileNames, DbType.String);
+                    parameters.Add("FileTypes", model.Document.FileTypes, DbType.String);
+                    parameters.Add("FileBase64", model.Document.FileBase64, DbType.Binary);
+                }
+                
 
                 using (var connection = _context.CreateConnection())
                 {
@@ -50,9 +54,27 @@ namespace InformationCollector.Repository
                 }
                 return isSuccess;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
+            }
+        }
+
+        public async Task<List<InformationDTO>> GetAllInformation()
+        {
+            try
+            {
+                var query = "Select I.Id,I.Name,I.FileNames,I.FileBase64,I.FileTypes,I.DateOfBirth,CO.CountryName,C.CityName " +
+                    "from Informations as I Left Join Cities as C on I.CityId = C.Id Left Join Countrys as CO on I.CountryId = CO.Id";
+                using (var connection = _context.CreateConnection())
+                {
+                    var informations = await connection.QueryAsync<InformationDTO>(query);
+                    return informations.ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
