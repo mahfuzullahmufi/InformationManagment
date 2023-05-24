@@ -10,7 +10,7 @@ import { ShowInfoService } from '../show-info/show-info.service';
  
 
 @Component({
-  selector: 'app-get-info',
+  selector: 'ngx-get-info',
   templateUrl: './get-info.component.html',
   styleUrls: ['./get-info.component.css']
 })

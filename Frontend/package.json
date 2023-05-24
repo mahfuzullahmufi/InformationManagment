@@ -19,7 +19,13 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
     "bootstrap": "^5.2.2",
+    "dayjs": "^1.11.7",
     "font-awesome": "^4.7.0",
+    "moment": "^2.29.4",
+    "ngx-extended-pdf-viewer": "^17.0.0-alpha.6",
+    "pdfmake": "^0.2.7",
+    "pdfmake-to-excel": "^1.1.57",
+    "pdfmake-unicode": "^0.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
