@@ -4,6 +4,7 @@ using InformationCollector.Models;
 using InformationCollector.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using System.Net;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -37,7 +38,8 @@ namespace InformationCollector.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInformation(int id)
         {
-            var info = await _unitOfWork.Informations.Get(q => q.Id == id, new List<string> { });
+            //var info = await _unitOfWork.Informations.Get(q => q.Id == id, new List<string> { });
+            var info = await _infoRepository.GetInformationById(id);
             return Ok(info);
         }
 
@@ -70,7 +72,7 @@ namespace InformationCollector.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateInformation(int id, Information info)
+        public async Task<IActionResult> UpdateInformation(int id, InformationDTO info)
         {
             if (!ModelState.IsValid || id < 1)
             {
@@ -79,18 +81,18 @@ namespace InformationCollector.Controllers
             }
 
 
-            info.Id = id;
-            if (info == null)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateInformation)}");
-                return BadRequest("Submitted data is invalid");
-            }
+            //info.Id = id;
+            //if (info == null)
+            //{
+            //    _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateInformation)}");
+            //    return BadRequest("Submitted data is invalid");
+            //}
 
-            _unitOfWork.Informations.Update(info);
-            await _unitOfWork.Save();
-
-            return Ok(info);
-
+            //_unitOfWork.Informations.Update(info);
+            //await _unitOfWork.Save();
+            //return Ok(info);
+            var updateInfo = await _infoRepository.UpdateInfoAsync(id,info);
+            return Ok(updateInfo);
         }
 
 
@@ -103,17 +105,19 @@ namespace InformationCollector.Controllers
                 return BadRequest();
             }
 
-            var info = await _unitOfWork.Informations.Get(q => q.Id == id);
-            if (info == null)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteInformation)}");
-                return BadRequest("Submitted data is invalid");
-            }
+            //var info = await _unitOfWork.Informations.Get(q => q.Id == id);
+            //if (info == null)
+            //{
+            //    _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteInformation)}");
+            //    return BadRequest("Submitted data is invalid");
+            //}
 
-            await _unitOfWork.Informations.Delete(id);
-            await _unitOfWork.Save();
+            //await _unitOfWork.Informations.Delete(id);
+            //await _unitOfWork.Save();
+            //return NoContent();
 
-            return NoContent();
+            var result = await _infoRepository.DeleteInformation(id);
+            return Ok(result);
 
         }
 

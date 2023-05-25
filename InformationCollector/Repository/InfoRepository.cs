@@ -60,6 +60,27 @@ namespace InformationCollector.Repository
             }
         }
 
+        public async Task<bool> DeleteInformation(int id)
+        {
+            try
+            {
+                bool result = false;
+                var query = $"DELETE FROM Informations WHERE Id = {id}";
+                var languageQuery = $"DELETE FROM LanguageData WHERE LanguageId = {id}";
+                using (var connection = _context.CreateConnection())
+                {
+                    var info = await connection.ExecuteAsync(query);
+                    var language = await connection.ExecuteAsync(languageQuery);
+                    if(info!=0 && language!=0) result = true;
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<InformationDTO>> GetAllInformation()
         {
             try
@@ -76,6 +97,64 @@ namespace InformationCollector.Repository
             {
                 throw;
             }
+        }
+
+        public async Task<InformationDTO> GetInformationById(int id)
+        {
+            try
+            {
+                InformationDTO information = new InformationDTO();
+                var query = $"Select * from Informations Where Id = {id}";
+                var languageQuery = $"Select * from LanguageData Where LanguageId = {id}";
+                using (var connection = _context.CreateConnection())
+                {
+                    information = await connection.QueryFirstOrDefaultAsync<InformationDTO>(query);
+                    var languageData = await connection.QueryAsync<LanguageDTO>(languageQuery);
+                    information.LanguageList = languageData.ToList();
+                    return information;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateInfoAsync(int id, InformationDTO info)
+        {
+            bool isSuccess = false;
+            var query = "UPDATE Informations SET Name = @Name, CountryId = @CountryId, CityId = @CityId, DateOfBirth = @DateOfBirth, FileNames = @FileNames, FileBase64 = @FileBase64, FileTypes = @FileTypes WHERE Id = @Id";
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            parameters.Add("Name", info.Name, DbType.String);
+            parameters.Add("CountryId", info.CountryId, DbType.String);
+            parameters.Add("CityId", info.CityId, DbType.String);
+            parameters.Add("DateOfBirth", info.DateOfBirth, DbType.String);
+            if (info.Document != null)
+            {
+                parameters.Add("FileNames", info.Document.FileNames, DbType.String);
+                parameters.Add("FileTypes", info.Document.FileTypes, DbType.String);
+                parameters.Add("FileBase64", info.Document.FileBase64, DbType.Binary);
+            }
+
+            using (var connection = _context.CreateConnection())
+            {
+                
+                var infoResult = await connection.ExecuteAsync(query, parameters);
+                var languageQuery = $"DELETE FROM LanguageData WHERE LanguageId = {id}";
+                var language = await connection.ExecuteAsync(languageQuery);
+                var queryL = "INSERT INTO LanguageData (InfoId, LanguageId, LanguageName) VALUES (@InfoId, @LanguageId, @LanguageName)";
+                foreach (var item in info.LanguageList)
+                {
+                    var languageData = new DynamicParameters();
+                    languageData.Add("InfoId", id, DbType.Int32);
+                    languageData.Add("LanguageId", item.Id, DbType.Int32);
+                    languageData.Add("LanguageName", item.LanguageName, DbType.String);
+                    var lanData = await connection.ExecuteAsync(queryL, languageData);
+                }
+                isSuccess = true;
+            }
+            return isSuccess;
         }
     }
 }
