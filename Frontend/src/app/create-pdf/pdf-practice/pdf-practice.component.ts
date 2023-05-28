@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExerciseService } from 'src/app/service/exercise.service';
+import { ExerciseService } from 'src/app/services/exercise.service';
 
 @Component({
   selector: 'app-pdf-practice',

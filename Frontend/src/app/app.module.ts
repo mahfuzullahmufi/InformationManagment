@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ShowInfoComponent } from './show-info/show-info.component';
 import { GetInfoComponent } from './get-info/get-info.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +14,6 @@ import { EditCountryComponent } from './edit-country/edit-country.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ShowInfoComponent,
     GetInfoComponent,
     CountryComponent,
     EditCountryComponent,

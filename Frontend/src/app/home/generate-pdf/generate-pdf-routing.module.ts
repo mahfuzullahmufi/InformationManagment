@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PdfPracticeComponent } from './pdf-practice/pdf-practice.component';
+import { PracticePdfComponent } from './practice-pdf/practice-pdf.component';
 
 const routes: Routes = [
-  {path:'practice-report',component:PdfPracticeComponent},
+  { path : 'practice-pdf',component:PracticePdfComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CreatePdfRoutingModule { }
+export class GeneratePdfRoutingModule { }

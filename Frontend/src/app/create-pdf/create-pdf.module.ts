@@ -9,6 +9,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { BrowserModule } from '@angular/platform-browser';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    BrowserModule
+    BrowserModule,
+    RouterModule
   ]
 })
 export class CreatePdfModule { }

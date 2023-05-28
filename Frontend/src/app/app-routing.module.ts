@@ -6,17 +6,21 @@ import { GetInfoComponent } from './get-info/get-info.component';
 import { PdfPracticeComponent } from './create-pdf/pdf-practice/pdf-practice.component';
 
 const routes: Routes = [
-  { path : 'editCountry/:id', 
-  component : EditCountryComponent 
-  },
-  {path:'practice-report-generate',component:PdfPracticeComponent},
+  { path : 'get-info', component : GetInfoComponent },
   {
-    path : 'country',
-    component : CountryComponent
+    path: "information",
+    loadChildren: () => import("./home/information/information.module").then((m) => m.InformationModule),
   },
+  { path : 'editCountry/:id', component : EditCountryComponent },
+  { path : 'country', component : CountryComponent },
+  { path : 'practice-report',component:PdfPracticeComponent },
+  // {
+  //   path: "report",
+  //   loadChildren: () => import("./create-pdf/create-pdf.module").then((m)=>m.CreatePdfModule)
+  // },
   {
-    path: "report",
-    loadChildren: () => import("./create-pdf/create-pdf.module").then((m)=>m.CreatePdfModule)
+    path: "pdf",
+    loadChildren: () => import("./home/generate-pdf/generate-pdf.module").then((m)=>m.GeneratePdfModule)
   },
 ];
 

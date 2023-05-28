@@ -6,11 +6,10 @@ import { GetInfoService } from './get-info.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LanguageModel } from '../models/language.model';
 import { InfoModel } from '../models/info.model';
-import { ShowInfoService } from '../show-info/show-info.service';
  
 
 @Component({
-  selector: 'ngx-get-info',
+  selector: 'app-get-info',
   templateUrl: './get-info.component.html',
   styleUrls: ['./get-info.component.css']
 })
@@ -34,7 +33,6 @@ export class GetInfoComponent implements OnInit {
   constructor(
     private _getInfoService: GetInfoService, 
     private _fb:FormBuilder,
-    private _showInfoService : ShowInfoService
     ) { }
 
   addCountry = new FormGroup ( {
@@ -45,7 +43,7 @@ export class GetInfoComponent implements OnInit {
     this.getCountries();
     this.getCities();
     this.getAllLanguages();
-    this.getInformations();
+    //this.getInformations();
     this.createForm();
 }
 
@@ -80,13 +78,13 @@ getSelection(item:any) {
   return this.selectionLanguage.findIndex(s => s.id === item.id) !== -1;
 }
 
-getInformations() {
-  this._showInfoService.getInfo().subscribe((response : any) => {
-    this.infodata = response;
-  }, error => {
-    console.log(error);
-  })
-}
+// getInformations() {
+//   this._showInfoService.getInfo().subscribe((response : any) => {
+//     this.infodata = response;
+//   }, error => {
+//     console.log(error);
+//   })
+// }
 
 changeHandler(item: any) {
   const id = item.id;
@@ -116,7 +114,7 @@ changeHandler(item: any) {
 
 refresh(){
   this.createForm();
-  this.getInformations();
+  //this.getInformations();
 }
 
 submitForm(){
