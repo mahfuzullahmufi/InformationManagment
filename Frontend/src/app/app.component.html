@@ -1,10 +1,23 @@
-<div class="container" style="background-color: rgb(247, 244, 244);">
-  <router-outlet></router-outlet>
-  
-  <!-- <app-get-info></app-get-info> -->
-  <!-- <app-show-info></app-show-info>
-  <h3 class="m-2">Country</h3>
-  <app-country></app-country> -->
-  <!-- <router-outlet></router-outlet> -->
-  <!-- <app-edit-country></app-edit-country> -->
-</div>
+<nb-layout>
+
+  <nb-layout-header fixed>
+  <!-- Insert header here -->
+  </nb-layout-header>
+
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+    <!-- <div class="container" style="background-color: rgb(247, 244, 244);"> -->
+      <!-- <app-get-info></app-get-info> -->
+      <!-- <app-show-info></app-show-info>
+      <h3 class="m-2">Country</h3>
+      <app-country></app-country> -->
+      <!-- <router-outlet></router-outlet> -->
+      <!-- <app-edit-country></app-edit-country> -->
+    <!-- </div>  -->
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+  <!-- Insert footer here -->
+  </nb-layout-footer>
+
+</nb-layout>

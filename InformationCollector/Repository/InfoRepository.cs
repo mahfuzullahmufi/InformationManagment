@@ -66,12 +66,12 @@ namespace InformationCollector.Repository
             {
                 bool result = false;
                 var query = $"DELETE FROM Informations WHERE Id = {id}";
-                var languageQuery = $"DELETE FROM LanguageData WHERE LanguageId = {id}";
+                var languageQuery = $"DELETE FROM LanguageData WHERE InfoId = {id}";
                 using (var connection = _context.CreateConnection())
                 {
                     var info = await connection.ExecuteAsync(query);
                     var language = await connection.ExecuteAsync(languageQuery);
-                    if(info!=0 && language!=0) result = true;
+                    if(info!=0) result = true;
                 }
                 return result;
             }
@@ -105,7 +105,7 @@ namespace InformationCollector.Repository
             {
                 InformationDTO information = new InformationDTO();
                 var query = $"Select * from Informations Where Id = {id}";
-                var languageQuery = $"Select * from LanguageData Where LanguageId = {id}";
+                var languageQuery = $"Select * from LanguageData Where InfoId = {id}";
                 using (var connection = _context.CreateConnection())
                 {
                     information = await connection.QueryFirstOrDefaultAsync<InformationDTO>(query);

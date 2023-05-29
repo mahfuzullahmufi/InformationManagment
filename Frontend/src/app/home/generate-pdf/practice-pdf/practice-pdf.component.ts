@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Examplepdfservice } from '../pdfmake Service/Example-pdf-service';
 
 @Component({
   selector: 'app-practice-pdf',
@@ -6,16 +7,33 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./practice-pdf.component.css']
 })
 export class PracticePdfComponent implements OnInit {
+  docData: any;
+  report: any;
+  documentTitle = "";
+  isTrue: boolean = false;
 
-  @Input() documentTitle: any
-
-  @Input() report: any=''
-  constructor() {
+  
+  constructor(
+    private _pdfService : Examplepdfservice
+  ) {
   }
 
   ngOnInit(): void {
-    console.log("report",this.report)
-    console.log("documentTitle",this.documentTitle)
+  
   }
+
+  generateReport() {
+    this.isTrue = true;
+    this.docData = this._pdfService.generatePdf();
+    this.docData.getBase64((base64Data) => {
+      this.report = base64Data;
+      this.documentTitle = this.docData.docDefinition.info.title;
+    });
+    console.log("this.docData",this.docData);
+    console.log("this.report",this.report);
+    console.log("this.documentTitle",this.documentTitle);
+    
+  
+}
 
 }
