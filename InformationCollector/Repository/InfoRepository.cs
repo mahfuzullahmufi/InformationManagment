@@ -4,6 +4,9 @@ using InformationCollector.Models;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Data;
+using InformationCollector.Data;
+using Microsoft.VisualBasic;
+using System.Text.RegularExpressions;
 
 namespace InformationCollector.Repository
 {
@@ -85,8 +88,9 @@ namespace InformationCollector.Repository
         {
             try
             {
-                var query = "Select I.Id,I.Name,I.FileNames,I.FileBase64,I.FileTypes,I.DateOfBirth,CO.CountryName,C.CityName " +
-                    "from Informations as I Left Join Cities as C on I.CityId = C.Id Left Join Countrys as CO on I.CountryId = CO.Id";
+                var query = "Select I.Id,I.Name,I.FileNames,I.FileBase64,I.FileTypes,I.DateOfBirth,CO.CountryName,C.CityName, STRING_AGG(LD.LanguageName, ',') AS Languages " +
+                    "from Informations as I Left Join Cities as C on I.CityId = C.Id Left Join Countrys as CO on I.CountryId = CO.Id LEFT JOIN LanguageData AS LD ON LD.InfoId = I.Id " +
+                    "GROUP BY I.Id,I.Name,I.FileNames,I.FileBase64,I.FileTypes,I.DateOfBirth,CO.CountryName,C.CityName ORDER BY I.NAME";
                 using (var connection = _context.CreateConnection())
                 {
                     var informations = await connection.QueryAsync<InformationDTO>(query);
@@ -105,7 +109,7 @@ namespace InformationCollector.Repository
             {
                 InformationDTO information = new InformationDTO();
                 var query = $"Select * from Informations Where Id = {id}";
-                var languageQuery = $"Select * from LanguageData Where InfoId = {id}";
+                var languageQuery = $"Select LD.LanguageId AS Id, LD.LanguageName from LanguageData AS LD Where InfoId = {id}";
                 using (var connection = _context.CreateConnection())
                 {
                     information = await connection.QueryFirstOrDefaultAsync<InformationDTO>(query);
@@ -123,25 +127,26 @@ namespace InformationCollector.Repository
         public async Task<bool> UpdateInfoAsync(int id, InformationDTO info)
         {
             bool isSuccess = false;
-            var query = "UPDATE Informations SET Name = @Name, CountryId = @CountryId, CityId = @CityId, DateOfBirth = @DateOfBirth, FileNames = @FileNames, FileBase64 = @FileBase64, FileTypes = @FileTypes WHERE Id = @Id";
+            var query = "UPDATE Informations SET Name = @Name, CountryId = @CountryId, CityId = @CityId, DateOfBirth = @DateOfBirth WHERE Id = @Id";
+            //FileNames = @FileNames, FileBase64 = @FileBase64, FileTypes = @FileTypes
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32);
             parameters.Add("Name", info.Name, DbType.String);
             parameters.Add("CountryId", info.CountryId, DbType.String);
             parameters.Add("CityId", info.CityId, DbType.String);
             parameters.Add("DateOfBirth", info.DateOfBirth, DbType.String);
-            if (info.Document != null)
-            {
-                parameters.Add("FileNames", info.Document.FileNames, DbType.String);
-                parameters.Add("FileTypes", info.Document.FileTypes, DbType.String);
-                parameters.Add("FileBase64", info.Document.FileBase64, DbType.Binary);
-            }
+            //if (info.Document != null)
+            //{
+            //    parameters.Add("FileNames", info.Document.FileNames, DbType.String);
+            //    parameters.Add("FileTypes", info.Document.FileTypes, DbType.String);
+            //    parameters.Add("FileBase64", info.Document.FileBase64, DbType.Binary);
+            //}
 
             using (var connection = _context.CreateConnection())
             {
                 
                 var infoResult = await connection.ExecuteAsync(query, parameters);
-                var languageQuery = $"DELETE FROM LanguageData WHERE LanguageId = {id}";
+                var languageQuery = $"DELETE FROM LanguageData WHERE InfoId = {id}";
                 var language = await connection.ExecuteAsync(languageQuery);
                 var queryL = "INSERT INTO LanguageData (InfoId, LanguageId, LanguageName) VALUES (@InfoId, @LanguageId, @LanguageName)";
                 foreach (var item in info.LanguageList)
@@ -152,7 +157,10 @@ namespace InformationCollector.Repository
                     languageData.Add("LanguageName", item.LanguageName, DbType.String);
                     var lanData = await connection.ExecuteAsync(queryL, languageData);
                 }
-                isSuccess = true;
+                if (infoResult != 0)
+                {
+                    isSuccess = true;
+                }
             }
             return isSuccess;
         }

@@ -1,268 +1,286 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NbToastrService } from '@nebular/theme';
-import dayjs from 'dayjs';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import { NbToastrService } from "@nebular/theme";
+import dayjs from "dayjs";
 import { DataTableDirective } from "angular-datatables";
 
-import { ICity } from 'src/app/models/city';
-import { ICountry } from 'src/app/models/country';
-import { InfoModel } from 'src/app/models/info.model';
-import { LanguageModel } from 'src/app/models/language.model';
-import { InformationService } from 'src/app/services/information.service';
-import { Subject } from 'rxjs';
+import { ICity } from "src/app/models/city";
+import { ICountry } from "src/app/models/country";
+import { InfoModel } from "src/app/models/info.model";
+import { LanguageModel } from "src/app/models/language.model";
+import { InformationService } from "src/app/services/information.service";
+import { Subject } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: 'ngx-collect-information',
-  templateUrl: './collect-information.component.html',
-  styleUrls: ['./collect-information.component.css']
+  selector: "ngx-collect-information",
+  templateUrl: "./collect-information.component.html",
+  styleUrls: ["./collect-information.component.css"],
 })
 export class CollectInformationComponent implements OnInit {
-
   saveInfoForm: FormGroup;
-  languageFormArray:FormArray;
+  languageFormArray: FormArray;
   countries: ICountry[];
   cities: ICity[];
   city: ICity[];
   lstLanguage: LanguageModel[];
-  selectionLanguage:LanguageModel[]=[];
-  infodata: InfoModel[];
-  file : {
-    fileBase64: any,
-    fileTypes: any,
-    fileNames: any
+  selectionLanguage: LanguageModel[] = [];
+  file: {
+    fileBase64: any;
+    fileTypes: any;
+    fileNames: any;
   };
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
-  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+
   personInfo: any;
+  information: InfoModel;
+  isEditable: boolean = false;
+  infoId: number;
 
   constructor(
-    private _fb:FormBuilder,
-    private _infoService: InformationService, 
+    private _fb: FormBuilder,
+    private _infoService: InformationService,
     private _toasterService: NbToastrService,
-    
-    ) { }
-
-  addCountry = new FormGroup ( {
-  countryName : new FormControl ('')
-  });
+    private _activateRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-    };
     this.getCountries();
     this.getCities();
     this.getAllLanguages();
-    this.getInformations();
     this.createForm();
-}
-
-getCountries(){
-  this._infoService.getCountries().subscribe((response : any) => {
-    this.countries = response;
-  }, error => {
-    console.log(error);
-  })
-}
-
-getCities(){
-  this._infoService.getCities().subscribe((response : any) => {
-    this.cities = response;
-  },
-   error => {
-    console.log(error);
-  });
-}
-
-getAllLanguages(){
-  this._infoService.getAllLanguage().subscribe(res => {
-    this.lstLanguage = res as LanguageModel[];
-  });
-}
-
-citySelect(event){
-  this.city = this.cities.filter(e => e.countryID == event);
-}
-
-getSelection(item:any) {
-  return this.selectionLanguage.findIndex(s => s.id === item.id) !== -1;
-}
-
-getInformations() {
-  this._infoService.getInfo().subscribe((response : any) => {
-    this.infodata = response;
-    this.dtTrigger.next(this.infodata);
-    //this.reRender;
-  }, error => {
-    console.log(error);
-  })
-}
-
-changeHandler(item: any) {
-  const id = item.id;
-  const index = this.selectionLanguage.findIndex(u => u.id === id);
-  if (index === -1) {
-    this.selectionLanguage = [...this.selectionLanguage, item];
-    this.languageFormArray = this._fb.array([]);
-    this.selectionLanguage.forEach(p=>{
-      this.languageFormArray.push(new FormGroup({
-        id: new FormControl(p.id),
-        languageName: new FormControl(p.languageName),
- }))
-    })
-
-  } else {
-    this.selectionLanguage = this.selectionLanguage.filter(language => language.id !== item.id)
-    this.languageFormArray = this._fb.array([]);
-
-    this.selectionLanguage.forEach(p=>{
-      this.languageFormArray.push(new FormGroup({
-        id: new FormControl(p.id),
-        languageName: new FormControl(p.languageName),
- }))
-    })
-  }
-}
-
-dateChange(event: any){  
-  let changesDate=dayjs(event).format("DD-MM-YYYY");
-  this.saveInfoForm.patchValue({
-    dateOfBirth:changesDate
-  })
-}
-
-// refresh(){
-//   this.createForm();
-//   //this.getInformations();
-// }
-
-submitForm(){
-  this.saveInfoForm.patchValue({
-    countryId: this.saveInfoForm.value.countryId.toString(),
-    cityId: this.saveInfoForm.value.cityId.toString(),
-    languageList: this.languageFormArray.value,
-  })
-  console.log("this.saveInfoForm",this.formVal);
-  if (this.saveInfoForm?.invalid) {
-    this._toasterService.danger("Please fill the all required fields", "Invalid submission");
-    return;
-  }
-  
-  this._infoService.infoSave(this.formVal).subscribe(
-    (res: any) => {
-      console.log(res);
-      
-      if(res){
-        this._toasterService.success("Information has been Saved ", "Success");
-        //this.ngOnInit();
-        this.reRender();
-      }      
-    },
-    (er) => {
-        this._toasterService.danger("Something went wrong!","Error");
-        this.reRender();
-    }
-  );
-}
-
-onFileSelected(event) {
-  if (event.target.files) {
-    for (let i = 0; i < event.target.files.length; i++) {
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[i]);
-      reader.onload = (reader: any) => {
-        const result = reader.target.result;
-        const base64 = reader.target.result.split(",");
-
-        this.file = {
-          fileBase64: base64[1],
-          fileTypes: base64[0],
-          fileNames: event.target.files[i].name,
-        };
-        this.saveInfoForm.patchValue({
-          document: this.file
-        })        
-      };
+    if (this._activateRoute.snapshot.paramMap.get("id") !== null) {
+      let id = this._activateRoute.snapshot.paramMap.get("id");
+      this.infoId = Number(id);
+      this.getInformationById(id);
+      this.isEditable = true;
     }
   }
-}
 
+  getCountries() {
+    this._infoService.getCountries().subscribe(
+      (response: any) => {
+        this.countries = response;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
-createForm(){
-  this.saveInfoForm=this._fb.group({
-   id:[0,[]],
-   name:[,[Validators.required]],
-   countryId:[,[Validators.required]],
-   cityId:[,[Validators.required]],
-   dateOfBirth:[,[]],
-   languageList:[[],[]],
-   document:[,[]],
-  })
-this.languageFormArray = this._fb.array([]);
-}
+  getCities() {
+    this._infoService.getCities().subscribe(
+      (response: any) => {
+        this.cities = response;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
-get formVal(){
-  return this.saveInfoForm?.value
-}
-  get f(){
-  return this.saveInfoForm?.controls
-}
-get detailsFormAllVal() {
-  return this.languageFormArray.value;
-}
+  getAllLanguages() {
+    this._infoService.getAllLanguage().subscribe((res) => {
+      this.lstLanguage = res as LanguageModel[];
+    });
+  }
 
-fileDownload(id) {
-  let fullFIle =
-    this.infodata[id].fileTypes + "," + this.infodata[id].fileBase64;
+  citySelect(event) {
+    this.city = this.cities.filter((e) => e.countryID == event);
+  }
 
-  let a = document.createElement("a");
-  a.download = `${this.infodata[id].fileNames}`;
-  a.href = fullFIle;
-  a.click();
-}
+  getSelection(item: any) {
+    return this.selectionLanguage.findIndex((s) => s.id === item.id) !== -1;
+  }
 
-getInformationById(id){
-  this._infoService.getInformationById(id).subscribe((res:any) => {
-    console.log(res);
+  changeHandler(item: any) {
+    const id = item.id;
+    const index = this.selectionLanguage.findIndex((u) => u.id === id);
+    if (index === -1) {
+      this.selectionLanguage = [...this.selectionLanguage, item];
+      this.languageFormArray = this._fb.array([]);
+      this.selectionLanguage.forEach((p) => {
+        this.languageFormArray.push(
+          new FormGroup({
+            id: new FormControl(p.id),
+            languageName: new FormControl(p.languageName),
+          })
+        );
+      });
+    } else {
+      this.selectionLanguage = this.selectionLanguage.filter(
+        (language) => language.id !== item.id
+      );
+      this.languageFormArray = this._fb.array([]);
+
+      this.selectionLanguage.forEach((p) => {
+        this.languageFormArray.push(
+          new FormGroup({
+            id: new FormControl(p.id),
+            languageName: new FormControl(p.languageName),
+          })
+        );
+      });
+    }
+  }
+
+  dateChange(event: any) {
+    let changesDate = dayjs(event).format("DD-MM-YYYY");
     this.saveInfoForm.patchValue({
-      name:res.name,
-      countryId:res.countryId,
-      cityId:res.cityId,
-      dateOfBirth:res.dateOfBirth
-    })
-    this.selectionLanguage = res.languageList
-    this.personInfo=res;
-  },
-  (er) => {
-      this._toasterService.danger("Something went wrong!","Error");
-  });
-}
+      dateOfBirth: changesDate,
+    });
+  }
 
-deletePersonInformation(id){
-   this._infoService.deleteInfo(id).subscribe((res:any) => {
-    if(res){
-      this._toasterService.danger("Information has been Deleted.", "Delete");
-      this.reRender();
-    } 
-  },
-  (er) => {
-      this._toasterService.danger("Something went wrong!","Error");
-  });
-   
-}
-
-reRender(): void {
-  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-    dtInstance.destroy();
+  refresh() {
     this.selectionLanguage = [];
     this.createForm();
-    this.getInformations();
-  });
-}
+  }
 
-ngOnDestroy(): void {
-  this.dtTrigger.unsubscribe();
-}
+  submitForm() {
+    this.saveInfoForm.patchValue({
+      id: this.infoId,
+      countryId: this.saveInfoForm.value.countryId.toString(),
+      cityId: this.saveInfoForm.value.cityId.toString(),
+      languageList: this.languageFormArray.value,
+    });
+    console.log("this.saveInfoForm", this.formVal);
+    if (this.saveInfoForm?.invalid) {
+      this._toasterService.danger(
+        "Please fill the all required fields",
+        "Invalid submission"
+      );
+      return;
+    }
 
+    this._infoService.infoSave(this.formVal).subscribe(
+      (res: any) => {
+        console.log(res);
+
+        if (res) {
+          this._toasterService.success(
+            "Information has been Saved ",
+            "Success"
+          );
+          this.refresh();
+        }
+      },
+      (er) => {
+        this._toasterService.danger("Something went wrong!", "Error");
+        this.refresh();
+      }
+    );
+  }
+
+  updateInfo() {
+    this.saveInfoForm.patchValue({
+      countryId: this.saveInfoForm.value.countryId.toString(),
+      cityId: this.saveInfoForm.value.cityId.toString(),
+      languageList: this.languageFormArray.value,
+    });
+    console.log("this.saveInfoForm", this.formVal);
+    if (this.saveInfoForm?.invalid) {
+      this._toasterService.danger(
+        "Please fill the all required fields",
+        "Invalid submission"
+      );
+      return;
+    }
+    this._infoService.infoUpdate(this.formVal, this.infoId).subscribe(
+      (res: any) => {
+        if (res) {
+          this._toasterService.success(
+            "Information has been Updated ",
+            "Success"
+          );
+          this.refresh();
+          this.isEditable = false;
+        }
+      },
+      (er) => {
+        this._toasterService.danger("Something went wrong!", "Error");
+        this.refresh();
+      }
+    );
+  }
+
+  onFileSelected(event) {
+    if (event.target.files) {
+      for (let i = 0; i < event.target.files.length; i++) {
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[i]);
+        reader.onload = (reader: any) => {
+          const result = reader.target.result;
+          const base64 = reader.target.result.split(",");
+
+          this.file = {
+            fileBase64: base64[1],
+            fileTypes: base64[0],
+            fileNames: event.target.files[i].name,
+          };
+          this.saveInfoForm.patchValue({
+            document: this.file,
+          });
+        };
+      }
+    }
+  }
+
+  createForm() {
+    this.saveInfoForm = this._fb.group({
+      id: [0, []],
+      name: [, [Validators.required]],
+      countryId: [, [Validators.required]],
+      cityId: [, [Validators.required]],
+      dateOfBirth: [, []],
+      languageList: [[], []],
+      document: [, []],
+    });
+    this.languageFormArray = this._fb.array([]);
+  }
+
+  get formVal() {
+    return this.saveInfoForm?.value;
+  }
+  get f() {
+    return this.saveInfoForm?.controls;
+  }
+  get detailsFormAllVal() {
+    return this.languageFormArray.value;
+  }
+
+  getInformationById(id) {
+    this._infoService.getInformationById(id).subscribe(
+      (res: any) => {
+        this.information = res as InfoModel;
+        console.log("info", this.information);
+        this.saveInfoForm.patchValue({
+          name: this.information.name,
+          countryId: Number(this.information.countryId),
+          dateOfBirth: this.information.dateOfBirth,
+          //document: this.information.fileNames
+        });
+        this.citySelect(this.information.countryId);
+        this.saveInfoForm.patchValue({
+          cityId: Number(this.information.cityId),
+        });
+        this.selectionLanguage = this.information.languageList;
+        this.selectionLanguage.forEach((p) => {
+          this.languageFormArray.push(
+            new FormGroup({
+              id: new FormControl(p.id),
+              languageName: new FormControl(p.languageName),
+            })
+          );
+        });
+      },
+      (er) => {
+        this._toasterService.danger("Something went wrong!", "Error");
+      }
+    );
+  }
 }

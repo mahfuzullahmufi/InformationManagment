@@ -7,11 +7,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbButtonModule, NbCardModule, NbDatepickerModule, NbIconModule, NbInputModule, NbSelectModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
+import { ViewInformationComponent } from './view-information/view-information.component';
 
 
 @NgModule({
   declarations: [
-    CollectInformationComponent
+    CollectInformationComponent,
+    ViewInformationComponent
   ],
   imports: [
     CommonModule,

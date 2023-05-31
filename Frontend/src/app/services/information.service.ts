@@ -26,7 +26,6 @@ export class InformationService {
   }
 
   infoSave(data:any){
-    debugger;
     return this.http.post(this.baseUrl+'Information',data);
   }
   
@@ -40,5 +39,10 @@ export class InformationService {
 
   getInformationById(id : any){    
     return this.http.get(`${this.baseUrl}Information/${id}`);
+  }
+
+  infoUpdate(data:any, id:number){
+    debugger;
+    return this.http.put(this.baseUrl+'Information/'+id,data);
   }
 }

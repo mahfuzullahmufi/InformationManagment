@@ -26,6 +26,7 @@ namespace InformationCollector.Models
         public byte[]? FileBase64 { get; set; }
         public string? FileTypes { get; set; }
         public string? FileNames { get; set; }
+        public string? Languages { get; set; }
 
 
     }
