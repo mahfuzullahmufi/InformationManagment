@@ -1,0 +1,29 @@
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+nb-layout-footer {
+    background: #05579e !important;
+ }
+
+#footer {
+    background: #05579e !important;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  #footer .copyright {
+    text-align: center;
+    color:#05579e;
+    padding-top: -10px !important;  
+  }
+  
+  #footer .credits {
+    /* padding-top: 5px; */
+    text-align: center;
+    font-size: 13px;
+    color:#05579e;
+  }
+  
+  #footer .credits a {
+    color: navy;
+  }

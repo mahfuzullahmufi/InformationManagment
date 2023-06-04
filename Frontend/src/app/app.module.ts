@@ -10,9 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CountryComponent } from './country/country.component';
 import { EditCountryComponent } from './edit-country/edit-country.component';
-import { NbThemeModule, NbLayoutModule, NbDatepickerModule, NbToastrModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbDatepickerModule, NbToastrModule, NbMenuModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
+import { TopNavbarComponent } from './dashboard/top-navbar/top-navbar.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { DataTablesModule } from 'angular-datatables';
     NbEvaIconsModule,
     NbDatepickerModule.forRoot(),
     NbToastrModule.forRoot(),
-    DataTablesModule
+    DataTablesModule,
+    DashboardModule,
+    NbMenuModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

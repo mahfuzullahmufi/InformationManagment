@@ -1,8 +1,9 @@
+<app-top-navbar></app-top-navbar>
 <nb-layout>
 
-  <nb-layout-header fixed>
-  <!-- Insert header here -->
-  </nb-layout-header>
+  <!-- <nb-layout-header fixed>
+  <app-top-navbar></app-top-navbar>
+  </nb-layout-header> -->
 
   <nb-layout-column>
     <router-outlet></router-outlet>
@@ -16,8 +17,17 @@
     <!-- </div>  -->
   </nb-layout-column>
 
-  <nb-layout-footer fixed>
-  <!-- Insert footer here -->
+  <nb-layout-footer id="footer" class="bg-primary" fixed>
+  <div class="container">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Info-Collector</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      Designed by <a href="https://mahfuzullahmufi.github.io/">Mufi</a>
+    </div>
+  </div>
+  
   </nb-layout-footer>
 
 </nb-layout>
+
