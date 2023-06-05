@@ -13,7 +13,7 @@ import { InformationService } from 'src/app/services/information.service';
 })
 export class ViewInformationComponent implements OnInit {
 
-  infodata: InfoModel[];
+  infodata: InfoModel[] = [];
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
@@ -34,17 +34,16 @@ export class ViewInformationComponent implements OnInit {
   getInformations() {
     this._infoService.getInfo().subscribe((response : any) => {
       this.infodata = response as InfoModel[];
+      console.log("infodata",this.infodata);
+      
       this.dtTrigger.next(this.infodata);
-      //this.reRender;
     }, error => {
       console.log(error);
     })
   }
 
   fileDownload(id) {
-    let fullFIle =
-      this.infodata[id].fileTypes + "," + this.infodata[id].fileBase64;
-  
+    let fullFIle = this.infodata[id].fileTypes + "," + this.infodata[id].fileBase64;
     let a = document.createElement("a");
     a.download = `${this.infodata[id].fileNames}`;
     a.href = fullFIle;
@@ -77,6 +76,10 @@ export class ViewInformationComponent implements OnInit {
  
  ngOnDestroy(): void {
    this.dtTrigger.unsubscribe();
+ }
+
+ generatePdf(){
+  
  }
 
 }
