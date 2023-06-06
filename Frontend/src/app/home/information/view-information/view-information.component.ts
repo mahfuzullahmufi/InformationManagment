@@ -4,6 +4,7 @@ import { NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { InfoModel } from 'src/app/models/info.model';
+import { AllInfoReportService } from 'src/app/services/PdfService/all-info-report.service';
 import { InformationService } from 'src/app/services/information.service';
 
 @Component({
@@ -17,11 +18,19 @@ export class ViewInformationComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+  docData: any;
+  documentTitle = "";
+  exportTypeList: any[] = [
+    { id: 1, name: ".pdf" },
+    { id: 2, name: ".xls" },
+  ];
+  report: any;
 
   constructor(
     private _infoService: InformationService, 
     private _toasterService: NbToastrService,
     private _router: Router,
+    private _pdfService: AllInfoReportService,
   ) { }
 
   ngOnInit(): void {
@@ -79,7 +88,11 @@ export class ViewInformationComponent implements OnInit {
  }
 
  generatePdf(){
-  
+  this.docData = this._pdfService.generatePdf(this.infodata);
+            this.docData.getBase64((base64Data) => {
+              this.report = base64Data;
+              this.documentTitle = this.docData.docDefinition.info.title;
+            });
  }
 
 }
