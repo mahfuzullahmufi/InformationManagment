@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
-import dayjs from 'dayjs';
-import { InfoModel } from 'src/app/models/info.model';
-import { setSubSetHeading } from 'src/assets/pdfMakeConfig/pdf-make-config';
-import { misAllMinistryCenterwiseSummaryDefaultStyle, misMinistrySummaryStyle, setNewConnectionStyle, setPdfMakeFonts } from './config/pdfMakeConfig';
 
+import pdfFonts from '../../../assets/pdf-make/vfs_fonts.js';
+// const pdfFontsX = require('pdfmake-unicode/dist/pdfmake-unicode.js');
+// (<any>pdfMake).vfs = pdfFontsX.pdfMake.vfs;
+import * as dayjs from 'dayjs'
+import {misAllMinistryCenterwiseSummaryDefaultStyle, misMinistrySummaryStyle, setHeading, setNewConnectionStyle, setPdfMakeFonts, setSubHeading, setSubSetHeading} from "./config/pdfMakeConfig";
+import { InfoModel } from 'src/app/models/info.model.js';
+
+
+
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 @Injectable({
   providedIn: 'root'
 })
-export class AllInfoReportService {
+export class Examplepdfservice {
 
-  defaultColur = "#0c0d0d"
-  
-  constructor() {}
+  constructor() { }
 
-  generatePdf(data: any) {
+  defaultColor = '';
+  generatePdf(data: InfoModel[]) {
     //@ts-ignore
-    pdfMake.fonts = setPdfMakeFonts;
-    //@ts-ignore
+    pdfMake.fonts= setPdfMakeFonts
+
     const documentDefinition = this.getDocumentDefinition(data);
-    //@ts-ignore
-    return pdfMake.createPdf(documentDefinition);
+    // @ts-ignore
+    return pdfMake.createPdf(documentDefinition).download('All Information Lists.pdf');
+    //return pdfMake.createPdf(documentDefinition);
   }
 
   private getDocumentDefinition(data: any) {
@@ -80,7 +83,7 @@ export class AllInfoReportService {
         body: [
           [
             {
-              // image: `logo.png`,
+              //image: `logo.png`,
               // width: 70,
               // height: 60,
               // color: 'gray',
@@ -187,12 +190,12 @@ export class AllInfoReportService {
   private UntraceableCustomerInfo(data: InfoModel[]) {
     let sl = 0;
     const phase = {
-      margin: [0, -40, 0, 0],
+      margin: [0, 40, 0, 0],
       table: {
         dontBreakRows: true,
         headerRows: 1,
         // heights: [10, 10.1, 10],
-        widths: [15, "*", 130, 60, 70, "auto", 70],
+        widths: [15, 70, 70, 70, 130, 70, 60],
         body: [
           [
             {
@@ -280,7 +283,7 @@ export class AllInfoReportService {
   }
 
   private setTableBorder() {
-    const d = this.defaultColur;
+    const d = this.defaultColor;
     return {
       hLineWidth: function (i, node) {
         return i === 0 || i === node.table.body.length ? 1 : 1;

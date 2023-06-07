@@ -4,6 +4,7 @@ import { NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { InfoModel } from 'src/app/models/info.model';
+import { Examplepdfservice } from 'src/app/services/PdfService/Example-pdf-service';
 import { AllInfoReportService } from 'src/app/services/PdfService/all-info-report.service';
 import { InformationService } from 'src/app/services/information.service';
 
@@ -25,12 +26,15 @@ export class ViewInformationComponent implements OnInit {
     { id: 2, name: ".xls" },
   ];
   report: any;
+  isTrue: boolean = false;
+  examplePdf: any;
 
   constructor(
     private _infoService: InformationService, 
     private _toasterService: NbToastrService,
     private _router: Router,
     private _pdfService: AllInfoReportService,
+    private _pdfServiceEx: Examplepdfservice,
   ) { }
 
   ngOnInit(): void {
@@ -88,11 +92,23 @@ export class ViewInformationComponent implements OnInit {
  }
 
  generatePdf(){
-  this.docData = this._pdfService.generatePdf(this.infodata);
-            this.docData.getBase64((base64Data) => {
-              this.report = base64Data;
-              this.documentTitle = this.docData.docDefinition.info.title;
-            });
+  this.examplePdf = this._pdfServiceEx.generatePdf(this.infodata);
+  // this.docData = this._pdfService.generatePdf(this.infodata);
+  //           this.docData.getBase64((base64Data) => {
+  //             this.report = base64Data;
+  //             this.documentTitle = this.docData.docDefinition.info.title;
+  //             this.isTrue = true;
+  //           });  
+    
+  // this.examplePdf.getBase64((base64Data) => {
+  //             this.report = base64Data;
+  //             this.documentTitle = this.examplePdf.docDefinition.info.title;
+  //             this.isTrue = true;
+  //           });    
+ }
+
+ onSearchAgain(){
+  this.isTrue = false;
  }
 
 }

@@ -8,6 +8,8 @@ import { NbButtonModule, NbCardModule, NbDatepickerModule, NbIconModule, NbInput
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
 import { ViewInformationComponent } from './view-information/view-information.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { PdfViewerComponent } from '../generate-pdf/pdf-viewer/pdf-viewer.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { ViewInformationComponent } from './view-information/view-information.co
     NbCardModule,
     NbButtonModule, 
     NbEvaIconsModule,
-    DataTablesModule
+    DataTablesModule,
+    NgxExtendedPdfViewerModule,
+    
   ]
 })
 export class InformationModule { }
