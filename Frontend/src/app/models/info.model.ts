@@ -9,6 +9,7 @@ export interface InfoModel {
     countryId?: string
     cityId?: string
     languageList?: any[]
+    languages?: string;
     dateOfBirth?: string
     document?: any
   }
