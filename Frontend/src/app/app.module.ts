@@ -5,16 +5,18 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GetInfoComponent } from './get-info/get-info.component';
+import { GetInfoComponent } from './excercise/get-info/get-info.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CountryComponent } from './country/country.component';
-import { EditCountryComponent } from './edit-country/edit-country.component';
+import { CountryComponent } from './excercise/country/country.component';
+import { EditCountryComponent } from './excercise/edit-country/edit-country.component';
 import { NbThemeModule, NbLayoutModule, NbDatepickerModule, NbToastrModule, NbMenuModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
 import { TopNavbarComponent } from './dashboard/top-navbar/top-navbar.component';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { ExamplePdfViewerComponent } from './excercise/example-pdf-viewer/example-pdf-viewer.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     GetInfoComponent,
     CountryComponent,
     EditCountryComponent,
+    ExamplePdfViewerComponent,
     
   ],
   imports: [
@@ -38,7 +41,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     NbToastrModule.forRoot(),
     DataTablesModule,
     DashboardModule,
-    NbMenuModule.forRoot()
+    NbMenuModule.forRoot(),
+    NgxExtendedPdfViewerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

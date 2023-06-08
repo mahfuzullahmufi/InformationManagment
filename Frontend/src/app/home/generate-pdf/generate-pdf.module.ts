@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { GeneratePdfRoutingModule } from './generate-pdf-routing.module';
 import { PracticePdfComponent } from './practice-pdf/practice-pdf.component';
-import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
   imports: [
     CommonModule,
     GeneratePdfRoutingModule,
-    NgxExtendedPdfViewerModule,
+    NgxExtendedPdfViewerModule
     
   ],
   exports:[

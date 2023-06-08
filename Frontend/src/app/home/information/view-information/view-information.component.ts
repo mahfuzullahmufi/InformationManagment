@@ -4,6 +4,7 @@ import { NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { InfoModel } from 'src/app/models/info.model';
+import { ExcelServiceService } from 'src/app/services/ExcelService/excel-service.service';
 import { Examplepdfservice } from 'src/app/services/PdfService/Example-pdf-service';
 import { AllInfoReportService } from 'src/app/services/PdfService/all-info-report.service';
 import { InformationService } from 'src/app/services/information.service';
@@ -35,6 +36,8 @@ export class ViewInformationComponent implements OnInit {
     private _router: Router,
     private _pdfService: AllInfoReportService,
     private _pdfServiceEx: Examplepdfservice,
+    private _excelService: ExcelServiceService,
+
   ) { }
 
   ngOnInit(): void {
@@ -91,20 +94,41 @@ export class ViewInformationComponent implements OnInit {
    this.dtTrigger.unsubscribe();
  }
 
+ onChangeExportType(event: any) {
+  if (event == 1) {
+    let date = new Date();
+    let fileName = "Information Lists";
+    const source = `data:application/pdf;base64,${this.report}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}.pdf`;
+    link.click();
+  } 
+  else if (event == 2 || event == 3) {
+    let date = new Date();
+    let excelObj = {
+      data: this.docData.docDefinition.content[1].table.body,
+    };
+
+    setTimeout(() => {
+      let exporter = this._excelService.downloadExcelFile(
+        excelObj,
+        "Information Lists");
+      //@ts-ignore
+      if (exporter.payload.data.length > 0) {
+      }
+    }, 800);
+
+  }
+}
+
  generatePdf(){
-  this.examplePdf = this._pdfServiceEx.generatePdf(this.infodata);
-  // this.docData = this._pdfService.generatePdf(this.infodata);
-  //           this.docData.getBase64((base64Data) => {
-  //             this.report = base64Data;
-  //             this.documentTitle = this.docData.docDefinition.info.title;
-  //             this.isTrue = true;
-  //           });  
-    
-  // this.examplePdf.getBase64((base64Data) => {
-  //             this.report = base64Data;
-  //             this.documentTitle = this.examplePdf.docDefinition.info.title;
-  //             this.isTrue = true;
-  //           });    
+  this.docData = this._pdfService.generatePdf(this.infodata);
+            this.docData.getBase64((base64Data) => {
+              this.report = base64Data;
+              this.documentTitle = this.docData.docDefinition.info.title;
+              this.isTrue = true;
+            });    
  }
 
  onSearchAgain(){

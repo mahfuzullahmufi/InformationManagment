@@ -25,8 +25,8 @@ export class Examplepdfservice {
 
     const documentDefinition = this.getDocumentDefinition(data);
     // @ts-ignore
-    return pdfMake.createPdf(documentDefinition).download('All Information Lists.pdf');
-    //return pdfMake.createPdf(documentDefinition);
+    //return pdfMake.createPdf(documentDefinition).download('All Information Lists.pdf');
+    return pdfMake.createPdf(documentDefinition);
   }
 
   private getDocumentDefinition(data: any) {

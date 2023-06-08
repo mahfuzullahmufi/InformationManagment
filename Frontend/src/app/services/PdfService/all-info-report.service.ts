@@ -187,12 +187,12 @@ export class AllInfoReportService {
   private UntraceableCustomerInfo(data: InfoModel[]) {
     let sl = 0;
     const phase = {
-      margin: [0, -40, 0, 0],
+      margin: [0, 40, 0, 0],
       table: {
         dontBreakRows: true,
         headerRows: 1,
         // heights: [10, 10.1, 10],
-        widths: [15, "*", 130, 60, 70, "auto", 70],
+        widths: [15, 70, 70, 70, 130, 70, 60],
         body: [
           [
             {

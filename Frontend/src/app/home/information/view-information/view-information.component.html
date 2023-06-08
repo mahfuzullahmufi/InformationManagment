@@ -65,29 +65,36 @@
 <div *ngIf="isTrue==true && report !=''">
   <div class="row" >
     <div class="col-sm-12 d-flex justify-content-end pb-2">
-      <!-- <nb-select placeholder="Export Type" (selectedChange)="onChangeExportType($event)">
+      <nb-select placeholder="Export Type" (selectedChange)="onChangeExportType($event)">
         <nb-option *ngFor="let exportType of exportTypeList" [value]="exportType.id">{{exportType.name}}</nb-option>
-      </nb-select> &nbsp; -->
+      </nb-select> &nbsp;
       <button type="submit" nbButton status="info" (click)="onSearchAgain()">Search Again </button>
     </div> 
   </div>
+  <ngx-extended-pdf-viewer 
+  [base64Src]="report" 
+  backgroundColor="#525659"
+  [height]="'100vh'"
+  > </ngx-extended-pdf-viewer>
+
   <!-- <ngx-pdf-viewer [report]="report" [documentTitle]="documentTitle"></ngx-pdf-viewer> -->
 
-  <ngx-extended-pdf-viewer
-[base64Src]="report"
-backgroundColor="#525659"
-[height]="'100vh'"
-[useBrowserLocale]="true"
-[handTool]="false"
-[showHandToolButton]="false"
-[showOpenFileButton]="false"
-[enablePrint]="true"
-[filenameForDownload]="documentTitle"
-[showBookmarkButton]="false"
-[enablePinchOnMobile]="true"
-[showSecondaryToolbarButton]="false"
-[showScrollingButton]="false">
-</ngx-extended-pdf-viewer>
+  <!-- <ngx-extended-pdf-viewer
+  [base64Src]="report"
+  backgroundColor="#525659"
+  [height]="'100vh'"
+  [useBrowserLocale]="true"
+  [handTool]="false"
+  [showHandToolButton]="false"
+  [showOpenFileButton]="false"
+  [enablePrint]="true"
+  [filenameForDownload]="documentTitle"
+  [showBookmarkButton]="false"
+  [showSecondaryToolbarButton]="false"
+  [showScrollingButton]="false"
+  [enablePinchOnMobile]="true">
+  </ngx-extended-pdf-viewer> -->
+
 
 </div>
 
@@ -109,3 +116,5 @@ backgroundColor="#525659"
 
 >
 </ngx-extended-pdf-viewer> -->
+
+

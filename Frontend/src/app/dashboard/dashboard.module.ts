@@ -5,12 +5,14 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { StartupPageComponent } from './startup-page/startup-page.component';
 import { TopNavbarComponent } from './top-navbar/top-navbar.component';
 import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbMenuModule, NbSelectModule } from '@nebular/theme';
+import { StartPageComponent } from './start-page/start-page.component';
 
 
 @NgModule({
   declarations: [
     StartupPageComponent,
-    TopNavbarComponent
+    TopNavbarComponent,
+    StartPageComponent
   ],
   imports: [
     CommonModule,

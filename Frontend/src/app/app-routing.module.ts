@@ -1,10 +1,13 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CountryComponent } from './country/country.component';
-import { EditCountryComponent } from './edit-country/edit-country.component';
-import { GetInfoComponent } from './get-info/get-info.component';
+import { CountryComponent } from './excercise/country/country.component';
+import { EditCountryComponent } from './excercise/edit-country/edit-country.component';
+import { GetInfoComponent } from './excercise/get-info/get-info.component';
+import { ExamplePdfViewerComponent } from './excercise/example-pdf-viewer/example-pdf-viewer.component';
+import { StartupPageComponent } from './dashboard/startup-page/startup-page.component';
 
 const routes: Routes = [
+  { path : '', component : StartupPageComponent },
   { path : 'get-info', component : GetInfoComponent },
   {
     path: "information",
@@ -12,10 +15,7 @@ const routes: Routes = [
   },
   { path : 'editCountry/:id', component : EditCountryComponent },
   { path : 'country', component : CountryComponent },
-  // {
-  //   path: "report",
-  //   loadChildren: () => import("./create-pdf/create-pdf.module").then((m)=>m.CreatePdfModule)
-  // },
+  { path : 'example-pdf-viewer', component : ExamplePdfViewerComponent },
   {
     path: "pdf",
     loadChildren: () => import("./home/generate-pdf/generate-pdf.module").then((m)=>m.GeneratePdfModule)
