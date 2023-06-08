@@ -21,8 +21,9 @@
                     <div class="form-group row">
                         <label for="customerType" class="label col-sm-4 col-form-label">Date Of Birth :</label>
                         <div class="col-sm-8">
-                            <input nbInput placeholder="Select Date" formControlName="dateOfBirth" fullWidth (ngModelChange)="dateChange($event)" [nbDatepicker]="formpicker">
-                            <nb-datepicker #formpicker ></nb-datepicker>
+                            <input nbInput placeholder="Select Date" formControlName="dateOfBirth" fullWidth
+                                (ngModelChange)="dateChange($event)" [nbDatepicker]="formpicker">
+                            <nb-datepicker #formpicker></nb-datepicker>
                         </div>
                     </div>
                 </div>
@@ -34,7 +35,7 @@
                                 class="text-danger">*</span> :</label>
                         <div class="col-sm-8">
                             <nb-select fullWidth placeholder="Please Select Country" formControlName="countryId"
-                            (selectedChange)="citySelect($event)">
+                                (selectedChange)="citySelect($event)">
                                 <nb-option *ngFor="let item of countries"
                                     [value]="item.id">{{item.countryName}}</nb-option>
                             </nb-select>
@@ -71,9 +72,41 @@
                     <div class="form-group row">
                         <label for="customerType" class="label col-sm-4 col-form-label">Upload Resume :</label>
                         <div class="col-sm-8">
-                            <input type="file" fullWidth class="btn btn-secondary" formControlName="document" (change)="onFileSelected($event)" />
+                            <input type="file" fullWidth class="btn btn-secondary" formControlName="document"
+                                (change)="onFileSelected($event)" />
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="this.showfilename != null">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-5 center-block m-1 p-1" style="text-align:center;">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Download</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="upload-name-style">
+                            <tr >
+                                <td>
+                                    <strong>{{this.showfilename}}</strong>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm" (click)="fileDownload()">
+                                        Download
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" (click)="fileDelete()">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </form>
@@ -86,8 +119,10 @@
                     <div class="col-sm-8">
                         <div class="row">
                             <div class="col-sm-4">
-                                <button *ngIf="this.isEditable == false"  nbButton fullWidth status="primary" (click)="submitForm()"> Save </button>
-                                <button *ngIf="this.isEditable" nbButton fullWidth status="primary" (click)="updateInfo()"> Update </button>
+                                <button *ngIf="this.isEditable == false" nbButton fullWidth status="primary"
+                                    (click)="submitForm()"> Save </button>
+                                <button *ngIf="this.isEditable" nbButton fullWidth status="primary"
+                                    (click)="updateInfo()"> Update </button>
                             </div>
                             <div class="col-sm-4">
                                 <button nbButton fullWidth status="danger" (click)="refresh()"> Refresh </button>
@@ -99,4 +134,3 @@
         </div>
     </nb-card-footer>
 </nb-card>
-

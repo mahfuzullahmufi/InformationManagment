@@ -41,6 +41,7 @@ export class CollectInformationComponent implements OnInit {
   information: InfoModel;
   isEditable: boolean = false;
   infoId: number;
+  showfilename: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -216,7 +217,7 @@ export class CollectInformationComponent implements OnInit {
         reader.onload = (reader: any) => {
           const result = reader.target.result;
           const base64 = reader.target.result.split(",");
-
+          this.showfilename=event.target.files[i].name;
           this.file = {
             fileBase64: base64[1],
             fileTypes: base64[0],
@@ -277,10 +278,28 @@ export class CollectInformationComponent implements OnInit {
             })
           );
         });
+        this.file.fileNames = this.information.fileNames;
+        this.file.fileBase64 = this.information.fileBase64;
+        this.file.fileTypes = this.information.fileTypes;
+        
       },
       (er) => {
         this._toasterService.danger("Something went wrong!", "Error");
       }
     );
+  }
+
+  fileDownload() {
+    let fullFIle = this.file.fileTypes + "," + this.file.fileBase64;
+    let a = document.createElement("a");
+    a.download = `${this.file.fileNames}`;
+    a.href = fullFIle;
+    a.click();
+  }
+  fileDelete() {
+    this.file.fileNames=null;
+    this.file.fileBase64=null;
+    this.file.fileTypes=null;
+    this.showfilename=null;
   }
 }
