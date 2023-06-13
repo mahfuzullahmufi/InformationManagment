@@ -51,8 +51,8 @@ export class CollectInformationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getCountries();
     this.getCities();
+    this.getCountries();
     this.getAllLanguages();
     this.createForm();
     if (this._activateRoute.snapshot.paramMap.get("id") !== null) {
@@ -92,7 +92,9 @@ export class CollectInformationComponent implements OnInit {
   }
 
   citySelect(event) {
-    this.city = this.cities.filter((e) => e.countryID == event);
+    if(this.cities != undefined){
+      this.city = this.cities.filter((e) => e.countryID == event);
+    }
   }
 
   getSelection(item: any) {
@@ -139,6 +141,7 @@ export class CollectInformationComponent implements OnInit {
 
   refresh() {
     this.selectionLanguage = [];
+    this.showfilename = null;
     this.createForm();
   }
 
@@ -263,9 +266,8 @@ export class CollectInformationComponent implements OnInit {
           name: this.information.name,
           countryId: Number(this.information.countryId),
           dateOfBirth: this.information.dateOfBirth,
-          //document: this.information.fileNames
         });
-        this.citySelect(this.information.countryId);
+        this.citySelect(this.saveInfoForm.value.countryId);
         this.saveInfoForm.patchValue({
           cityId: Number(this.information.cityId),
         });
@@ -278,10 +280,12 @@ export class CollectInformationComponent implements OnInit {
             })
           );
         });
-        this.file.fileNames = this.information.fileNames;
-        this.file.fileBase64 = this.information.fileBase64;
-        this.file.fileTypes = this.information.fileTypes;
-        
+        this.file = {
+          fileBase64: this.information.fileBase64,
+          fileTypes: this.information.fileTypes,
+          fileNames: this.information.fileNames,
+        };
+        this.showfilename = this.information.fileNames;
       },
       (er) => {
         this._toasterService.danger("Something went wrong!", "Error");

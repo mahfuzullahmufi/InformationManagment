@@ -127,7 +127,7 @@ namespace InformationCollector.Repository
         public async Task<bool> UpdateInfoAsync(int id, InformationDTO info)
         {
             bool isSuccess = false;
-            var query = "UPDATE Informations SET Name = @Name, CountryId = @CountryId, CityId = @CityId, DateOfBirth = @DateOfBirth WHERE Id = @Id";
+            var query = "UPDATE Informations SET Name = @Name, CountryId = @CountryId, CityId = @CityId, DateOfBirth = @DateOfBirth, FileBase64 = @FileBase64, FileTypes = @FileTypes, FileNames = @FileNames WHERE Id = @Id";
             //FileNames = @FileNames, FileBase64 = @FileBase64, FileTypes = @FileTypes
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32);
@@ -135,12 +135,12 @@ namespace InformationCollector.Repository
             parameters.Add("CountryId", info.CountryId, DbType.String);
             parameters.Add("CityId", info.CityId, DbType.String);
             parameters.Add("DateOfBirth", info.DateOfBirth, DbType.String);
-            //if (info.Document != null)
-            //{
-            //    parameters.Add("FileNames", info.Document.FileNames, DbType.String);
-            //    parameters.Add("FileTypes", info.Document.FileTypes, DbType.String);
-            //    parameters.Add("FileBase64", info.Document.FileBase64, DbType.Binary);
-            //}
+            if (info.Document != null)
+            {
+                parameters.Add("FileNames", info.Document.FileNames, DbType.String);
+                parameters.Add("FileTypes", info.Document.FileTypes, DbType.String);
+                parameters.Add("FileBase64", info.Document.FileBase64, DbType.Binary);
+            }
 
             using (var connection = _context.CreateConnection())
             {
