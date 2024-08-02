@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,33 +18,25 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ExamplePdfViewerComponent } from './excercise/example-pdf-viewer/example-pdf-viewer.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    GetInfoComponent,
-    CountryComponent,
-    EditCountryComponent,
-    ExamplePdfViewerComponent,
-    
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NbThemeModule.forRoot({ name: 'default' }),
-    NbLayoutModule,
-    NbEvaIconsModule,
-    NbDatepickerModule.forRoot(),
-    NbToastrModule.forRoot(),
-    DataTablesModule,
-    DashboardModule,
-    NbMenuModule.forRoot(),
-    NgxExtendedPdfViewerModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        GetInfoComponent,
+        CountryComponent,
+        EditCountryComponent,
+        ExamplePdfViewerComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NbThemeModule.forRoot({ name: 'default' }),
+        NbLayoutModule,
+        NbEvaIconsModule,
+        NbDatepickerModule.forRoot(),
+        NbToastrModule.forRoot(),
+        DataTablesModule,
+        DashboardModule,
+        NbMenuModule.forRoot(),
+        NgxExtendedPdfViewerModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
