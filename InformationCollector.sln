@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InformationCollector", "InformationCollector\InformationCollector.csproj", "{65FEF316-F1B7-4E83-9F6E-FCEC70AF8415}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InformationManagement.Api", "InformationCollector\InformationManagement.Api.csproj", "{65FEF316-F1B7-4E83-9F6E-FCEC70AF8415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InformationManagment.Core", "InformationManagment.Core\InformationManagment.Core.csproj", "{D36FBDBF-BAFB-413B-8274-9C11967DBA98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{65FEF316-F1B7-4E83-9F6E-FCEC70AF8415}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65FEF316-F1B7-4E83-9F6E-FCEC70AF8415}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65FEF316-F1B7-4E83-9F6E-FCEC70AF8415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
