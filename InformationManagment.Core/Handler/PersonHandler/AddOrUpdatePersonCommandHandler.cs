@@ -1,44 +1,39 @@
 ﻿using AutoMapper;
 using InformationManagment.Core.Command.PersonCommand;
+using InformationManagment.Core.DbContext;
 using InformationManagment.Core.Entities;
-using InformationManagment.Core.Models;
-using InformationManagment.Core.Repository.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationManagment.Core.Handler.PersonHandler
 {
     public class AddOrUpdatePersonCommandHandler : IRequestHandler<AddOrUpdatePersonCommand, int>
     {
-        private readonly IRepository<Person> _personRepository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly DatabaseContext _dbContext;
         private readonly IMapper _mapper;
 
-        public AddOrUpdatePersonCommandHandler(IRepository<Person> personRepository, IRepository<Language> languageRepository, IMapper mapper)
+        public AddOrUpdatePersonCommandHandler(DatabaseContext dbContext, IMapper mapper)
         {
-            _personRepository = personRepository;
-            _languageRepository = languageRepository;
+            _dbContext = dbContext;
             _mapper = mapper;
         }
 
         public async Task<int> Handle(AddOrUpdatePersonCommand request, CancellationToken cancellationToken)
         {
-            var person = _mapper.Map<PersonDto, Person>(request);
+            ArgumentNullException.ThrowIfNull(request);
 
-            if (person.PersonLanguages != null)
-            {
-                var languages = await _languageRepository.GetByIdsAsync(request.PersonLanguages.Select(l => l.Id));
-                foreach (var language in languages)
-                {
-                    person.PersonLanguages.Add(new PersonLanguage
-                    {
-                        Person = person,
-                        Language = language
-                    });
-                }
-            }
+            if (string.IsNullOrEmpty(request.Name))
+                throw new ArgumentException("Person name is required");
 
-            await _personRepository.Insert(person);
-            await _personRepository.SaveChangesAsync();
+            var person = _mapper.Map<Person>(request);
+            person.PersonLanguages ??= new List<PersonLanguage>();
+
+            if (person.Id > 0)
+                _dbContext.Update(person);
+            else
+                await _dbContext.Persons.AddAsync(person, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return person.Id;
         }

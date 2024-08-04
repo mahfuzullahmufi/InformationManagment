@@ -1,31 +1,33 @@
 ﻿using AutoMapper;
-using InformationManagment.Core.Entities;
+using InformationManagment.Core.DbContext;
 using InformationManagment.Core.Models;
 using InformationManagment.Core.Queries.PersonQueries;
-using InformationManagment.Core.Repository.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationManagment.Core.Handler.PersonHandler
 {
     public class GetPersonListQueryHandler : IRequestHandler<GetPersonListQuery, List<PersonDto>>
     {
-        private readonly IRepository<Person> _repository;
+        private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
 
-        public GetPersonListQueryHandler(IRepository<Person> repository, IMapper mapper)
+        public GetPersonListQueryHandler(DatabaseContext databaseContext, IMapper mapper)
         {
-            _repository = repository;
+            _databaseContext = databaseContext;
             _mapper = mapper;
         }
 
         public async Task<List<PersonDto>> Handle(GetPersonListQuery request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetAllAsync();
-            var personList = _mapper.Map<List<Person>, List<PersonDto>>(result.ToList());
-            if (personList is null)
-                return new();
+            var result = await _databaseContext.Persons
+                .Include(x => x.PersonLanguages)
+                .ThenInclude(x => x.Language)
+                .ToListAsync(cancellationToken);
 
-            return personList;
+            var personList = _mapper.Map<List<PersonDto>>(result);
+
+            return personList ?? new List<PersonDto>();
         }
     }
 }

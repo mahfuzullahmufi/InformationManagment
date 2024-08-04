@@ -1,30 +1,35 @@
 ﻿using AutoMapper;
-using InformationManagment.Core.Entities;
+using InformationManagment.Core.DbContext;
 using InformationManagment.Core.Models;
 using InformationManagment.Core.Queries.PersonQueries;
-using InformationManagment.Core.Repository.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationManagment.Core.Handler.PersonHandler
 {
     public class GetPersonByIdQueryHandler : IRequestHandler<GetPersonByIdQuery, PersonDto>
     {
-        private readonly IRepository<Person> _personRepository;
+        private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
 
-        public GetPersonByIdQueryHandler(IRepository<Person> personRepository, IMapper mapper)
+        public GetPersonByIdQueryHandler(DatabaseContext databaseContext, IMapper mapper)
         {
-            _personRepository = personRepository;
+            _databaseContext = databaseContext;
             _mapper = mapper;
         }
 
         public async Task<PersonDto> Handle(GetPersonByIdQuery request, CancellationToken cancellationToken)
         {
-            var person = await _personRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
-            if (person is null)
-                return new();
+            var person = await _databaseContext.Persons
+                .Include(i => i.PersonLanguages)
+                .ThenInclude(t => t.Language)
+                .SingleOrDefaultAsync(x => x.Id == request.Id)
+                .ConfigureAwait(false);
 
-            return _mapper.Map<Person, PersonDto>(person);
+            if (person is null)
+                return new PersonDto();
+
+            return _mapper.Map<PersonDto>(person);
         }
     }
 }

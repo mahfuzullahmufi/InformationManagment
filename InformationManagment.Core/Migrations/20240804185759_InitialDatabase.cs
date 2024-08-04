@@ -67,7 +67,7 @@ namespace InformationManagment.Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CountryName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,7 +80,7 @@ namespace InformationManagment.Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LanguageName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,7 +93,7 @@ namespace InformationManagment.Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: true),
                     CityId = table.Column<int>(type: "int", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -218,7 +218,7 @@ namespace InformationManagment.Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CityName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -258,7 +258,7 @@ namespace InformationManagment.Core.Migrations
 
             migrationBuilder.InsertData(
                 table: "Countrys",
-                columns: new[] { "Id", "CountryName" },
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
                     { 1, "Bangladesh" },
@@ -268,7 +268,7 @@ namespace InformationManagment.Core.Migrations
 
             migrationBuilder.InsertData(
                 table: "Languages",
-                columns: new[] { "Id", "LanguageName" },
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
                     { 1, "C#" },
@@ -281,15 +281,15 @@ namespace InformationManagment.Core.Migrations
 
             migrationBuilder.InsertData(
                 table: "Cities",
-                columns: new[] { "Id", "CityName", "CountryId" },
+                columns: new[] { "Id", "CountryId", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Dhaka", 1 },
-                    { 2, "Mymensingh", 1 },
-                    { 3, "Sylhet", 1 },
-                    { 4, "Jeddah", 2 },
-                    { 5, "Mumbai", 3 },
-                    { 6, "Delhi", 3 }
+                    { 1, 1, "Dhaka" },
+                    { 2, 1, "Mymensingh" },
+                    { 3, 1, "Sylhet" },
+                    { 4, 2, "Jeddah" },
+                    { 5, 3, "Mumbai" },
+                    { 6, 3, "Delhi" }
                 });
 
             migrationBuilder.CreateIndex(

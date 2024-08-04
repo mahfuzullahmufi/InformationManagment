@@ -124,11 +124,12 @@ namespace InformationManagment.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CityName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -140,38 +141,38 @@ namespace InformationManagment.Core.Migrations
                         new
                         {
                             Id = 1,
-                            CityName = "Dhaka",
-                            CountryId = 1
+                            CountryId = 1,
+                            Name = "Dhaka"
                         },
                         new
                         {
                             Id = 2,
-                            CityName = "Mymensingh",
-                            CountryId = 1
+                            CountryId = 1,
+                            Name = "Mymensingh"
                         },
                         new
                         {
                             Id = 3,
-                            CityName = "Sylhet",
-                            CountryId = 1
+                            CountryId = 1,
+                            Name = "Sylhet"
                         },
                         new
                         {
                             Id = 4,
-                            CityName = "Jeddah",
-                            CountryId = 2
+                            CountryId = 2,
+                            Name = "Jeddah"
                         },
                         new
                         {
                             Id = 5,
-                            CityName = "Mumbai",
-                            CountryId = 3
+                            CountryId = 3,
+                            Name = "Mumbai"
                         },
                         new
                         {
                             Id = 6,
-                            CityName = "Delhi",
-                            CountryId = 3
+                            CountryId = 3,
+                            Name = "Delhi"
                         });
                 });
 
@@ -183,7 +184,8 @@ namespace InformationManagment.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CountryName")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -194,17 +196,17 @@ namespace InformationManagment.Core.Migrations
                         new
                         {
                             Id = 1,
-                            CountryName = "Bangladesh"
+                            Name = "Bangladesh"
                         },
                         new
                         {
                             Id = 2,
-                            CountryName = "Saudi Arabia"
+                            Name = "Saudi Arabia"
                         },
                         new
                         {
                             Id = 3,
-                            CountryName = "India"
+                            Name = "India"
                         });
                 });
 
@@ -216,7 +218,8 @@ namespace InformationManagment.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("LanguageName")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -227,32 +230,32 @@ namespace InformationManagment.Core.Migrations
                         new
                         {
                             Id = 1,
-                            LanguageName = "C#"
+                            Name = "C#"
                         },
                         new
                         {
                             Id = 2,
-                            LanguageName = "Angular"
+                            Name = "Angular"
                         },
                         new
                         {
                             Id = 3,
-                            LanguageName = "TypeScript"
+                            Name = "TypeScript"
                         },
                         new
                         {
                             Id = 4,
-                            LanguageName = "JavaScript"
+                            Name = "JavaScript"
                         },
                         new
                         {
                             Id = 5,
-                            LanguageName = "C"
+                            Name = "C"
                         },
                         new
                         {
                             Id = 6,
-                            LanguageName = "Java"
+                            Name = "Java"
                         });
                 });
 
@@ -283,6 +286,7 @@ namespace InformationManagment.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

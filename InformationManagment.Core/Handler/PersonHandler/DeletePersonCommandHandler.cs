@@ -1,29 +1,34 @@
 ﻿using InformationManagment.Core.Command.PersonCommand;
-using InformationManagment.Core.Entities;
-using InformationManagment.Core.Repository.Interfaces;
+using InformationManagment.Core.DbContext;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationManagment.Core.Handler.PersonHandler
 {
     public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, bool>
     {
-        private readonly IRepository<Person> _repository;
+        private readonly DatabaseContext _context;
 
-        public DeletePersonCommandHandler(IRepository<Person> repository)
+        public DeletePersonCommandHandler(DatabaseContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
         public async Task<bool> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetByIdAsync(request.Id);
-            if (result is null)
-                return false;
+            var person = await _context.Persons
+                .Include(p => p.PersonLanguages)
+                .FirstOrDefaultAsync(p => p.Id == request.Id);
 
-            await _repository.Delete(request.Id);
-            await _repository.SaveChangesAsync();
+            if (person is not null)
+            {
+                _context.PersonLanguages.RemoveRange(person.PersonLanguages);
+                _context.Persons.Remove(person);
+                await _context.SaveChangesAsync();
+                return true;
+            }
 
-            return true;
+            return false;
         }
     }
 }

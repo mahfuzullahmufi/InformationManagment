@@ -1,9 +1,12 @@
-﻿namespace InformationManagment.Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InformationManagment.Core.Entities
 {
     public class Country
     {
         public int Id { get; set; }
-        public string? CountryName { get; set; }
+        [Required]
+        public string Name { get; set; }
         public List<City> Cities { get; set; }
     }
 }

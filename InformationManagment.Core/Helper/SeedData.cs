@@ -18,17 +18,17 @@ namespace InformationManagment.Core.Helper
                 new Country
                 {
                     Id = 1,
-                    CountryName = "Bangladesh",
+                    Name = "Bangladesh",
                 },
                 new Country
                 {
                     Id = 2,
-                    CountryName = "Saudi Arabia"
+                    Name = "Saudi Arabia"
                 },
                 new Country
                 {
                     Id = 3,
-                    CountryName = "India"
+                    Name = "India"
                 }
             );
         }
@@ -39,37 +39,37 @@ namespace InformationManagment.Core.Helper
                 new City
                 {
                     Id = 1,
-                    CityName = "Dhaka",
+                    Name = "Dhaka",
                     CountryId = 1,
                 },
                 new City
                 {
                     Id = 2,
-                    CityName = "Mymensingh",
+                    Name = "Mymensingh",
                     CountryId = 1
                 },
                 new City
                 {
                     Id = 3,
-                    CityName = "Sylhet",
+                    Name = "Sylhet",
                     CountryId = 1
                 },
                 new City
                 {
                     Id = 4,
-                    CityName = "Jeddah",
+                    Name = "Jeddah",
                     CountryId = 2
                 },
                 new City
                 {
                     Id = 5,
-                    CityName = "Mumbai",
+                    Name = "Mumbai",
                     CountryId = 3
                 },
                 new City
                 {
                     Id = 6,
-                    CityName = "Delhi",
+                    Name = "Delhi",
                     CountryId = 3
                 }
             );
@@ -81,32 +81,32 @@ namespace InformationManagment.Core.Helper
                 new Language
                 {
                     Id = 1,
-                    LanguageName = "C#",
+                    Name = "C#",
                 },
                 new Language
                 {
                     Id = 2,
-                    LanguageName = "Angular"
+                    Name = "Angular"
                 },
                 new Language
                 {
                     Id = 3,
-                    LanguageName = "TypeScript"
+                    Name = "TypeScript"
                 },
                 new Language
                 {
                     Id = 4,
-                    LanguageName = "JavaScript",
+                    Name = "JavaScript",
                 },
                 new Language
                 {
                     Id = 5,
-                    LanguageName = "C"
+                    Name = "C"
                 },
                 new Language
                 {
                     Id = 6,
-                    LanguageName = "Java"
+                    Name = "Java"
                 }
             );
         }
