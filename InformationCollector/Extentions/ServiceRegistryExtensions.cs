@@ -21,7 +21,7 @@ namespace InformationManagment.Api.Extentions
         {
             service.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GaariWeb_Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "InformationManagementApi", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
