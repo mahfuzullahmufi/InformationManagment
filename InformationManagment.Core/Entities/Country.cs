@@ -8,5 +8,6 @@ namespace InformationManagment.Core.Entities
         [Required]
         public string Name { get; set; }
         public List<City> Cities { get; set; }
+        public List<Person> Persons { get; set; }
     }
 }

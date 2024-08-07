@@ -1,17 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace InformationManagment.Core.Entities
+﻿namespace InformationManagment.Core.Models
 {
-    public class Person
+    public class PersonSaveDto
     {
         public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int CountryId { get; set; }
-        public Country Country { get; set; }
         public int CityId { get; set; }
-        public City City { get; set; }
-        public List<PersonLanguage> PersonLanguages { get; set; }
+        public List<LanguageDto>? PersonLanguages { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? FileNames { get; set; }
         public string? FileTypes { get; set; }

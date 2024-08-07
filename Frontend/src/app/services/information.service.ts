@@ -14,35 +14,31 @@ export class InformationService {
   constructor(private http: HttpClient) { }
 
   getCountries(){
-    return this.http.get<ICountry>(this.baseUrl + 'Country/get-all-country');
+    return this.http.get<ICountry>(this.baseUrl + 'Country/get-country-list');
   }
 
   getCities(){
-    return this.http.get<ICity>(this.baseUrl + 'City/get-all-cities')
+    return this.http.get<ICity>(this.baseUrl + 'City/get-city-list')
   }
 
   getAllLanguage(){
-    return this.http.get(this.baseUrl + 'Language/get-all-Language')
+    return this.http.get(this.baseUrl + 'Language/get-language-list')
   }
 
   infoSave(data:any){
-    return this.http.post(this.baseUrl+'Information',data);
+    debugger;
+    return this.http.post(this.baseUrl+'Person/add-or-update-person',data);
   }
   
   getInfo() {
-    return this.http.get<IInfoData>(this.baseUrl + 'Information');
+    return this.http.get<IInfoData>(this.baseUrl + 'Person/get-person-list');
   };
 
   deleteInfo(id : any){    
-    return this.http.delete(`${this.baseUrl}Information/${id}`);
+    return this.http.delete(`${this.baseUrl}Person/delete-person?Id=${id}`);
   }
 
   getInformationById(id : any){    
-    return this.http.get(`${this.baseUrl}Information/${id}`);
-  }
-
-  infoUpdate(data:any, id:number){
-    debugger;
-    return this.http.put(this.baseUrl+'Information/'+id,data);
+    return this.http.get(`${this.baseUrl}Person/get-person-by-id?Id=${id}`);
   }
 }

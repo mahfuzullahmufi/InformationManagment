@@ -37,7 +37,7 @@
                             <nb-select fullWidth placeholder="Please Select Country" formControlName="countryId"
                                 (selectedChange)="citySelect($event)">
                                 <nb-option *ngFor="let item of countries"
-                                    [value]="item.id">{{item.countryName}}</nb-option>
+                                    [value]="item.id">{{item.name}}</nb-option>
                             </nb-select>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                 class="text-danger">*</span> :</label>
                         <div class="col-sm-8">
                             <nb-select fullWidth placeholder="Please Select City" formControlName="cityId">
-                                <nb-option *ngFor="let item of city" [value]="item.id">{{item.cityName}}</nb-option>
+                                <nb-option *ngFor="let item of city" [value]="item.id">{{item.name}}</nb-option>
                             </nb-select>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="col-sm-8">
                             <li *ngFor="let item of lstLanguage">
                                 <input type="checkbox" [checked]="getSelection(item)" (change)="changeHandler(item)">
-                                <label>{{item.languageName}}</label>
+                                <label>{{item.name}}</label>
                             </li>
                         </div>
                     </div>

@@ -11,5 +11,6 @@ namespace InformationManagment.Core.Entities
         [ForeignKey(nameof(Country))]
         public int CountryId { get; set; }
         public Country Country { get; set; }
+        public List<Person> Persons { get; set; }
     }
 }

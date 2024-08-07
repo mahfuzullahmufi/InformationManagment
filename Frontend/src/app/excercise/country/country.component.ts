@@ -60,7 +60,7 @@ export class CountryComponent implements OnInit {
     this.isSubmit = false;
     this.addCountry.patchValue({
       id: item.id,
-      countryName: item.countryName
+      countryName: item.name
     })
     // //this.router.navigate(['/editCountry', id])
     // this.countryService.getCountryById(id).subscribe((res) => {

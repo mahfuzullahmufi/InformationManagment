@@ -71,7 +71,7 @@ getAllLanguages(){
 }
 
 onSelect(countries){
-  this.city = this.cities.filter(e => e.countryID == countries.target.value);
+  this.city = this.cities.filter(e => e.countryId == countries.target.value);
 }
 
 getSelection(item:any) {
@@ -95,7 +95,7 @@ changeHandler(item: any) {
     this.selectionLanguage.forEach(p=>{
       this.languageFormArray.push(new FormGroup({
         id: new FormControl(p.id),
-        languageName: new FormControl(p.languageName),
+        languageName: new FormControl(p.name),
  }))
     })
 
@@ -106,7 +106,7 @@ changeHandler(item: any) {
     this.selectionLanguage.forEach(p=>{
       this.languageFormArray.push(new FormGroup({
         id: new FormControl(p.id),
-        languageName: new FormControl(p.languageName),
+        languageName: new FormControl(p.name),
  }))
     })
   }

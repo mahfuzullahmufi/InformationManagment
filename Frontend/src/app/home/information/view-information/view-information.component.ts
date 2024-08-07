@@ -4,6 +4,7 @@ import { NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { InfoModel } from 'src/app/models/info.model';
+import { LanguageModel } from 'src/app/models/language.model';
 import { ExcelServiceService } from 'src/app/services/ExcelService/excel-service.service';
 import { Examplepdfservice } from 'src/app/services/PdfService/Example-pdf-service';
 import { AllInfoReportService } from 'src/app/services/PdfService/all-info-report.service';
@@ -56,6 +57,10 @@ export class ViewInformationComponent implements OnInit {
     }, error => {
       console.log(error);
     })
+  }
+
+  public formatLanguages(languages: LanguageModel[]): string {
+    return languages.map(lang => lang.name).join(', ');
   }
 
   fileDownload(id) {

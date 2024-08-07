@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InformationManagment.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabase : Migration
+    public partial class IntialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -85,25 +85,6 @@ namespace InformationManagment.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Languages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Persons",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: true),
-                    CityId = table.Column<int>(type: "int", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FileNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FileTypes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FileBase64 = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Persons", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,7 +210,38 @@ namespace InformationManagment.Core.Migrations
                         column: x => x.CountryId,
                         principalTable: "Countrys",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Persons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FileNames = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileTypes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileBase64 = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Persons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Persons_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Persons_Countrys_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countrys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -340,6 +352,16 @@ namespace InformationManagment.Core.Migrations
                 name: "IX_PersonLanguages_LanguageId",
                 table: "PersonLanguages",
                 column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Persons_CityId",
+                table: "Persons",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Persons_CountryId",
+                table: "Persons",
+                column: "CountryId");
         }
 
         /// <inheritdoc />
@@ -361,9 +383,6 @@ namespace InformationManagment.Core.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cities");
-
-            migrationBuilder.DropTable(
                 name: "PersonLanguages");
 
             migrationBuilder.DropTable(
@@ -373,13 +392,16 @@ namespace InformationManagment.Core.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Countrys");
-
-            migrationBuilder.DropTable(
                 name: "Languages");
 
             migrationBuilder.DropTable(
                 name: "Persons");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
+
+            migrationBuilder.DropTable(
+                name: "Countrys");
         }
     }
 }

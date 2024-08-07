@@ -3,7 +3,7 @@ using MediatR;
 
 namespace InformationManagment.Core.Command.PersonCommand
 {
-    public class AddOrUpdatePersonCommand : PersonDto, IRequest<int>
+    public class AddOrUpdatePersonCommand : PersonSaveDto, IRequest<int>
     {
     }
 }

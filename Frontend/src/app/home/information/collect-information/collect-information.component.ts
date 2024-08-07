@@ -40,7 +40,7 @@ export class CollectInformationComponent implements OnInit {
   personInfo: any;
   information: InfoModel;
   isEditable: boolean = false;
-  infoId: number;
+  infoId: number = 0;
   showfilename: string;
 
   constructor(
@@ -93,7 +93,7 @@ export class CollectInformationComponent implements OnInit {
 
   citySelect(event) {
     if(this.cities != undefined){
-      this.city = this.cities.filter((e) => e.countryID == event);
+      this.city = this.cities.filter((e) => e.countryId == event);
     }
   }
 
@@ -111,7 +111,7 @@ export class CollectInformationComponent implements OnInit {
         this.languageFormArray.push(
           new FormGroup({
             id: new FormControl(p.id),
-            languageName: new FormControl(p.languageName),
+            name: new FormControl(p.name),
           })
         );
       });
@@ -125,7 +125,7 @@ export class CollectInformationComponent implements OnInit {
         this.languageFormArray.push(
           new FormGroup({
             id: new FormControl(p.id),
-            languageName: new FormControl(p.languageName),
+            name: new FormControl(p.name),
           })
         );
       });
@@ -133,7 +133,10 @@ export class CollectInformationComponent implements OnInit {
   }
 
   dateChange(event: any) {
-    let changesDate = dayjs(event).format("DD-MM-YYYY");
+    let date = dayjs(event);
+    
+    let changesDate = date.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    console.log("event", date);
     this.saveInfoForm.patchValue({
       dateOfBirth: changesDate,
     });
@@ -150,7 +153,7 @@ export class CollectInformationComponent implements OnInit {
       id: this.infoId,
       countryId: this.saveInfoForm.value.countryId.toString(),
       cityId: this.saveInfoForm.value.cityId.toString(),
-      languageList: this.languageFormArray.value,
+      personLanguages: this.languageFormArray.value,
     });
     console.log("this.saveInfoForm", this.formVal);
     if (this.saveInfoForm?.invalid) {
@@ -163,7 +166,7 @@ export class CollectInformationComponent implements OnInit {
 
     this._infoService.infoSave(this.formVal).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log("Response",res);
 
         if (res) {
           this._toasterService.success(
@@ -175,7 +178,8 @@ export class CollectInformationComponent implements OnInit {
       },
       (er) => {
         this._toasterService.danger("Something went wrong!", "Error");
-        this.refresh();
+        console.log("error",er);
+        // this.refresh();
       }
     );
   }
@@ -184,7 +188,7 @@ export class CollectInformationComponent implements OnInit {
     this.saveInfoForm.patchValue({
       countryId: this.saveInfoForm.value.countryId.toString(),
       cityId: this.saveInfoForm.value.cityId.toString(),
-      languageList: this.languageFormArray.value,
+      personLanguages: this.languageFormArray.value,
     });
     console.log("this.saveInfoForm", this.formVal);
     if (this.saveInfoForm?.invalid) {
@@ -194,7 +198,7 @@ export class CollectInformationComponent implements OnInit {
       );
       return;
     }
-    this._infoService.infoUpdate(this.formVal, this.infoId).subscribe(
+    this._infoService.infoSave(this.formVal).subscribe(
       (res: any) => {
         if (res) {
           this._toasterService.success(
@@ -227,7 +231,9 @@ export class CollectInformationComponent implements OnInit {
             fileNames: event.target.files[i].name,
           };
           this.saveInfoForm.patchValue({
-            document: this.file,
+            fileBase64: this.file.fileBase64,
+            fileTypes: this.file.fileTypes,
+            fileNames: this.file.fileNames,
           });
         };
       }
@@ -241,8 +247,10 @@ export class CollectInformationComponent implements OnInit {
       countryId: [, [Validators.required]],
       cityId: [, [Validators.required]],
       dateOfBirth: [, []],
-      languageList: [[], []],
-      document: [, []],
+      personLanguages: [[], []],
+      fileBase64: [, []],
+      fileTypes: [, []],
+      fileNames: [, []],
     });
     this.languageFormArray = this._fb.array([]);
   }
@@ -263,6 +271,7 @@ export class CollectInformationComponent implements OnInit {
         this.information = res as InfoModel;
         console.log("info", this.information);
         this.saveInfoForm.patchValue({
+          id: this.infoId,
           name: this.information.name,
           countryId: Number(this.information.countryId),
           dateOfBirth: this.information.dateOfBirth,
@@ -271,12 +280,12 @@ export class CollectInformationComponent implements OnInit {
         this.saveInfoForm.patchValue({
           cityId: Number(this.information.cityId),
         });
-        this.selectionLanguage = this.information.languageList;
+        this.selectionLanguage = this.information.personLanguages;
         this.selectionLanguage.forEach((p) => {
           this.languageFormArray.push(
             new FormGroup({
               id: new FormControl(p.id),
-              languageName: new FormControl(p.languageName),
+              name: new FormControl(p.name),
             })
           );
         });

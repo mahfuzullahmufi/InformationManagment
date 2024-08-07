@@ -2,10 +2,11 @@
 using InformationManagment.Core.Helper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace InformationManagment.Core.DbContext
 {
-    public class DatabaseContext : IdentityDbContext<ApplicationUser> 
+    public class DatabaseContext : IdentityDbContext<ApplicationUser>
     {
         public DatabaseContext(DbContextOptions options) : base(options) { }
 
@@ -15,7 +16,7 @@ namespace InformationManagment.Core.DbContext
             base.OnModelCreating(builder);
 
             builder.Entity<PersonLanguage>()
-            .HasKey(pl => new { pl.PersonId, pl.LanguageId });
+                .HasKey(pl => new { pl.PersonId, pl.LanguageId });
 
             builder.Entity<PersonLanguage>()
                 .HasOne(pl => pl.Person)
@@ -29,6 +30,31 @@ namespace InformationManagment.Core.DbContext
                 .HasForeignKey(pl => pl.LanguageId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Country>()
+                .HasMany(c => c.Cities)
+                .WithOne(c => c.Country)
+                .HasForeignKey(c => c.CountryId);
+
+            // Configuring the one-to-many relationship between Country and City
+            builder.Entity<Country>()
+                .HasMany(c => c.Cities)
+                .WithOne(c => c.Country)
+                .HasForeignKey(c => c.CountryId)
+                .OnDelete(DeleteBehavior.Restrict); // No cascade delete
+
+            // Configuring the one-to-many relationship between Country and Person
+            builder.Entity<Country>()
+                .HasMany(c => c.Persons)
+                .WithOne(p => p.Country)
+                .HasForeignKey(p => p.CountryId)
+                .OnDelete(DeleteBehavior.Restrict); // No cascade delete
+
+            // Configuring the one-to-many relationship between City and Person
+            builder.Entity<City>()
+                .HasMany(c => c.Persons)
+                .WithOne(p => p.City)
+                .HasForeignKey(p => p.CityId)
+                .OnDelete(DeleteBehavior.Restrict); // No cascade delete
         }
 
         public DbSet<Person> Persons { get; set; }

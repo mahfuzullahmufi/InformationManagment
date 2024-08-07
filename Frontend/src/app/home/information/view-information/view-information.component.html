@@ -40,7 +40,7 @@
                             <td style="width: 10%;">{{item.name}}</td>
                             <td style="width: 10%;">{{item.countryName}}</td>
                             <td style="width: 10%;">{{item.cityName}}</td>
-                            <td style="width: 10%;">{{item.languages}}</td>
+                            <td style="width: 10%;">{{formatLanguages(item.personLanguages)}}</td>
                             <td style="width: 10%;"><a href="#" class="link-primary download" (click)="fileDownload(i)">{{item.fileNames}}</a></td>
                             <td style="width: 10%;">{{item.dateOfBirth | date}}</td>
                             <td style="width: 10%;">

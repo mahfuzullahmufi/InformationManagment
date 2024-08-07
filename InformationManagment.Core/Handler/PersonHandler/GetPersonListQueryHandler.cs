@@ -21,6 +21,8 @@ namespace InformationManagment.Core.Handler.PersonHandler
         public async Task<List<PersonDto>> Handle(GetPersonListQuery request, CancellationToken cancellationToken)
         {
             var result = await _databaseContext.Persons
+                .Include(x => x.Country)
+                .Include(x => x.City)
                 .Include(x => x.PersonLanguages)
                 .ThenInclude(x => x.Language)
                 .ToListAsync(cancellationToken);

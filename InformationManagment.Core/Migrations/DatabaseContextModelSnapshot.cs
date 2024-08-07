@@ -267,10 +267,10 @@ namespace InformationManagment.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CityId")
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DateOfBirth")
@@ -290,6 +290,10 @@ namespace InformationManagment.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Persons");
                 });
@@ -447,8 +451,27 @@ namespace InformationManagment.Core.Migrations
                     b.HasOne("InformationManagment.Core.Entities.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("InformationManagment.Core.Entities.Person", b =>
+                {
+                    b.HasOne("InformationManagment.Core.Entities.City", "City")
+                        .WithMany("Persons")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InformationManagment.Core.Entities.Country", "Country")
+                        .WithMany("Persons")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("City");
 
                     b.Navigation("Country");
                 });
@@ -523,9 +546,16 @@ namespace InformationManagment.Core.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("InformationManagment.Core.Entities.City", b =>
+                {
+                    b.Navigation("Persons");
+                });
+
             modelBuilder.Entity("InformationManagment.Core.Entities.Country", b =>
                 {
                     b.Navigation("Cities");
+
+                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("InformationManagment.Core.Entities.Language", b =>

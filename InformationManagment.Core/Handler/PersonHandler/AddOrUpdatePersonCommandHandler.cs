@@ -29,9 +29,25 @@ namespace InformationManagment.Core.Handler.PersonHandler
             person.PersonLanguages ??= new List<PersonLanguage>();
 
             if (person.Id > 0)
-                _dbContext.Update(person);
+            {
+                var existingPerson = await _dbContext.Persons
+                    .Include(i => i.PersonLanguages)
+                    .ThenInclude(t => t.Language)
+                    .SingleOrDefaultAsync(x => x.Id == request.Id)
+                    .ConfigureAwait(false);
+
+                ArgumentNullException.ThrowIfNull(existingPerson);
+
+                _dbContext.PersonLanguages.RemoveRange(existingPerson.PersonLanguages);
+
+                existingPerson.PersonLanguages.AddRange(person.PersonLanguages);
+
+                _dbContext.Persons.Update(existingPerson);
+            }
             else
+            {
                 await _dbContext.Persons.AddAsync(person, cancellationToken);
+            }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
