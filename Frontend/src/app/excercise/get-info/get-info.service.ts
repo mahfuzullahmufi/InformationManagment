@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ICity } from '../../models/city';
-import { ICountry } from '../../models/country';
+import { City } from '../../models/city.model';
+import { Country } from '../../models/country.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ export class GetInfoService {
   constructor(private http: HttpClient) { }
 
   getCountries(){
-    return this.http.get<ICountry>(this.baseUrl + 'Country/get-all-country');
+    return this.http.get<Country>(this.baseUrl + 'Country/get-all-country');
   }
 
   getCities(){
-    return this.http.get<ICity>(this.baseUrl + 'City/get-all-cities')
+    return this.http.get<City>(this.baseUrl + 'City/get-all-cities')
   }
 
   getAllLanguage(){

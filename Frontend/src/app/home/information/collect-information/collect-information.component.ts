@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormArray,
   FormBuilder,
@@ -8,15 +8,12 @@ import {
 } from "@angular/forms";
 import { NbToastrService } from "@nebular/theme";
 import dayjs from "dayjs";
-import { DataTableDirective } from "angular-datatables";
-
-import { ICity } from "src/app/models/city";
-import { ICountry } from "src/app/models/country";
+import { Country } from "src/app/models/country.model";
 import { InfoModel } from "src/app/models/info.model";
 import { LanguageModel } from "src/app/models/language.model";
 import { InformationService } from "src/app/services/information.service";
-import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
+import { City } from "src/app/models/city.model";
 
 @Component({
   selector: "ngx-collect-information",
@@ -26,9 +23,9 @@ import { ActivatedRoute } from "@angular/router";
 export class CollectInformationComponent implements OnInit {
   saveInfoForm: FormGroup;
   languageFormArray: FormArray;
-  countries: ICountry[];
-  cities: ICity[];
-  city: ICity[];
+  countries: Country[];
+  cities: City[];
+  city: City[];
   lstLanguage: LanguageModel[];
   selectionLanguage: LanguageModel[] = [];
   file: {
@@ -44,10 +41,10 @@ export class CollectInformationComponent implements OnInit {
   showfilename: string;
 
   constructor(
-    private _fb: FormBuilder,
-    private _infoService: InformationService,
-    private _toasterService: NbToastrService,
-    private _activateRoute: ActivatedRoute
+    private fb: FormBuilder,
+    private infoService: InformationService,
+    private toasterService: NbToastrService,
+    private activateRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -55,18 +52,17 @@ export class CollectInformationComponent implements OnInit {
     this.getCountries();
     this.getAllLanguages();
     this.createForm();
-    if (this._activateRoute.snapshot.paramMap.get("id") !== null) {
-      let id = this._activateRoute.snapshot.paramMap.get("id");
-      this.infoId = Number(id);
-      this.getInformationById(id);
+    if (this.activateRoute.snapshot.paramMap.has("id")) {
+      this.infoId = Number(this.activateRoute.snapshot.paramMap.get("id"));
+      this.getInformationById(this.infoId);
       this.isEditable = true;
     }
   }
 
   getCountries() {
-    this._infoService.getCountries().subscribe(
+    this.infoService.getCountries().subscribe(
       (response: any) => {
-        this.countries = response;
+        this.countries = response as Country[];
       },
       (error) => {
         console.log(error);
@@ -75,7 +71,7 @@ export class CollectInformationComponent implements OnInit {
   }
 
   getCities() {
-    this._infoService.getCities().subscribe(
+    this.infoService.getCities().subscribe(
       (response: any) => {
         this.cities = response;
       },
@@ -86,19 +82,19 @@ export class CollectInformationComponent implements OnInit {
   }
 
   getAllLanguages() {
-    this._infoService.getAllLanguage().subscribe((res) => {
-      this.lstLanguage = res as LanguageModel[];
+    this.infoService.getAllLanguages().subscribe((res: any) => {
+      this.lstLanguage = res;
     });
   }
 
   citySelect(event) {
-    if(this.cities != undefined){
+    if (this.cities) {
       this.city = this.cities.filter((e) => e.countryId == event);
     }
   }
 
   getSelection(item: any) {
-    return this.selectionLanguage.findIndex((s) => s.id === item.id) !== -1;
+    return this.selectionLanguage.some((s) => s.id === item.id);
   }
 
   changeHandler(item: any) {
@@ -106,7 +102,7 @@ export class CollectInformationComponent implements OnInit {
     const index = this.selectionLanguage.findIndex((u) => u.id === id);
     if (index === -1) {
       this.selectionLanguage = [...this.selectionLanguage, item];
-      this.languageFormArray = this._fb.array([]);
+      this.languageFormArray = this.fb.array([]);
       this.selectionLanguage.forEach((p) => {
         this.languageFormArray.push(
           new FormGroup({
@@ -119,7 +115,7 @@ export class CollectInformationComponent implements OnInit {
       this.selectionLanguage = this.selectionLanguage.filter(
         (language) => language.id !== item.id
       );
-      this.languageFormArray = this._fb.array([]);
+      this.languageFormArray = this.fb.array([]);
 
       this.selectionLanguage.forEach((p) => {
         this.languageFormArray.push(
@@ -133,13 +129,9 @@ export class CollectInformationComponent implements OnInit {
   }
 
   dateChange(event: any) {
-    let date = dayjs(event);
-    
-    let changesDate = date.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    console.log("event", date);
-    this.saveInfoForm.patchValue({
-      dateOfBirth: changesDate,
-    });
+    const date = dayjs(event);
+    const changesDate = date.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    this.saveInfoForm.get('dateOfBirth').setValue(changesDate, { emitEvent: false });
   }
 
   refresh() {
@@ -148,61 +140,51 @@ export class CollectInformationComponent implements OnInit {
     this.createForm();
   }
 
-  submitForm() {
-    this.saveInfoForm.patchValue({
-      id: this.infoId,
-      countryId: this.saveInfoForm.value.countryId.toString(),
-      cityId: this.saveInfoForm.value.cityId.toString(),
-      personLanguages: this.languageFormArray.value,
-    });
-    console.log("this.saveInfoForm", this.formVal);
-    if (this.saveInfoForm?.invalid) {
-      this._toasterService.danger(
-        "Please fill the all required fields",
+    submitForm() {
+        this.saveInfoForm.patchValue({
+            personLanguages: this.languageFormArray.value,
+        });
+    if (this.saveInfoForm.invalid) {
+      this.toasterService.danger(
+        "Please fill in all required fields",
         "Invalid submission"
       );
       return;
     }
 
-    this._infoService.infoSave(this.formVal).subscribe(
+    this.infoService.saveInfo(this.saveInfoForm.value).subscribe(
       (res: any) => {
-        console.log("Response",res);
-
         if (res) {
-          this._toasterService.success(
-            "Information has been Saved ",
+          this.toasterService.success(
+            "Information has been saved",
             "Success"
           );
           this.refresh();
         }
       },
       (er) => {
-        this._toasterService.danger("Something went wrong!", "Error");
-        console.log("error",er);
-        // this.refresh();
+        this.toasterService.danger("Something went wrong!", "Error");
       }
     );
   }
 
-  updateInfo() {
-    this.saveInfoForm.patchValue({
-      countryId: this.saveInfoForm.value.countryId.toString(),
-      cityId: this.saveInfoForm.value.cityId.toString(),
-      personLanguages: this.languageFormArray.value,
-    });
-    console.log("this.saveInfoForm", this.formVal);
-    if (this.saveInfoForm?.invalid) {
-      this._toasterService.danger(
-        "Please fill the all required fields",
+    updateInfo() {
+        this.saveInfoForm.patchValue({
+            personLanguages: this.languageFormArray.value,
+        });
+    if (this.saveInfoForm.invalid) {
+      this.toasterService.danger(
+        "Please fill in all required fields",
         "Invalid submission"
       );
       return;
     }
-    this._infoService.infoSave(this.formVal).subscribe(
+
+    this.infoService.saveInfo(this.saveInfoForm.value).subscribe(
       (res: any) => {
         if (res) {
-          this._toasterService.success(
-            "Information has been Updated ",
+          this.toasterService.success(
+            "Information has been updated",
             "Success"
           );
           this.refresh();
@@ -210,8 +192,7 @@ export class CollectInformationComponent implements OnInit {
         }
       },
       (er) => {
-        this._toasterService.danger("Something went wrong!", "Error");
-        this.refresh();
+        this.toasterService.danger("Something went wrong!", "Error");
       }
     );
   }
@@ -219,7 +200,7 @@ export class CollectInformationComponent implements OnInit {
   onFileSelected(event) {
     if (event.target.files) {
       for (let i = 0; i < event.target.files.length; i++) {
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.readAsDataURL(event.target.files[i]);
         reader.onload = (reader: any) => {
           const result = reader.target.result;
@@ -241,53 +222,56 @@ export class CollectInformationComponent implements OnInit {
   }
 
   createForm() {
-    this.saveInfoForm = this._fb.group({
-      id: [0, []],
+    this.saveInfoForm = this.fb.group({
+      id: [0],
       name: [, [Validators.required]],
       countryId: [, [Validators.required]],
       cityId: [, [Validators.required]],
       dateOfBirth: [, []],
-      personLanguages: [[], []],
+      personLanguages: [[]],
       fileBase64: [, []],
       fileTypes: [, []],
       fileNames: [, []],
     });
-    this.languageFormArray = this._fb.array([]);
+    this.languageFormArray = this.fb.array([]);
   }
 
   get formVal() {
-    return this.saveInfoForm?.value;
+    return this.saveInfoForm.value;
   }
+
   get f() {
-    return this.saveInfoForm?.controls;
+    return this.saveInfoForm.controls;
   }
+
   get detailsFormAllVal() {
     return this.languageFormArray.value;
   }
 
   getInformationById(id) {
-    this._infoService.getInformationById(id).subscribe(
-      (res: any) => {
-        this.information = res as InfoModel;
-        console.log("info", this.information);
+    this.infoService.getInformationById(id).subscribe(
+      (res: InfoModel) => {
+        this.information = res;
         this.saveInfoForm.patchValue({
-          id: this.infoId,
+          id: this.information.id,
           name: this.information.name,
-          countryId: Number(this.information.countryId),
+          countryId: this.information.countryId,
           dateOfBirth: this.information.dateOfBirth,
         });
         this.citySelect(this.saveInfoForm.value.countryId);
         this.saveInfoForm.patchValue({
-          cityId: Number(this.information.cityId),
+          cityId: this.information.cityId,
         });
         this.selectionLanguage = this.information.personLanguages;
         this.selectionLanguage.forEach((p) => {
-          this.languageFormArray.push(
-            new FormGroup({
-              id: new FormControl(p.id),
-              name: new FormControl(p.name),
-            })
-          );
+          if (this.languageFormArray) {
+            this.languageFormArray.push(
+              new FormGroup({
+                id: new FormControl(p.id),
+                name: new FormControl(p.name),
+              })
+            );
+          }
         });
         this.file = {
           fileBase64: this.information.fileBase64,
@@ -297,7 +281,7 @@ export class CollectInformationComponent implements OnInit {
         this.showfilename = this.information.fileNames;
       },
       (er) => {
-        this._toasterService.danger("Something went wrong!", "Error");
+        this.toasterService.danger("Something went wrong!", "Error");
       }
     );
   }
@@ -309,10 +293,11 @@ export class CollectInformationComponent implements OnInit {
     a.href = fullFIle;
     a.click();
   }
+
   fileDelete() {
-    this.file.fileNames=null;
-    this.file.fileBase64=null;
-    this.file.fileTypes=null;
-    this.showfilename=null;
+    this.file.fileNames = null;
+    this.file.fileBase64 = null;
+    this.file.fileTypes = null;
+    this.showfilename = null;
   }
 }

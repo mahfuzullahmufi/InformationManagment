@@ -2,6 +2,7 @@
 using InformationManagment.Core.Command.PersonCommand;
 using InformationManagment.Core.DbContext;
 using InformationManagment.Core.Entities;
+using InformationManagment.Core.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,23 +34,28 @@ namespace InformationManagment.Core.Handler.PersonHandler
                 var existingPerson = await _dbContext.Persons
                     .Include(i => i.PersonLanguages)
                     .ThenInclude(t => t.Language)
-                    .SingleOrDefaultAsync(x => x.Id == request.Id)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id)
                     .ConfigureAwait(false);
 
-                ArgumentNullException.ThrowIfNull(existingPerson);
+                if (existingPerson == null)
+                {
+                    throw new ArgumentNullException("Person not found");
+                }
 
                 _dbContext.PersonLanguages.RemoveRange(existingPerson.PersonLanguages);
 
+                _mapper.Map(request, existingPerson);
+
                 existingPerson.PersonLanguages.AddRange(person.PersonLanguages);
 
-                _dbContext.Persons.Update(existingPerson);
+                existingPerson.PersonLanguages = person.PersonLanguages;
             }
             else
             {
-                await _dbContext.Persons.AddAsync(person, cancellationToken);
+                await _dbContext.Persons.AddAsync(person);
             }
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _dbContext.SaveChangesAsync();
 
             return person.Id;
         }

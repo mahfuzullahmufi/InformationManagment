@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ICountry } from '../../models/country';
+import { Country } from '../../models/country.model';
 import { CountryService } from './country.service';
 
 @Component({
@@ -11,9 +11,9 @@ import { CountryService } from './country.service';
   styleUrls: ['./country.component.css']
 })
 export class CountryComponent implements OnInit {
-  countries: ICountry[];
+  countries: Country[];
   addCountry: FormGroup;
-  country:ICountry;
+  country: Country;
   message : boolean = false;
   isSubmit: boolean = true;
   countryId: any;
@@ -55,7 +55,7 @@ export class CountryComponent implements OnInit {
     })
   }
 
-  editCountry(item:ICountry) {
+  editCountry(item:Country) {
    // this.countryId = id;
     this.isSubmit = false;
     this.addCountry.patchValue({

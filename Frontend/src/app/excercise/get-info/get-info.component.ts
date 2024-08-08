@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ICity } from '../../models/city';
-import { ICountry } from '../../models/country';
+import { City } from '../../models/city.model';
+import { Country } from '../../models/country.model';
 import { GetInfoService } from './get-info.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LanguageModel } from '../../models/language.model';
@@ -16,9 +16,9 @@ import { InfoModel } from '../../models/info.model';
 export class GetInfoComponent implements OnInit {
   saveInfoForm: FormGroup;
   languageFormArray:FormArray;
-  countries: ICountry[];
-  cities: ICity[];
-  city: ICity[];
+  countries: Country[];
+  cities: City[];
+  city: City[];
   lstLanguage: LanguageModel[];
   selectionLanguage:LanguageModel[]=[];
   infodata: InfoModel[];

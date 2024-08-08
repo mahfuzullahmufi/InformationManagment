@@ -7,6 +7,7 @@ import pdfFonts from '../../../assets/pdf-make/vfs_fonts.js';
 import * as dayjs from 'dayjs'
 import {misAllMinistryCenterwiseSummaryDefaultStyle, misMinistrySummaryStyle, setHeading, setNewConnectionStyle, setPdfMakeFonts, setSubHeading, setSubSetHeading} from "./config/pdfMakeConfig";
 import { InfoModel } from 'src/app/models/info.model.js';
+import { LanguageModel } from 'src/app/models/language.model.js';
 
 
 
@@ -70,6 +71,9 @@ export class Examplepdfservice {
     return num.toString().replace(/\d/g, x => banglaDigits[x]);
   }
 
+  formatLanguages(languages: LanguageModel[]): string {
+    return languages.map(lang => lang.name).join(', ');
+  }
 
 
   private getHeading(data: any){
@@ -262,7 +266,7 @@ export class Examplepdfservice {
           },
           {
              
-            text: `${item.languages}`,
+            text: `${this.formatLanguages(item.personLanguages)}`,
             style: ["setBold",],
             border: [true, true, true, true],
           },

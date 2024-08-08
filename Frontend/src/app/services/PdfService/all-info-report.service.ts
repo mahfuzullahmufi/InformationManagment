@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { InfoModel } from 'src/app/models/info.model';
 import { setSubSetHeading } from 'src/assets/pdfMakeConfig/pdf-make-config';
 import { misAllMinistryCenterwiseSummaryDefaultStyle, misMinistrySummaryStyle, setNewConnectionStyle, setPdfMakeFonts } from './config/pdfMakeConfig';
+import { LanguageModel } from 'src/app/models/language.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,11 @@ export class AllInfoReportService {
     //@ts-ignore
     return pdfMake.createPdf(documentDefinition);
   }
+
+  formatLanguages(languages: LanguageModel[]): string {
+    return languages.map(lang => lang.name).join(', ');
+  }
+
 
   private getDocumentDefinition(data: any) {
     return {
@@ -259,7 +265,7 @@ export class AllInfoReportService {
           },
           {
              
-            text: `${item.languages}`,
+            text: `${this.formatLanguages(item.personLanguages)}`,
             style: ["setBold",],
             border: [true, true, true, true],
           },

@@ -1,4 +1,4 @@
 export class LanguageModel{
-    id:number=0;
+    id:number;
     name:string;
   }

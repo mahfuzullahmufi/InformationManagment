@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IInfoData } from '../../models/infodata';
+import { IInfoData } from '../../models/infodata.model';
 import { ShowInfoService } from './show-info.service';
 import { HttpClient } from '@angular/common/http';
 
