@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import dayjs from 'dayjs';
 import { InfoModel } from 'src/app/models/info.model';
 import { setSubSetHeading } from 'src/assets/pdfMakeConfig/pdf-make-config';
@@ -14,23 +12,21 @@ import { LanguageModel } from 'src/app/models/language.model';
 })
 export class AllInfoReportService {
 
-  defaultColur = "#0c0d0d"
-  
-  constructor() {}
+  defaultColor = "#0c0d0d";
+
+  constructor() {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  }
 
   generatePdf(data: any) {
-    //@ts-ignore
     pdfMake.fonts = setPdfMakeFonts;
-    //@ts-ignore
     const documentDefinition = this.getDocumentDefinition(data);
-    //@ts-ignore
     return pdfMake.createPdf(documentDefinition);
   }
 
   formatLanguages(languages: LanguageModel[]): string {
     return languages.map(lang => lang.name).join(', ');
   }
-
 
   private getDocumentDefinition(data: any) {
     return {
@@ -41,43 +37,36 @@ export class AllInfoReportService {
         keywords: "keywords for document",
       },
       pageSize: 'A4',
-      //pageOrientation: 'landscape',    
-      footer: (currentPage, PageCount)=> {
-        return {
-          table: {
-            widths: ['*', '*'],
-            body: [
-              [
-                { text: `পৃষ্ঠা ${this.translateNumber(currentPage, 2)} এর ${this.translateNumber(PageCount, 2)}`, style: ['setFooterLeft'], margin: [30, 5, 30, 0] }, 
-                { text: this.translateNumber(dayjs(new Date()).format('DD/MM/YYYY'), 2), style: ['setFooterRight'], margin: [30, 5, 30, 0] }
-              ],
-            ]
-          },
-          layout: 'noBorders'
-        }
-      },
+      footer: (currentPage, PageCount) => ({
+        table: {
+          widths: ['*', '*'],
+          body: [
+            [
+              { text: `পৃষ্ঠা ${this.translateNumber(currentPage, 2)} এর ${this.translateNumber(PageCount, 2)}`, style: ['setFooterLeft'], margin: [30, 5, 30, 0] },
+              { text: this.translateNumber(dayjs(new Date()).format('DD/MM/YYYY'), 2), style: ['setFooterRight'], margin: [30, 5, 30, 0] }
+            ],
+          ]
+        },
+        layout: 'noBorders'
+      }),
       content: [this.getHeading(data), this.UntraceableCustomerInfo(data)],
       pageMargins: [30, 0, 30, 30],
-      // pageMargins: misAllMinistryCenterwiseSummaryPageMargin,
       defaultStyle: misAllMinistryCenterwiseSummaryDefaultStyle,
       styles: misMinistrySummaryStyle
-
     };
   }
 
-  private translateNumber(num, option = 1) {
-    let banglaDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"]
-    if (option == 1) {
-      num = Number(num).toLocaleString(undefined, { minimumFractionDigits: 2 })
+  private translateNumber(num: number | string, option = 1): string {
+    const banglaDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+    if (option === 1) {
+      num = Number(num).toLocaleString(undefined, { minimumFractionDigits: 2 });
     }
     return num.toString().replace(/\d/g, x => banglaDigits[x]);
   }
 
-
-
-  private getHeading(data: any){
+  private getHeading(data: any) {
     const totalCount = data.length;
-    const phase = {
+    return {
       margin: [30, 20, 30, 0],
       table: {
         dontBreakRows: true,
@@ -85,16 +74,7 @@ export class AllInfoReportService {
         margin: [0, 0, 0, 0],
         body: [
           [
-            {
-              // image: `logo.png`,
-              // width: 70,
-              // height: 60,
-              // color: 'gray',
-              // rowSpan: 5,
-              // colSpan: 2,
-              // alignment: 'right',
-              // margin: [-25, -2, 0, 0],
-            },
+            {},
             {},
             {},
             {},
@@ -109,7 +89,7 @@ export class AllInfoReportService {
             {},
             {},
             {
-              text: 'Information Managment',
+              text: 'Information Management',
               style: [setNewConnectionStyle.setTitleBold],
               colSpan: 5,
             },
@@ -187,7 +167,6 @@ export class AllInfoReportService {
       },
       layout: 'noBorders',
     };
-    return phase;
   }
 
   private UntraceableCustomerInfo(data: InfoModel[]) {
@@ -197,112 +176,89 @@ export class AllInfoReportService {
       table: {
         dontBreakRows: true,
         headerRows: 1,
-        // heights: [10, 10.1, 10],
         widths: [15, 70, 70, 70, 130, 70, 60],
         body: [
           [
             {
               text: `SL No`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
             {
               text: `Name`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
             {
               text: `Country`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
             {
               text: `City`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
             {
               text: `Language Skills`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
             {
               text: `Date Of Birth`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
             {
               text: `Remarks`,
-              style: ["setBold",],
+              style: ["setBold"],
               border: [true, true, true, true],
             },
           ],
         ],
       },
     };
-      data.forEach(item => {
-        sl++;
-        phase.table.body.push([
-          {
-            text: `${sl}`,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-          {
-            text: `${item.name}`,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-          {
-            text: `${item.countryName}`,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-          {
-            text: `${item.cityName}`,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-          {
-             
-            text: `${this.formatLanguages(item.personLanguages)}`,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-          {
-            text: `${item.dateOfBirth}`,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-          {
-            text: ``,
-            style: ["setBold",],
-            border: [true, true, true, true],
-          },
-        ]);
-      });
-    
-    return phase;
-  }
+    data.forEach(item => {
+      sl++;
+      phase.table.body.push([
+        {
+          text: `${sl}`,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+        {
+          text: `${item.name}`,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+        {
+          text: `${item.countryName}`,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+        {
+          text: `${item.cityName}`,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+        {
+          text: `${this.formatLanguages(item.personLanguages)}`,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+        {
+          text: `${item.dateOfBirth}`,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+        {
+          text: ``,
+          style: ["setBold"],
+          border: [true, true, true, true],
+        },
+      ]);
+    });
 
-  private setTableBorder() {
-    const d = this.defaultColur;
-    return {
-      hLineWidth: function (i, node) {
-        return i === 0 || i === node.table.body.length ? 1 : 1;
-      },
-      vLineWidth: function (i, node) {
-        return i === 0 || i === node.table.widths.length ? 1 : 1;
-      },
-      hLineColor: function (i, node) {
-        return i === 0 || i === node.table.body.length ? d : d;
-      },
-      vLineColor: function (i, node) {
-        return i === 0 || i === node.table.widths.length ? d : d;
-      },
-      paddingBottom: function (i, node) {
-        return 5;
-      },
-    };
+    return phase;
   }
 }

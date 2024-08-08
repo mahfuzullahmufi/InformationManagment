@@ -7,10 +7,9 @@
             <div class="row">
                 <div class="col-sm-6 mb-2">
                     <div class="form-group row">
-                        <label for="customerType" class="label col-sm-4 col-form-label">Name<span
-                                class="text-danger">*</span> :</label>
+                        <label for="customerType" class="label col-sm-4 col-form-label">Name<span class="text-danger">*</span>:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" formControlName="name" fullWidth placeholder="Name">
+                            <input type="text" class="form-control" formControlName="name" placeholder="Name">
                             <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
                                 <div *ngIf="f.name.errors?.required">Please Enter Name!</div>
                             </div>
@@ -19,10 +18,9 @@
                 </div>
                 <div class="col-sm-6 mb-2">
                     <div class="form-group row">
-                        <label for="customerType" class="label col-sm-4 col-form-label">Date Of Birth :</label>
+                        <label for="customerType" class="label col-sm-4 col-form-label">Date Of Birth:</label>
                         <div class="col-sm-8">
-                            <input nbInput placeholder="Select Date" formControlName="dateOfBirth" fullWidth
-                                (ngModelChange)="dateChange($event)" [nbDatepicker]="formpicker">
+                            <input nbInput placeholder="Select Date" formControlName="dateOfBirth" (ngModelChange)="dateChange($event)" [nbDatepicker]="formpicker">
                             <nb-datepicker #formpicker></nb-datepicker>
                         </div>
                     </div>
@@ -31,22 +29,17 @@
             <div class="row">
                 <div class="col-sm-6 mb-2">
                     <div class="form-group row">
-                        <label for="customerType" class="label col-sm-4 col-form-label">Country<span
-                                class="text-danger">*</span> :</label>
+                        <label for="customerType" class="label col-sm-4 col-form-label">Country<span class="text-danger">*</span>:</label>
                         <div class="col-sm-8">
-                            <nb-select fullWidth placeholder="Please Select Country" formControlName="countryId"
-                                (selectedChange)="citySelect($event)">
-                                <nb-option *ngFor="let item of countries"
-                                    [value]="item.id">{{item.name}}</nb-option>
+                            <nb-select fullWidth placeholder="Please Select Country" formControlName="countryId" (selectedChange)="citySelect($event)">
+                                <nb-option *ngFor="let item of countries" [value]="item.id">{{item.name}}</nb-option>
                             </nb-select>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-sm-6 mb-2">
                     <div class="form-group row">
-                        <label for="customerType" class="label col-sm-4 col-form-label">City<span
-                                class="text-danger">*</span> :</label>
+                        <label for="customerType" class="label col-sm-4 col-form-label">City<span class="text-danger">*</span>:</label>
                         <div class="col-sm-8">
                             <nb-select fullWidth placeholder="Please Select City" formControlName="cityId">
                                 <nb-option *ngFor="let item of city" [value]="item.id">{{item.name}}</nb-option>
@@ -58,8 +51,7 @@
             <div class="row">
                 <div class="col-sm-6 mb-1">
                     <div class="form-group row">
-                        <label for="customerType" class="label col-sm-4 col-form-label">Language Skills<span
-                                class="text-danger">*</span> :</label>
+                        <label for="customerType" class="label col-sm-4 col-form-label">Language Skills<span class="text-danger">*</span>:</label>
                         <div class="col-sm-8">
                             <li *ngFor="let item of lstLanguage">
                                 <input type="checkbox" [checked]="getSelection(item)" (change)="changeHandler(item)">
@@ -69,32 +61,21 @@
                     </div>
                 </div>
                 <div class="col-sm-6 mb-1">
-                    <!-- <div class="form-group row">
-                        <label for="customerType" class="label col-sm-4 col-form-label">Upload Resume :</label>
-                        <div class="col-sm-8">
-                            <input type="file" fullWidth class="btn btn-secondary" formControlName="document"
-                                (change)="onFileSelected($event)" />
-                        </div>
-                    </div> -->
-
-                    <div class="form-group row ">
-                        <label  class="label col-sm-4 col-form-label">Upload Resume :</label>
-                        <div class="col-sm-4 center-block border border-primary rounded " style="text-align:center;">
+                    <div class="form-group row">
+                        <label class="label col-sm-4 col-form-label">Upload Resume:</label>
+                        <div class="col-sm-4 center-block border border-primary rounded" style="text-align:center;">
                             <label for="file-input">
-                                <nb-icon for="file-input" icon="cloud-upload-outline" status="primary"
-                                    [options]="{ animation: { type: 'zoom' } }"></nb-icon>
+                                <nb-icon for="file-input" icon="cloud-upload-outline" status="primary" [options]="{ animation: { type: 'zoom' } }"></nb-icon>
                             </label>
                             <ng-container>
-                                <input id="file-input" type="file" class="btn btn-secondary" (change)="onFileSelected($event)"
-                                    multiple />
+                                <input id="file-input" type="file" class="btn btn-secondary" (change)="onFileSelected($event)" multiple />
                             </ng-container>
-                                
                         </div>
                     </div>
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-sm-4"></div>
-                        <div class="col-sm-6" *ngIf="this.showfilename != null">
-                            <table class="table table-sm" >
+                        <div class="col-sm-6" *ngIf="showfilename != null">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>File Name</th>
@@ -103,53 +84,42 @@
                                     </tr>
                                 </thead>
                                 <tbody class="upload-name-style">
-                                    <tr >
+                                    <tr>
                                         <td>
-                                            <strong>{{this.showfilename}}</strong>
+                                            <strong>{{showfilename}}</strong>
                                         </td>
                                         <td>
-                                            <button class="btn btn-secondary btn-sm" (click)="fileDownload()">
-                                                Download
-                                            </button>
+                                            <button class="btn btn-secondary btn-sm" (click)="fileDownload()">Download</button>
                                         </td>
                                         <td>
-                                            <button class="btn btn-danger btn-sm" (click)="fileDelete()">
-                                                Delete
-                                            </button>
+                                            <button class="btn btn-danger btn-sm" (click)="fileDelete()">Delete</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-                    
-
                 </div>
             </div>
-            
         </form>
     </nb-card-body>
     <nb-card-footer>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6"></div>
                 <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-8">
                         <div class="row">
                             <div class="col-sm-4">
-                                <button *ngIf="this.isEditable == false" nbButton fullWidth status="primary"
-                                    (click)="submitForm()"> Save </button>
-                                <button *ngIf="this.isEditable" nbButton fullWidth status="primary"
-                                    (click)="updateInfo()"> Update </button>
+                                <button *ngIf="!isEditable" nbButton fullWidth status="primary" (click)="submitForm()">Save</button>
+                                <button *ngIf="isEditable" nbButton fullWidth status="primary" (click)="updateInfo()">Update</button>
                             </div>
                             <div class="col-sm-4">
-                                <button nbButton fullWidth status="danger" (click)="refresh()"> Refresh </button>
+                                <button nbButton fullWidth status="danger" (click)="refresh()">Refresh</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </nb-card-footer>
 </nb-card>

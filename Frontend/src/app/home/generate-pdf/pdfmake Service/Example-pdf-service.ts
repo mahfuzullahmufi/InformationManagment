@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from "pdfmake/build/pdfmake";
-
 import pdfFonts from '../../../../assets/pdf-make/vfs_fonts.js';
-// const pdfFontsX = require('pdfmake-unicode/dist/pdfmake-unicode.js');
-// (<any>pdfMake).vfs = pdfFontsX.pdfMake.vfs;
-import * as dayjs from 'dayjs'
-import {setHeading, setPdfMakeFonts, setSubHeading, setSubSetHeading} from "../../../../assets/pdfMakeConfig/pdf-make-config";
+import * as dayjs from 'dayjs';
+import { setHeading, setPdfMakeFonts, setSubHeading, setSubSetHeading } from "../../../../assets/pdfMakeConfig/pdf-make-config";
 
-
-
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 @Injectable({
   providedIn: 'root'
 })
@@ -18,50 +12,43 @@ export class Examplepdfservice {
   constructor() { }
 
   defaultColor = '';
+
   generatePdf() {
-    //@ts-ignore
-    pdfMake.fonts= setPdfMakeFonts
-
+    pdfMake.fonts = setPdfMakeFonts;
     const documentDefinition = this.getDocumentDefinition();
-    // @ts-ignore
-    // return pdfMake.createPdf(documentDefinition).download('pdfmake.pdf');
-     return pdfMake.createPdf(documentDefinition);
+    return pdfMake.createPdf(documentDefinition);
   }
-  private getDocumentDefinition() {
 
+  private getDocumentDefinition() {
     return {
       info: {
         title: 'Customer-List',
         author: 'billonweb',
         subject: 'Customer-List',
         keywords: 'keywords for document',
-        // creationDate: Date.now(),
       },
       pageSize: 'A4',
-      pageOrientation: 'landscape',// @ts-ignore
-      footer: function (currentPage, pageCount) {
-        return {
-          table: {
-            widths: ['*', '*'],
-            body: [
-              [
-                {
-                  text: `Page ${currentPage.toString()} of ${pageCount}`,
-                  style: ['setFooterLeft'],
-                  margin: [35, 5, 30, 0],
-                },
-                {
-                  text: dayjs(new Date()).format('DD/MM/YYYY'),
-                  style: ['setFooterRight'],
-                  margin: [35, 5, 38, 0],
-                },
-              ],
+      pageOrientation: 'landscape',
+      footer: (currentPage, pageCount) => ({
+        table: {
+          widths: ['*', '*'],
+          body: [
+            [
+              {
+                text: `Page ${currentPage.toString()} of ${pageCount}`,
+                style: ['setFooterLeft'],
+                margin: [35, 5, 30, 0],
+              },
+              {
+                text: dayjs().format('DD/MM/YYYY'),
+                style: ['setFooterRight'],
+                margin: [35, 5, 38, 0],
+              },
             ],
-          },
-          layout: 'noBorders',
-        };
-      },
-
+          ],
+        },
+        layout: 'noBorders',
+      }),
       content: [this.getHeading()],
       defaultStyle: {
         fonts: 'Arial',
@@ -105,8 +92,9 @@ export class Examplepdfservice {
       pageMargins: [30, 20, 30, 30],
     };
   }
+
   private getHeading() {
-    const locationName ='All' ;
+    const locationName = 'All';
     const phase = {
       margin: [0, 0, 0, 0],
       table: {
@@ -126,9 +114,7 @@ export class Examplepdfservice {
           50,
         ],
         headerRows: 6,
-
         body: [
-          // row 1
           [
             {
               border: [false, false, false, false],
@@ -153,7 +139,6 @@ export class Examplepdfservice {
             {},
             {},
           ],
-          // row 2
           [
             {},
             {},
@@ -178,7 +163,6 @@ export class Examplepdfservice {
             {},
             {},
           ],
-          // row 3
           [
             {},
             {},
@@ -199,7 +183,6 @@ export class Examplepdfservice {
             {},
             {},
           ],
-          // row 4
           [
             { text: '', border: [false, false, false, false], colSpan: 3 },
             {},
@@ -220,7 +203,6 @@ export class Examplepdfservice {
             {},
             {},
           ],
-          // row 5
           [
             { text: '', border: [false, false, false, false], colSpan: 3 },
             {},
@@ -248,8 +230,6 @@ export class Examplepdfservice {
             {},
             {},
           ],
-
-          // row 6
           [
             {
               text: 'Bill Group',
@@ -308,7 +288,7 @@ export class Examplepdfservice {
     return phase;
   }
 
-  private nullChecker(value: any): any{
+  private nullChecker(value: any): any {
     if (value === null || value === '' || value === undefined) {
       return '';
     }

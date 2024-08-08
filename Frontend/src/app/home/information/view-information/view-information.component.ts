@@ -4,6 +4,7 @@ import { NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { InfoModel } from 'src/app/models/info.model';
+import { InfoData } from 'src/app/models/infodata.model';
 import { LanguageModel } from 'src/app/models/language.model';
 import { ExcelServiceService } from 'src/app/services/ExcelService/excel-service.service';
 import { Examplepdfservice } from 'src/app/services/PdfService/Example-pdf-service';
@@ -28,17 +29,16 @@ export class ViewInformationComponent implements OnInit {
     { id: 2, name: ".xls" },
   ];
   report: any;
-  isTrue: boolean = false;
+  isTrue = false;
   examplePdf: any;
 
   constructor(
-    private _infoService: InformationService, 
-    private _toasterService: NbToastrService,
-    private _router: Router,
-    private _pdfService: AllInfoReportService,
-    private _pdfServiceEx: Examplepdfservice,
-    private _excelService: ExcelServiceService,
-
+    private infoService: InformationService,
+    private toasterService: NbToastrService,
+    private router: Router,
+    private pdfService: AllInfoReportService,
+    private pdfServiceEx: Examplepdfservice,
+    private excelService: ExcelServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -48,96 +48,92 @@ export class ViewInformationComponent implements OnInit {
     this.getInformations();
   }
 
-  getInformations() {
-    this._infoService.getInfo().subscribe((response : any) => {
-      this.infodata = response as InfoModel[];
-      console.log("infodata",this.infodata);
-      
-      this.dtTrigger.next(this.infodata);
-    }, error => {
-      console.log(error);
-    })
+  getInformations(): void {
+    this.infoService.getInfo().subscribe(
+      (response: any) => {
+        this.infodata = response as InfoModel[];
+        this.dtTrigger.next(this.infodata);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
-  public formatLanguages(languages: LanguageModel[]): string {
-    return languages.map(lang => lang.name).join(', ');
+  formatLanguages(languages: LanguageModel[]): string {
+    return languages.map((lang) => lang.name).join(', ');
   }
 
-  fileDownload(id) {
-    let fullFIle = this.infodata[id].fileTypes + "," + this.infodata[id].fileBase64;
-    let a = document.createElement("a");
-    a.download = `${this.infodata[id].fileNames}`;
-    a.href = fullFIle;
+  fileDownload(id: number): void {
+    const fullFile = `${this.infodata[id].fileTypes},${this.infodata[id].fileBase64}`;
+    const a = document.createElement("a");
+    a.download = this.infodata[id].fileNames;
+    a.href = fullFile;
     a.click();
   }
 
-  editInformation(id) {
-    this._router.navigate(["/information/collect-information",id]);
+  editInformation(id: number): void {
+    this.router.navigate(["/information/collect-information", id]);
   }
 
-  deletePersonInformation(id){
-    this._infoService.deleteInfo(id).subscribe((res:any) => {
-     if(res){
-       this._toasterService.danger("Information has been Deleted.", "Delete");
-       this.reRender();
-     } 
-   },
-   (er) => {
-       this._toasterService.danger("Something went wrong!","Error");
-   });
-    
- }
- 
- reRender(): void {
-   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-     dtInstance.destroy();
-     this.getInformations();
-   });
- }
- 
- ngOnDestroy(): void {
-   this.dtTrigger.unsubscribe();
- }
-
- onChangeExportType(event: any) {
-  if (event == 1) {
-    let date = new Date();
-    let fileName = "Information Lists";
-    const source = `data:application/pdf;base64,${this.report}`;
-    const link = document.createElement("a");
-    link.href = source;
-    link.download = `${fileName}.pdf`;
-    link.click();
-  } 
-  else if (event == 2 || event == 3) {
-    let date = new Date();
-    let excelObj = {
-      data: this.docData.docDefinition.content[1].table.body,
-    };
-
-    setTimeout(() => {
-      let exporter = this._excelService.downloadExcelFile(
-        excelObj,
-        "Information Lists");
-      //@ts-ignore
-      if (exporter.payload.data.length > 0) {
+  deletePersonInformation(id: number): void {
+    this.infoService.deleteInfo(id).subscribe(
+      (res: any) => {
+        if (res) {
+          this.toasterService.danger("Information has been Deleted.", "Delete");
+          this.reRender();
+        }
+      },
+      (er) => {
+        this.toasterService.danger("Something went wrong!", "Error");
       }
-    }, 800);
-
+    );
   }
-}
 
- generatePdf(){
-  this.docData = this._pdfService.generatePdf(this.infodata);
-            this.docData.getBase64((base64Data) => {
-              this.report = base64Data;
-              this.documentTitle = this.docData.docDefinition.info.title;
-              this.isTrue = true;
-            });    
- }
+  reRender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.getInformations();
+    });
+  }
 
- onSearchAgain(){
-  this.isTrue = false;
- }
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
 
+  onChangeExportType(event: number): void {
+    if (event === 1) {
+      const fileName = "Information Lists";
+      const source = `data:application/pdf;base64,${this.report}`;
+      const link = document.createElement("a");
+      link.href = source;
+      link.download = `${fileName}.pdf`;
+      link.click();
+    } else if (event === 2 || event === 3) {
+      const excelObj = {
+        data: this.docData.docDefinition.content[1].table.body,
+      };
+
+      setTimeout(() => {
+        const exporter = this.excelService.downloadExcelFile(excelObj, "Information Lists");
+        //@ts-ignore
+        if (exporter.payload.data.length > 0) {
+          // Handle success
+        }
+      }, 800);
+    }
+  }
+
+  generatePdf(): void {
+    this.docData = this.pdfService.generatePdf(this.infodata);
+    this.docData.getBase64((base64Data) => {
+      this.report = base64Data;
+      this.documentTitle = this.docData.docDefinition.info.title;
+      this.isTrue = true;
+    });
+  }
+
+  onSearchAgain(): void {
+    this.isTrue = false;
+  }
 }
