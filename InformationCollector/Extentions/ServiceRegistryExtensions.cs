@@ -12,6 +12,8 @@ using InformationManagment.Core.Repository;
 using InformationManagment.Core.Entities;
 using InformationManagment.Api.Setup;
 using InformationManagment.Core.Command.PersonCommand;
+using InformationManagment.Core.Models.Auth;
+using InformationManagment.Core.Handler.AuthHandler;
 
 namespace InformationManagment.Api.Extentions
 {
@@ -50,6 +52,8 @@ namespace InformationManagment.Api.Extentions
                     options.UseSqlServer(AppSettings.Settings.SqlConnection);
                 })
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<ISendGridEmailSender, SendGridEmailSender>()
                 .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(AddOrUpdatePersonCommand).GetTypeInfo().Assembly));
 
             service.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -83,7 +87,7 @@ namespace InformationManagment.Api.Extentions
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateAudience = true,
                     ValidateIssuer = true,
-                    ValidAudience = AppSettings.Settings.SalesAppUrl,
+                    ValidAudience = AppSettings.Settings.AppUrl,
                     ValidIssuer = AppSettings.Settings.ApiUrl,
                     ClockSkew = TimeSpan.Zero
                 };
@@ -99,6 +103,30 @@ namespace InformationManagment.Api.Extentions
             });
 
             return service;
+        }
+
+        public static void AddRoles(this IServiceCollection services)
+        {
+            using var scope = services.BuildServiceProvider().CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            if (!dbContext.Roles.Any())
+            {
+                dbContext.Roles.AddRange(
+                  new List<IdentityRole> {
+                      new()
+                        {
+                            Name = UserRoleType.Admin.ToString(),
+                            NormalizedName = UserRoleType.Admin.ToString().ToUpper()
+                        },
+                      new()
+                        {
+                            Name = UserRoleType.User.ToString(),
+                            NormalizedName = UserRoleType.User.ToString().ToUpper()
+                        },
+                  });
+
+                dbContext.SaveChanges();
+            }
         }
     }
 }

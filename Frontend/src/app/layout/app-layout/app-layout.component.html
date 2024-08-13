@@ -1,0 +1,41 @@
+<nb-layout>
+    <nb-layout-header class="custom-navbar" fixed>
+      <div class="d-flex justify-content-between w-100 align-items-center">
+        <div class="d-flex align-items-center">
+          <nb-action (click)="toggleSidebar()" icon="menu-2-outline" class="me-3 toggle-icon"></nb-action>
+          <nb-action [routerLink]="['']">
+            <h4 class="mb-0 ms-3">Information-Management</h4>
+          </nb-action>
+        </div>
+        <div class="d-flex align-items-center">
+          <nb-user size="medium"
+                 name="Manfuzullah Mufi"
+                 title="Software Engineer"
+                 picture="https://mahfuzullahmufi.github.io/static/media/Mufi%20Formal%202.0.573a48f641f1119bdfa4.jpg"
+                 class="custom-user">
+        </nb-user>
+        <nb-action icon="log-out-outline" (click)="logout()" class="ms-3 logout-icon"></nb-action>
+        </div>
+      </div>
+    </nb-layout-header>
+  
+    <nb-sidebar tag="menu-sidebar" state="compacted">
+      <nb-menu [items]="menuItems"></nb-menu>
+    </nb-sidebar>
+  
+    <nb-layout-column>
+      <router-outlet></router-outlet>
+    </nb-layout-column>
+  
+    <nb-layout-footer id="footer" class="bg-primary" fixed>
+      <div class="container">
+        <div class="copyright">
+          &copy; <strong><span>Info-Collector</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          Designed by <a href="https://mahfuzullahmufi.github.io/">Mufi</a>
+        </div>
+      </div>
+    </nb-layout-footer>
+  </nb-layout>
+  

@@ -1,0 +1,50 @@
+.custom-navbar, .custom-navbar h4 {
+    background-color: #007bff;
+    padding: 0 20px;
+    color: #fff;
+  }
+  
+  .right-aligned {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggle-icon nb-icon {
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  
+  .toggle-icon nb-icon:hover {
+    color: #ffdd57;
+    cursor: pointer;
+  }
+  
+  .custom-user nb-user-name, 
+  .custom-user nb-user-title {
+    color: white ;
+  }
+  
+  .nb-layout-footer {
+    background: #05579e;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  #footer .copyright {
+    text-align: center;
+    color: #05579e;
+    padding-top: -10px;
+  }
+  
+  #footer .credits {
+    text-align: center;
+    font-size: 13px;
+    color: #05579e;
+  }
+  
+  #footer .credits a {
+    color: navy;
+  }
+  

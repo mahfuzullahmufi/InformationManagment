@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GetInfoComponent } from './excercise/get-info/get-info.component';
@@ -14,6 +14,8 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { LayoutModule } from './layout/layout.module';
+import { AuthInterceptor } from './authentication/auth.interceptor';
 
 @NgModule({
     declarations: [
@@ -41,11 +43,12 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
         NbSidebarModule.forRoot(),
         NgxExtendedPdfViewerModule,
         NbActionsModule,
-        NbActionsModule,
-        NbUserModule
+        NbUserModule,
+        LayoutModule
     ],
     providers: [
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     ]
 })
 export class AppModule { }

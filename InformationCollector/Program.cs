@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Configuration.GetSection("Settings").Bind(AppSettings.Settings);
 
 builder.Services.RegisterServices();
+builder.Services.AddRoles();
 
 var app = builder.Build();
 

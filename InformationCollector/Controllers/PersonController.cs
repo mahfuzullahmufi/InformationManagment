@@ -1,6 +1,7 @@
 ﻿using InformationManagment.Api.Controllers;
 using InformationManagment.Core.Command.PersonCommand;
 using InformationManagment.Core.Queries.PersonQueries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InformationCollector.Controllers
@@ -9,6 +10,7 @@ namespace InformationCollector.Controllers
     [ApiController]
     public class PersonController : BaseController
     {
+        [Authorize(Roles = "Admin")]
         [HttpGet("get-person-list")]
         public async Task<IActionResult> GetPersonList([FromQuery] GetPersonListQuery query) => Ok(await _mediatr.Send(query));
 
