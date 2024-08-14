@@ -5,10 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GetInfoComponent } from './excercise/get-info/get-info.component';
-import { CountryComponent } from './excercise/country/country.component';
-import { EditCountryComponent } from './excercise/edit-country/edit-country.component';
-import { ExamplePdfViewerComponent } from './excercise/example-pdf-viewer/example-pdf-viewer.component';
 import { NbThemeModule, NbLayoutModule, NbDatepickerModule, NbToastrModule, NbMenuModule, NbSidebarModule, NbActionsModule, NbUserModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
@@ -20,10 +16,6 @@ import { AuthInterceptor } from './authentication/auth.interceptor';
 @NgModule({
     declarations: [
         AppComponent,
-        GetInfoComponent,
-        CountryComponent,
-        EditCountryComponent,
-        ExamplePdfViewerComponent,
     ],
     bootstrap: [AppComponent],
     imports: [

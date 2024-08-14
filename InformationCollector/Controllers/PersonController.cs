@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InformationCollector.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonController : BaseController
     {
-        [Authorize(Roles = "Admin")]
         [HttpGet("get-person-list")]
         public async Task<IActionResult> GetPersonList([FromQuery] GetPersonListQuery query) => Ok(await _mediatr.Send(query));
 

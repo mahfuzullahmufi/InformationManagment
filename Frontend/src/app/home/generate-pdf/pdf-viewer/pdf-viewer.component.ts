@@ -14,8 +14,6 @@ export class PdfViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log("report",this.report)
-    // console.log("documentTitle",this.documentTitle)
   }
 
 }

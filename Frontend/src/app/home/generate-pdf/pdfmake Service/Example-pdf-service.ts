@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from '../../../../assets/pdf-make/vfs_fonts.js';
 import * as dayjs from 'dayjs';
 import { setHeading, setPdfMakeFonts, setSubHeading, setSubSetHeading } from "../../../../assets/pdfMakeConfig/pdf-make-config";
 
