@@ -7,7 +7,7 @@ import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbMenuModule
 
 @NgModule({
   declarations: [
-    StartupPageComponent
+    StartupPageComponent,
   ],
   imports: [
     CommonModule,

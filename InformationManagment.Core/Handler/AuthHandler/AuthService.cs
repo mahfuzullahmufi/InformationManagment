@@ -98,17 +98,14 @@ namespace InformationManagment.Core.Handler.AuthHandler
 
                 var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
+                var userRoles = await _userManager.GetRolesAsync(user);
+
                 return new SignInResponseDto()
                 {
                     IsSuccess = true,
                     Token = token,
-                    UserData = new UserDto()
-                    {
-                        FirstName = user.FirstName,
-                        Id = user.Id,
-                        Email = user.Email,
-                        PhoneNumber = user.PhoneNumber
-                    }
+                    Name = user.FirstName,
+                    Role = userRoles.FirstOrDefault()
                 };
             }
             else

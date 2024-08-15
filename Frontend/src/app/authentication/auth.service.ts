@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserSignUp } from '../models/UserSignUp.model';
 import { ApiResponse } from '../models/api-response.model';
+import { MenuService } from '../services/menu.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,12 +16,22 @@ export class AuthService {
   private readonly tokenKey = 'token';
   private readonly userNameKey = 'userName';
   private readonly userRoleKey = 'userRole';
+  private redirectUrlSubject = new BehaviorSubject<string | null>(null);
 
   constructor(
     private readonly http: HttpClient,
     private readonly toastrService: NbToastrService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly menuService: MenuService
   ) {}
+
+  setRedirectUrl(url: string) {
+    this.redirectUrlSubject.next(url);
+  }
+
+  getRedirectUrl(): Observable<string | null> {
+    return this.redirectUrlSubject.asObservable();
+  }
 
   signUp(data: UserSignUp): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.baseUrl}admin-sign-up`, data);
@@ -28,7 +39,24 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}sign-in`, { email, password }).pipe(
-      tap(response => this.handleLoginResponse(response))
+      tap(response => {
+        if (response.isSuccess) {
+          this.saveAuthData(response.token, response.name, response.role);
+          this.toastrService.success('Success, You are successfully logged in', 'Login Success');
+          
+          this.menuService.getMenuList().subscribe(menuList => {
+            this.menuService.updateMenuList(menuList);
+            const redirectUrl = this.redirectUrlSubject.getValue() || '/';
+            if (redirectUrl && this.menuService.isUrlInMenuList(redirectUrl)) {
+              this.router.navigate([redirectUrl]);
+            } else {
+              this.router.navigate(['/configuration/not-found']);
+            }
+          });
+        } else {
+          this.toastrService.danger(response.message, 'Login failed');
+        }
+      })
     );
   }
 
@@ -42,24 +70,16 @@ export class AuthService {
     return !!localStorage.getItem(this.tokenKey);
   }
 
-  private handleLoginResponse(response: any): void {
-    if (response.isSuccess) {
-      this.saveAuthData(response.token, `${response.userData.firstName}`, response.userData.userRole);
-      this.toastrService.success('Success, You are successfully logged in', 'Login Success');
-    } else {
-      this.toastrService.danger(response.message, 'Login failed');
-    }
-  }
-
-  private saveAuthData(token: string, userName: string, userRole: number): void {
+  private saveAuthData(token: string, userName: string, userRole: string): void {
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem(this.userNameKey, userName);
-    localStorage.setItem(this.userRoleKey, userRole.toString());
+    localStorage.setItem(this.userRoleKey, userRole);
   }
 
   private clearAuthData(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userNameKey);
     localStorage.removeItem(this.userRoleKey);
+    this.redirectUrlSubject.next(null);
   }
 }

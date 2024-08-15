@@ -9,9 +9,8 @@
         </div>
         <div class="d-flex align-items-center">
           <nb-user size="medium"
-                 name="Manfuzullah Mufi"
-                 title="Software Engineer"
-                 picture="https://mahfuzullahmufi.github.io/static/media/Mufi%20Formal%202.0.573a48f641f1119bdfa4.jpg"
+                 name={{userName}}
+                 title={{userRole}}
                  class="custom-user">
         </nb-user>
         <nb-action icon="log-out-outline" (click)="logout()" class="ms-3 logout-icon"></nb-action>

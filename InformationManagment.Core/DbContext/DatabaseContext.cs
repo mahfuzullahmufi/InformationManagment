@@ -76,5 +76,7 @@ namespace InformationManagment.Core.DbContext
         public DbSet<City> Cities { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<PersonLanguage> PersonLanguages { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<MenuRole> MenuRoles { get; set; }
     }
 }

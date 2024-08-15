@@ -40,7 +40,10 @@ namespace InformationManagment.Api.Setup
                 .ReverseMap()
                 .ForMember(dest => dest.Cities, opt => opt.Ignore()); // Prevent circular reference
 
-            CreateMap<Menu, MenuDto>().ReverseMap();
+            CreateMap<Menu, MenuDto>()
+                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.MenuRoles.Select(mr => mr.RoleId).ToList()))
+                .ReverseMap()
+                .ForMember(dest => dest.MenuRoles, opt => opt.MapFrom(src => src.RoleId.Select(roleId => new MenuRole { RoleId = roleId }).ToList()));
 
         }
     }

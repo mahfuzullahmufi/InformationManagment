@@ -10,12 +10,9 @@ import { MenuService } from "src/app/services/menu.service";
   styleUrl: "./app-layout.component.css",
 })
 export class AppLayoutComponent implements OnInit {
-  menuList: MenuData[] = [];
-  menuItemsList: any[] = [];
-
-  items = [{ title: "Profile" }, { title: "Logout" }];
-
   menuItems: any[] = [];
+  userName: string = localStorage.getItem("userName");
+  userRole: string = localStorage.getItem("userRole");
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -25,12 +22,11 @@ export class AppLayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.menuItems = [];
     this.menuService.menuList$.subscribe(menuList => {
-      debugger;
-      if(menuList.length > 0){
+      if (menuList.length > 0) {
         this.generateMenuItems(menuList);
-      }
-      else{
+      } else {
         this.loadMenuList();
       }
     });
@@ -39,27 +35,26 @@ export class AppLayoutComponent implements OnInit {
   loadMenuList() {
     this.menuService.getMenuList().subscribe(
       (data: MenuData[]) => {
-        this.menuList = data;
-        this.generateMenuItems(this.menuList);
+        this.generateMenuItems(data);
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
   }
 
-  toggleSidebar = (): void => {
-    this.sidebarService.toggle(true, "menu-sidebar");
-  };
+  toggleSidebar(): void {
+    this.sidebarService.toggle(true, 'menu-sidebar');
+  }
 
-  generateMenuItems = (menuList: MenuData[]): void => {
-    const parentMenus = menuList.filter((menu) => menu.isParent);
-    const childMenus = menuList.filter((menu) => menu.parentId > 0);
+  generateMenuItems(menuList: MenuData[]): void {
+    const parentMenus = menuList.filter(menu => menu.isParent);
+    const childMenus = menuList.filter(menu => menu.parentId > 0);
 
-    const menuItems = parentMenus.map((parent) => {
+    this.menuItems = parentMenus.map(parent => {
       const children = childMenus
-        .filter((child) => child.parentId === parent.id)
-        .map((child) => ({
+        .filter(child => child.parentId === parent.id)
+        .map(child => ({
           title: child.menuName,
           link: child.url,
           icon: child.icon,
@@ -73,20 +68,13 @@ export class AppLayoutComponent implements OnInit {
         children: children.length ? children : undefined,
       };
     });
-
-    this.menuItems = menuItems;
-  };
+  }
 
   logout() {
-    this.toastrService.success(
-      "You have been logged out successfully.",
-      "Logged Out"
-    );
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userRole");
-
-    this.router.navigate(["/auth/login"]);
+    this.toastrService.success('You have been logged out successfully.', 'Logged Out');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
+    this.router.navigate(['/auth/login']);
   }
 }

@@ -1,9 +1,10 @@
 <nb-layout>
-    <nb-layout-column class="d-flex justify-content-center align-items-center">
+  <nb-layout-column class="background-container">
+    <div class="content-container d-flex justify-content-center align-items-center">
       <nb-card class="login-card">
         <nb-card-header class="text-center">SignIn</nb-card-header>
         <nb-card-body>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center">
             <div class="form-group mb-3 w-100 position-relative">
               <input nbInput placeholder="Username" formControlName="email" fullWidth />
               <nb-icon *ngIf="!loginForm.get('email').value" icon="person-outline" pack="eva" class="input-icon"></nb-icon>
@@ -20,6 +21,6 @@
           </form>
         </nb-card-body>
       </nb-card>
-    </nb-layout-column>
-  </nb-layout>
-  
+    </div>
+  </nb-layout-column>
+</nb-layout>

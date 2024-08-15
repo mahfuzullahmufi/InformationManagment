@@ -1,3 +1,16 @@
+.background-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, rgb(3, 188, 250) 50%, white 50%);
+}
+
+.content-container {
+  width: 100%;
+  max-width: 400px; 
+}
+
 nb-card {
     max-width: 500px;
     width: 100%;

@@ -1,18 +1,35 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
+import { MenuService } from '../services/menu.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): boolean {
-    const isAuthenticated = !!localStorage.getItem('token');
+  constructor(private authService: AuthService, private router: Router, private menuService: MenuService) {}
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    const isAuthenticated = this.authService.isAuthenticated();
+    const currentUrl = state.url;
+
     if (!isAuthenticated) {
+      this.authService.setRedirectUrl(currentUrl);
       this.router.navigate(['/auth/login']);
+      return false;
     }
-    return isAuthenticated;
+
+    return this.menuService.isUrlInMenuList(currentUrl).then(isUrlAllowed => {
+      if (isUrlAllowed) {
+        return true;
+      } else {
+        this.router.navigate(['/configuration/not-found']);
+        return false;
+      }
+    });
   }
 }

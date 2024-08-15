@@ -1,19 +1,20 @@
 ﻿using AutoMapper;
 using InformationManagment.Core.Command.MenuCommand;
+using InformationManagment.Core.DbContext;
 using InformationManagment.Core.Entities;
-using InformationManagment.Core.Repository.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationManagment.Core.Handler.MenuHandler
 {
     public class AddOrUpdateMenuCommandHandler : IRequestHandler<AddOrUpdateMenuCommand, int>
     {
-        private readonly IRepository<Menu> _menuRepository;
+        private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
 
-        public AddOrUpdateMenuCommandHandler(IRepository<Menu> menuRepository, IMapper mapper)
+        public AddOrUpdateMenuCommandHandler(DatabaseContext databaseContext, IMapper mapper)
         {
-            _menuRepository = menuRepository;
+            _databaseContext = databaseContext;
             _mapper = mapper;
         }
 
@@ -28,18 +29,35 @@ namespace InformationManagment.Core.Handler.MenuHandler
 
             if (menu.Id > 0)
             {
+                var existingMenu = await _databaseContext.Menus
+                    .Include(x => x.MenuRoles)
+                    .Where(x => x.Id == request.Id)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id)
+                    .ConfigureAwait(false);
+
+                if (existingMenu == null)
+                {
+                    throw new ArgumentNullException("Menu not found");
+                }
+
+                _databaseContext.MenuRoles.RemoveRange(existingMenu.MenuRoles);
+
+                _mapper.Map(request, existingMenu);
+
                 menu.UpdatedBy = request.UserId;
                 menu.UpdatedDate = DateTime.UtcNow;
-                _menuRepository.Update(menu);
+
+                existingMenu.MenuRoles.Clear();
+                existingMenu.MenuRoles = menu.MenuRoles.ToList();
             }
             else
             {
                 menu.CreatedBy = request.UserId;
                 menu.CreatedDate = DateTime.UtcNow;
-                await _menuRepository.Insert(menu);
+                await _databaseContext.Menus.AddAsync(menu);
             }
 
-            await _menuRepository.SaveChangesAsync();
+            await _databaseContext.SaveChangesAsync();
 
             return menu.Id;
         }

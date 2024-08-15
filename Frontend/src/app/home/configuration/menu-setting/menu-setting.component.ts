@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { KeyValue } from 'src/app/models/key-value.model';
 import { MenuData } from 'src/app/models/menu-data.model';
 import { MenuService } from 'src/app/services/menu.service';
 
@@ -12,12 +11,15 @@ import { MenuService } from 'src/app/services/menu.service';
   templateUrl: './menu-setting.component.html',
   styleUrl: './menu-setting.component.css'
 })
-export class MenuSettingComponent implements OnInit {
+export class MenuSettingComponent implements OnInit, OnDestroy {
   form: FormGroup;
   submitted = false;
-  menuList : MenuData[] = [];
-  parentMenuList: KeyValue[] = [];
-  pmDDList = [];
+  menuList: MenuData[] = [];
+  parentMenuList: { key: number, value: string }[] = [];
+  roleList: { key: string, value: string }[] = [
+    { key: 'b82bc367-40b8-46be-865e-dfe2da84a913', value: 'Admin' },
+    { key: '6ec2bc70-2899-487c-a925-607839187ec2', value: 'User' }
+  ];
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
@@ -33,7 +35,7 @@ export class MenuSettingComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private toastrService: NbToastrService,
-    private menuSettingService: MenuService
+    private menuService: MenuService
   ) {}
 
   ngOnInit(): void {
@@ -43,8 +45,9 @@ export class MenuSettingComponent implements OnInit {
       url: ['', Validators.required],
       icon: ['', Validators.required],
       orderNo: ['', Validators.required],
-      parentId: [0, Validators.required],
-      isParent: [false]
+      parentId: [0],
+      isParent: [false],
+      roleId: [[], Validators.required]
     });
 
     this.dtOptions = {
@@ -55,15 +58,15 @@ export class MenuSettingComponent implements OnInit {
   }
 
   loadMenuList() {
-    this.menuSettingService.getMenuList().subscribe(
+    this.menuService.getMenuList().subscribe(
       (data: MenuData[]) => {
         this.menuList = data;
         this.parentMenuList = this.menuList
-        .filter(menu => menu.isParent)
-        .map(menu => ({
-          key: menu.id,
-          value: menu.menuName
-        }));
+          .filter(menu => menu.isParent)
+          .map(menu => ({
+            key: menu.id,
+            value: menu.menuName
+          }));
         this.dtTrigger.next(this.menuList);
       },
       error => {
@@ -79,7 +82,7 @@ export class MenuSettingComponent implements OnInit {
       return;
     }
 
-    this.menuSettingService.saveMenu(this.form.value).subscribe(
+    this.menuService.saveMenu(this.form.value).subscribe(
       () => {
         this.toastrService.success('Menu saved successfully', 'Success');
         this.reRender();
@@ -91,18 +94,17 @@ export class MenuSettingComponent implements OnInit {
     );
   }
 
-  editMenu(item) {
+  editMenu(item: MenuData) {
     this.form.patchValue(item);
   }
 
-  deleteMenu(menuId) {
-    this.menuSettingService.deleteMenu(menuId).subscribe(
-      (response: Boolean) => {
-        if(response) {
+  deleteMenu(menuId: number) {
+    this.menuService.deleteMenu(menuId).subscribe(
+      (response: boolean) => {
+        if (response) {
           this.toastrService.success('Menu deleted successfully', 'Success');
-        this.reRender();
-        }
-        else {
+          this.reRender();
+        } else {
           this.toastrService.danger('Failed to delete menu', 'Error');
         }
       },
@@ -117,7 +119,7 @@ export class MenuSettingComponent implements OnInit {
     this.submitted = false;
   }
 
-  checkboxChangeParent(event) {
+  checkboxChangeParent(event: boolean) {
     if (event) {
       this.form.get('parentId').clearValidators();
     } else {

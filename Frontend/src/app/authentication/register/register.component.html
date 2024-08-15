@@ -1,51 +1,53 @@
 <nb-layout>
-    <nb-layout-column>
-        <nb-card class="login-card">
-            <nb-card-header class="text-center">SignUp</nb-card-header>
-            <nb-card-body>
-                <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center">
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <input nbInput placeholder="First Name" formControlName="firstName" fullWidth />
-                        <nb-icon *ngIf="!signUpForm.get('firstName').value" icon="person-outline" pack="eva"
-                            class="input-icon"></nb-icon>
-                    </div>
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <input nbInput placeholder="Last Name" formControlName="lastName" fullWidth />
-                        <nb-icon *ngIf="!signUpForm.get('lastName').value" icon="person-outline" pack="eva"
-                            class="input-icon"></nb-icon>
-                    </div>
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <input nbInput placeholder="Email" formControlName="email" type="email" fullWidth />
-                        <nb-icon *ngIf="!signUpForm.get('email').value" icon="email-outline" pack="eva"
-                            class="input-icon"></nb-icon>
-                    </div>
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <input nbInput placeholder="Phone Number" formControlName="phoneNumber" fullWidth />
-                        <nb-icon *ngIf="!signUpForm.get('phoneNumber').value" icon="phone-outline" pack="eva"
-                            class="input-icon"></nb-icon>
-                    </div>
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <input nbInput placeholder="Password" formControlName="password" [type]="passwordFieldType"
-                            fullWidth />
-                        <nb-icon icon="eye-outline" pack="eva" class="input-icon eye-icon"
-                            (click)="togglePasswordVisibility()"></nb-icon>
-                    </div>
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <input nbInput placeholder="Confirm Password" formControlName="confirmPassword"
-                            [type]="passwordFieldType" fullWidth />
-                        <nb-icon icon="eye-outline" pack="eva" class="input-icon eye-icon"
-                            (click)="togglePasswordVisibility()"></nb-icon>
-                        <div *ngIf="signUpForm.get('confirmPassword').errors?.mustMatch && signUpForm.get('confirmPassword').touched"
-                            class="text-danger">
-                            Passwords must match
+    <nb-layout-column class="background-container">
+        <div class="content-container d-flex justify-content-center align-items-center">
+            <nb-card class="login-card">
+                <nb-card-header class="text-center">SignUp</nb-card-header>
+                <nb-card-body>
+                    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="d-flex flex-column align-items-center">
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <input nbInput placeholder="First Name" formControlName="firstName" fullWidth />
+                            <nb-icon *ngIf="!signUpForm.get('firstName').value" icon="person-outline" pack="eva"
+                                class="input-icon"></nb-icon>
                         </div>
-                    </div>
-                    <div class="form-group mb-3 w-100 position-relative">
-                        <a routerLink="/auth/login" class="signin-link">SignIn</a>
-                    </div>
-                    <button nbButton status="primary" type="submit" fullWidth>SignUp</button>
-                </form>
-            </nb-card-body>
-        </nb-card>
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <input nbInput placeholder="Last Name" formControlName="lastName" fullWidth />
+                            <nb-icon *ngIf="!signUpForm.get('lastName').value" icon="person-outline" pack="eva"
+                                class="input-icon"></nb-icon>
+                        </div>
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <input nbInput placeholder="Email" formControlName="email" type="email" fullWidth />
+                            <nb-icon *ngIf="!signUpForm.get('email').value" icon="email-outline" pack="eva"
+                                class="input-icon"></nb-icon>
+                        </div>
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <input nbInput placeholder="Phone Number" formControlName="phoneNumber" fullWidth />
+                            <nb-icon *ngIf="!signUpForm.get('phoneNumber').value" icon="phone-outline" pack="eva"
+                                class="input-icon"></nb-icon>
+                        </div>
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <input nbInput placeholder="Password" formControlName="password" [type]="passwordFieldType"
+                                fullWidth />
+                            <nb-icon icon="eye-outline" pack="eva" class="input-icon eye-icon"
+                                (click)="togglePasswordVisibility()"></nb-icon>
+                        </div>
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <input nbInput placeholder="Confirm Password" formControlName="confirmPassword"
+                                [type]="passwordFieldType" fullWidth />
+                            <nb-icon icon="eye-outline" pack="eva" class="input-icon eye-icon"
+                                (click)="togglePasswordVisibility()"></nb-icon>
+                            <div *ngIf="signUpForm.get('confirmPassword').errors?.mustMatch && signUpForm.get('confirmPassword').touched"
+                                class="text-danger">
+                                Passwords must match
+                            </div>
+                        </div>
+                        <div class="form-group mb-3 w-100 position-relative">
+                            <a routerLink="/auth/login" class="signin-link">SignIn</a>
+                        </div>
+                        <button nbButton status="primary" type="submit" fullWidth>SignUp</button>
+                    </form>
+                </nb-card-body>
+            </nb-card>
+        </div>
     </nb-layout-column>
 </nb-layout>

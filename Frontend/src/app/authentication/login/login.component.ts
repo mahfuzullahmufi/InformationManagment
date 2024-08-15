@@ -14,7 +14,11 @@ export class LoginComponent {
   showPassword = false;
   passwordFieldType: string = 'password';
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService, 
+    private router: Router,
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -33,9 +37,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
       this.authService.login(email, password).subscribe(response => {
-        if (response.isSuccess) {
-          this.router.navigate(['']);
-        }
+        console.log(response);
       });
     }
   }

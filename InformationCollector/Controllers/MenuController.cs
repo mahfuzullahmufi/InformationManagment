@@ -11,7 +11,11 @@ namespace InformationManagement.Api.Controllers
     {
 
         [HttpGet("get-menu-list")]
-        public async Task<IActionResult> GetMenuList([FromQuery] GetMenuListQuery query) => Ok(await _mediatr.Send(query));
+        public async Task<IActionResult> GetMenuList([FromQuery] GetMenuListQuery query)
+        {
+            query.UserId = CurrentUser.UserId;
+            return Ok(await _mediatr.Send(query));
+        }
 
         [HttpGet("get-menu-by-id")]
         public async Task<IActionResult> GetMenuById([FromQuery] GetMenuByIdQuery query) => Ok(await _mediatr.Send(query));
