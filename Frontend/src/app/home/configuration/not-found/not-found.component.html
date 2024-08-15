@@ -1,1 +1,9 @@
-<p>not-found works!</p>
+<nb-layout>
+    <nb-layout-column>
+      <div class="not-found-container">
+        <h1 class="not-found-title">You are UnAuthorized or This URL may not exist</h1>
+        <p class="not-found-message">Sorry, the page you are looking for does not exist or you do not have the necessary permissions to view it.</p>
+        <button nbButton status="primary" (click)="goHome()">Go to Home</button>
+      </div>
+    </nb-layout-column>
+  </nb-layout>

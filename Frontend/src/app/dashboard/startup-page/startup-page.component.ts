@@ -44,6 +44,4 @@ export class StartupPageComponent implements OnInit {
 
     });
   }
-
-
 }
