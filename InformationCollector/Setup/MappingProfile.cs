@@ -39,6 +39,9 @@ namespace InformationManagment.Api.Setup
             CreateMap<Country, CountryDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Cities, opt => opt.Ignore()); // Prevent circular reference
+
+            CreateMap<Menu, MenuDto>().ReverseMap();
+
         }
     }
 }

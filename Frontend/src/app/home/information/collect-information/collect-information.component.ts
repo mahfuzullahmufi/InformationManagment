@@ -11,9 +11,9 @@ import dayjs from "dayjs";
 import { Country } from "src/app/models/country.model";
 import { InfoModel } from "src/app/models/info.model";
 import { LanguageModel } from "src/app/models/language.model";
-import { InformationService } from "src/app/services/information.service";
 import { ActivatedRoute } from "@angular/router";
 import { City } from "src/app/models/city.model";
+import { InformationService } from "../../../services/information.service";
 
 @Component({
   selector: "ngx-collect-information",

@@ -7,6 +7,7 @@ import { StartupPageComponent } from './dashboard/startup-page/startup-page.comp
 const routes: Routes = [
   { path: '', component: AppLayoutComponent, canActivate: [AuthGuard], children: [
       { path: '', component: StartupPageComponent },
+      { path: 'configuration', loadChildren: () => import('./home/configuration/configuration.module').then(m => m.ConfigurationModule) },
       { path: 'information', loadChildren: () => import('./home/information/information.module').then(m => m.InformationModule) },
       { path: 'pdf', loadChildren: () => import('./home/generate-pdf/generate-pdf.module').then(m => m.GeneratePdfModule) }
     ]

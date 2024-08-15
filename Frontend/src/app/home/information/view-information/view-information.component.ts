@@ -9,7 +9,7 @@ import { LanguageModel } from 'src/app/models/language.model';
 import { ExcelServiceService } from 'src/app/services/ExcelService/excel-service.service';
 import { Examplepdfservice } from 'src/app/services/PdfService/Example-pdf-service';
 import { AllInfoReportService } from 'src/app/services/PdfService/all-info-report.service';
-import { InformationService } from 'src/app/services/information.service';
+import { InformationService } from '../../../services/information.service';
 
 @Component({
   selector: 'app-view-information',
@@ -37,7 +37,6 @@ export class ViewInformationComponent implements OnInit {
     private toasterService: NbToastrService,
     private router: Router,
     private pdfService: AllInfoReportService,
-    private pdfServiceEx: Examplepdfservice,
     private excelService: ExcelServiceService,
   ) { }
 

@@ -2,7 +2,6 @@
 using InformationManagment.Core.Helper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace InformationManagment.Core.DbContext
 {
@@ -55,6 +54,21 @@ namespace InformationManagment.Core.DbContext
                 .WithOne(p => p.City)
                 .HasForeignKey(p => p.CityId)
                 .OnDelete(DeleteBehavior.Restrict); // No cascade delete
+
+            builder.Entity<MenuRole>()
+                   .HasKey(mr => new { mr.MenuId, mr.RoleId });
+
+            builder.Entity<MenuRole>()
+                .HasOne(mr => mr.Menu)
+                .WithMany(m => m.MenuRoles)
+                .HasForeignKey(mr => mr.MenuId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<MenuRole>()
+                .HasOne(mr => mr.Role)
+                .WithMany()
+                .HasForeignKey(mr => mr.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Person> Persons { get; set; }
