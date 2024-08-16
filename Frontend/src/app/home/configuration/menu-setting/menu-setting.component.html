@@ -1,48 +1,87 @@
 <div fxLayout="column" fxLayoutGap="0px" fxLayoutAlign="space-between none" id="goUp" #goUp>
   <div>
     <nb-card size="medium">
-      <nb-card-header class="header-section">Menu Settings</nb-card-header>
+      <nb-card-header class="header-section form-header-section">Menu Settings</nb-card-header>
       <nb-card-body>
         <form [formGroup]="form" (ngSubmit)="onSave()">
-          <div class="row m-1 p-1">
-            <div class="col-sm-2">
-              <label class="col-form-label">Is Parent:</label>
-            </div>
-            <div class="col-sm-6">
-              <nb-checkbox status="basic" formControlName="isParent" (checkedChange)="checkboxChangeParent($event)"></nb-checkbox>
-            </div>
-          </div>
-          <div class="row m-1 p-1" *ngFor="let field of formFields">
-            <div class="col-sm-2">
-              <label class="col-form-label">{{ field.label }}: <span>*</span></label>
-            </div>
-            <div class="col-sm-6">
-              <input *ngIf="field.type !== 'select'" [type]="field.type" class="form-control" fullWidth nbInput [placeholder]="field.placeholder" [formControlName]="field.controlName">
-              <nb-select *ngIf="field.type === 'select' && !form.get('isParent').value" fullWidth [formControlName]="field.controlName" [placeholder]="field.placeholder">
-                <nb-option *ngFor="let item of parentMenuList" [value]="item.key">{{ item.value }}</nb-option>
-              </nb-select>
-              <div *ngIf="(submitted && form.get(field.controlName).hasError('required')) || (form.get(field.controlName).hasError('required') && form.get(field.controlName).touched)" class="text-danger" padding>
-                <div>Please Enter {{ field.label }}</div>
+          <div class="row">
+            <!-- Left Part -->
+            <div class="col-md-6">
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Is Parent:</label>
+                <div class="col-sm-8">
+                  <nb-checkbox status="basic" formControlName="isParent" (checkedChange)="checkboxChangeParent($event)"></nb-checkbox>
+                </div>
+              </div>
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Name: <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" nbInput placeholder="Enter Name" formControlName="menuName">
+                  <div *ngIf="submitted && form.get('menuName').hasError('required')" class="text-danger">
+                    Please Enter Name
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">URL: <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" nbInput placeholder="Enter URL" formControlName="url">
+                  <div *ngIf="submitted && form.get('url').hasError('required')" class="text-danger">
+                    Please Enter URL
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Parent Menu:</label>
+                <div class="col-sm-8">
+                  <nb-select fullWidth formControlName="parentId" placeholder="--- Select Parent Menu ---" *ngIf="!form.get('isParent').value">
+                    <nb-option *ngFor="let item of parentMenuList" [value]="item.key">{{ item.value }}</nb-option>
+                  </nb-select>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row m-1 p-1">
-            <div class="col-sm-2">
-              <label class="col-form-label">Roles: <span>*</span></label>
-            </div>
-            <div class="col-sm-6">
-              <nb-select fullWidth multiple formControlName="roleId" placeholder="Select Roles">
-                <nb-option *ngFor="let role of roleList" [value]="role.key">{{ role.value }}</nb-option>
-              </nb-select>
-              <div *ngIf="(submitted && form.get('roleId').hasError('required')) || (form.get('roleId').hasError('required') && form.get('roleId').touched)" class="text-danger" padding>
-                <div>Please Select Roles</div>
+            <!-- Right Part -->
+            <div class="col-md-6">
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Is Active:</label>
+                <div class="col-sm-8">
+                  <nb-checkbox status="basic" formControlName="isActive" ></nb-checkbox>
+                </div>
               </div>
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Icon: <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" nbInput placeholder="Enter Icon" formControlName="icon">
+                  <div *ngIf="submitted && form.get('icon').hasError('required')" class="text-danger">
+                    Please Enter Icon
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Order No: <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <input type="number" class="form-control" nbInput placeholder="Enter Order No" formControlName="orderNo">
+                  <div *ngIf="submitted && form.get('orderNo').hasError('required')" class="text-danger">
+                    Please Enter Order No
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row m-1 p-1">
+                <label class="col-sm-4 col-form-label label-bold">Roles: <span class="text-danger">*</span></label>
+                <div class="col-sm-8">
+                  <nb-select fullWidth multiple formControlName="roleId" placeholder="Select Roles">
+                    <nb-option *ngFor="let role of roleList" [value]="role.key">{{ role.value }}</nb-option>
+                  </nb-select>
+                  <div *ngIf="submitted && form.get('roleId').hasError('required')" class="text-danger">
+                    Please Select Roles
+                  </div>
+                </div>
+              </div>
+              
             </div>
           </div>
-          <div class="row m-1 p-1"></div>
           <div class="row m-1 p-1">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-6">
+            <div class="col-sm-12 text-center">
               <button class="col-sm-3 mx-1" nbButton status="primary" type="submit">Save</button>
               <button class="col-sm-3 mx-1" type="button" nbButton (click)="refresh()">Refresh</button>
             </div>

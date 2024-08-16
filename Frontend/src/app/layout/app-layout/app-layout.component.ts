@@ -48,8 +48,8 @@ export class AppLayoutComponent implements OnInit {
   }
 
   generateMenuItems(menuList: MenuData[]): void {
-    const parentMenus = menuList.filter(menu => menu.isParent);
-    const childMenus = menuList.filter(menu => menu.parentId > 0);
+    const parentMenus = menuList.filter(menu => menu.isParent && menu.isActive);
+    const childMenus = menuList.filter(menu => menu.parentId > 0 && menu.isActive);
 
     this.menuItems = parentMenus.map(parent => {
       const children = childMenus

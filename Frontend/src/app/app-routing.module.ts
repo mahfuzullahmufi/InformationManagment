@@ -3,9 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './authentication/auth.guard';  
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { StartupPageComponent } from './dashboard/startup-page/startup-page.component';
+import { NotFoundComponent } from './home/configuration/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '', component: AppLayoutComponent, canActivate: [AuthGuard], children: [
+  {
+    path: '',
+    component: AppLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
       { path: '', component: StartupPageComponent },
       { path: 'configuration', loadChildren: () => import('./home/configuration/configuration.module').then(m => m.ConfigurationModule) },
       { path: 'information', loadChildren: () => import('./home/information/information.module').then(m => m.InformationModule) },
@@ -13,7 +18,8 @@ const routes: Routes = [
     ]
   },
   { path: 'auth', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
-  { path: '**', redirectTo: 'auth/login', pathMatch: 'full' }
+  { path: 'configuration/not-found', component: NotFoundComponent },
+  { path: '**', redirectTo: 'configuration/not-found', pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -13,7 +13,8 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
     const isAuthenticated = this.authService.isAuthenticated();
     const currentUrl = state.url;
 
@@ -30,6 +31,9 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/configuration/not-found']);
         return false;
       }
+    }).catch(() => {
+      this.router.navigate(['/configuration/not-found']);
+      return false;
     });
   }
 }

@@ -24,14 +24,6 @@ export class MenuSettingComponent implements OnInit, OnDestroy {
   dtTrigger: Subject<any> = new Subject<any>();
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
 
-  formFields = [
-    { label: 'Name', type: 'text', placeholder: 'Enter Name', controlName: 'menuName' },
-    { label: 'URL', type: 'text', placeholder: 'Enter URL', controlName: 'url' },
-    { label: 'Icon', type: 'text', placeholder: 'Enter Icon', controlName: 'icon' },
-    { label: 'Order No', type: 'number', placeholder: 'Enter Order No', controlName: 'orderNo' },
-    { label: 'Parent Menu', type: 'select', placeholder: '--- Select Parent Menu ---', controlName: 'parentId' }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private toastrService: NbToastrService,
@@ -47,6 +39,7 @@ export class MenuSettingComponent implements OnInit, OnDestroy {
       orderNo: ['', Validators.required],
       parentId: [0],
       isParent: [false],
+      isActive: [true],
       roleId: [[], Validators.required]
     });
 

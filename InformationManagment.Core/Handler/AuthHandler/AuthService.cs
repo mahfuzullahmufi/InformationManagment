@@ -184,7 +184,7 @@ namespace InformationManagment.Core.Handler.AuthHandler
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var url = $"{AppSettings.Settings.AppUrl}/reset-password?token={token}&email={forgotPasswordDto.Email}";
+            var url = $"{AppSettings.Settings.AppUrl}/auth/reset-password-by-token?token={token}&email={forgotPasswordDto.Email}";
             var htmlContent = ResetPassHtmlContent.GetContent(url);
             var result = await _emailSender.SendEmailAsync(forgotPasswordDto.Email, "Password Reset", htmlContent);
             if (result.IsSuccess)

@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { UserSignUp } from '../models/UserSignUp.model';
 import { ApiResponse } from '../models/api-response.model';
 import { MenuService } from '../services/menu.service';
+import { ResetPassword } from '../models/reset-password.model';
+import { ResetPasswordByToken } from '../models/reset-password-by-token.model';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +60,18 @@ export class AuthService {
         }
       })
     );
+  }
+
+  resetPassword(data: ResetPassword): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.baseUrl}change-password`, data);
+  }
+
+  forgetPassword(data: any): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.baseUrl}forgot-password`, data);
+  }
+
+  resetPasswordByToken(data: ResetPasswordByToken): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.baseUrl}change-password-by-token`, data);
   }
 
   logout(): void {

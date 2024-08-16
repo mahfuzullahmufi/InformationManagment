@@ -18,6 +18,7 @@ namespace InformationManagment.Core.Entities
            public int? ParentId { get; set; }
 
            public bool IsParent { get; set; }
+           public bool IsActive { get; set; }
 
            public ICollection<MenuRole> MenuRoles { get; set; }
     }

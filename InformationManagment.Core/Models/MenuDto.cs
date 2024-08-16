@@ -9,6 +9,7 @@
         public int OrderNo { get; set; }
         public int? ParentId { get; set; }
         public bool IsParent { get; set; }
+        public bool IsActive { get; set; }
         public List<string> RoleId { get; set; }
     }
 }

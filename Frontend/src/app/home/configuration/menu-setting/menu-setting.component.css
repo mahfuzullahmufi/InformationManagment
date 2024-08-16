@@ -1,0 +1,32 @@
+.header-section {
+    background-color: #f7f9fc;
+    color: #333;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .form-header-section {
+    color: #2596be;
+    font-weight: bold;
+    font-size: 18px;
+    padding-left: 15px;
+    font-family: revert;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .label-bold {
+    font-weight: bold;
+    color: #000000; 
+  }
+  
+  .text-danger {
+    color: #ff3860;
+  }
+  
+  button[nbButton] {
+    margin-top: 10px;
+  }

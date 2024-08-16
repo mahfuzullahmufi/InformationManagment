@@ -6,6 +6,7 @@ export interface MenuData {
   orderNo: number;
   parentId: number;
   isParent: boolean;
+  isActive: boolean;
   roleId: string[];
   userId: string;
 }

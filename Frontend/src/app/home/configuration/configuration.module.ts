@@ -8,12 +8,14 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DataTablesModule } from 'angular-datatables';
 import { MenuSettingComponent } from './menu-setting/menu-setting.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
   declarations: [
     MenuSettingComponent,
     NotFoundComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,
