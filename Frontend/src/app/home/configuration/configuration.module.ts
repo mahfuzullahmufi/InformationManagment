@@ -15,7 +15,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
   declarations: [
     MenuSettingComponent,
     NotFoundComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
   ],
   imports: [
     CommonModule,

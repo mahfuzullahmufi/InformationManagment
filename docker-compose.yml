@@ -1,0 +1,56 @@
+version: '3.4'
+
+networks:
+  info-network:
+
+services:
+  infoappdb:
+    container_name: infoappdb
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=password@12345#
+    networks:
+      - info-network
+    volumes:
+      - sql-data:/var/opt/mssql
+      # - D:/SqlBackup:/var/opt/mssql/backup
+
+  informationmanagement.api:
+    container_name: info-manage-app
+    image: ${DOCKER_REGISTRY-}informationmanagementapi:latest
+    build:
+      context: .
+      dockerfile: InformationCollector/Dockerfile
+    ports:
+      - 8003:8003
+    depends_on:
+      - infoappdb
+    environment:
+      - DB_HOST=infoappdb
+      - DB_NAME=InformationManagement
+      - DB_SA_PASSWORD=password@12345#
+    networks:
+      - info-network
+  
+volumes:
+  sql-data:
+    driver: local
+
+  # angular-frontend:
+  #   container_name: info-frontend
+  #   image: ${DOCKER_REGISTRY-}infomanagefront:latest
+  #   build:
+  #     context: .
+  #     dockerfile: Frontend/Dockerfile
+  #   ports:
+  #     - 4200:80
+  #   depends_on:
+  #     - informationmanagement.api
+  #   environment:
+  #     - MY_API_URL=http://informationmanagement.api:8080/api/
+  #   networks:
+  #     - info-network
+    

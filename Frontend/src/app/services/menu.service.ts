@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MenuData } from '../models/menu-data.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,21 @@ export class MenuService {
   private menuItemsSource = new BehaviorSubject<MenuData[]>([]);
   menuList$ = this.menuItemsSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getMenuList(): Observable<MenuData[]> {
     return this.http.get<MenuData[]>(`${this.apiUrl}/get-menu-list`).pipe(
       tap((menuList: MenuData[]) => {
         this.menuItemsSource.next(menuList);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        debugger;
+        if (error.status === 500 || error.status == undefined) {
+          // Redirect to the error page on 500 internal server error
+          this.router.navigate(['/auth/error']);
+        }
+        // Handle other types of errors or rethrow the error if necessary
+        return throwError(() => new Error('An error occurred while fetching menu list.'));
       })
     );
   }

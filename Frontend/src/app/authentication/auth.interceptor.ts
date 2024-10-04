@@ -25,6 +25,9 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           this.toastrService.danger('Unauthorized access, please login.', 'Error');
           this.router.navigate(['/auth/login']);
+        } else if (error.status === 500) {
+          this.toastrService.danger('Internal Server Error. Please try again later.', 'Error');
+          this.router.navigate(['/auth/error']); // Redirect to an error page
         }
         return throwError(error);
       })
