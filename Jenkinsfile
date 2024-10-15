@@ -2,20 +2,27 @@ pipeline {
     agent {
         docker { 
             image 'mcr.microsoft.com/dotnet/sdk:8.0' 
-            args '-v /var/run/docker.sock:/var/run/docker.sock' 
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock' 
         }
     }
     
     environment {
-        DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi" // Your Docker Hub repo
-        DOCKER_HUB_CREDENTIALS = "docker-hub" // Docker Hub credentials ID in Jenkins
+        DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
+        DOCKER_HUB_CREDENTIALS = "docker-hub"
     }
-
+    
     stages {
         stage('Clone Repository') {
             steps {
-                echo 'Cloning repository from GitHub...'
+                echo 'Cloning repository...'
                 git branch: 'dockerize-the-app', url: 'https://github.com/mahfuzullahmufi/InformationManagment.git'
+            }
+        }
+
+        stage('Prepare Environment') {
+            steps {
+                echo 'Setting permissions for .dotnet folder...'
+                sh 'mkdir -p ~/.dotnet && chmod -R 777 ~/.dotnet'
             }
         }
         
@@ -39,7 +46,7 @@ pipeline {
                 echo 'Building Docker image...'
                 script {
                     def imageTag = "CI${env.BUILD_NUMBER}"
-                    def app = docker.build("${env.DOCKER_HUB_REPO}:${imageTag}")
+                    app = docker.build("${env.DOCKER_HUB_REPO}:${imageTag}")
                 }
             }
         }
@@ -48,9 +55,8 @@ pipeline {
             steps {
                 echo 'Pushing Docker image to Docker Hub...'
                 script {
-                    def imageTag = "CI${env.BUILD_NUMBER}"
                     docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB_CREDENTIALS) {
-                        app.push(imageTag)
+                        app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
                 }
