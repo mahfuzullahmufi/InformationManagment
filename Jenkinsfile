@@ -34,34 +34,34 @@ pipeline {
             }
         }
         
-        stage('Publish Application') {
-            steps {
-                echo 'Publishing the application...'
-                sh 'dotnet publish InformationCollector/InformationManagement.Api.csproj -c Release -o /app/publish /p:UseAppHost=false'
-            }
-        }
+        // stage('Publish Application') {
+        //     steps {
+        //         echo 'Publishing the application...'
+        //         sh 'dotnet publish InformationCollector/InformationManagement.Api.csproj -c Release -o /app/publish /p:UseAppHost=false'
+        //     }
+        // }
         
-        stage('Build Docker Image') {
-            steps {
-                echo 'Building Docker image...'
-                script {
-                    def imageTag = "CI${env.BUILD_NUMBER}"
-                    app = docker.build("${env.DOCKER_HUB_REPO}:${imageTag}")
-                }
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         echo 'Building Docker image...'
+        //         script {
+        //             def imageTag = "CI${env.BUILD_NUMBER}"
+        //             app = docker.build("${env.DOCKER_HUB_REPO}:${imageTag}")
+        //         }
+        //     }
+        // }
         
-        stage('Push Docker Image') {
-            steps {
-                echo 'Pushing Docker image to Docker Hub...'
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB_CREDENTIALS) {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-                    }
-                }
-            }
-        }
+        // stage('Push Docker Image') {
+        //     steps {
+        //         echo 'Pushing Docker image to Docker Hub...'
+        //         script {
+        //             docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB_CREDENTIALS) {
+        //                 app.push("${env.BUILD_NUMBER}")
+        //                 app.push("latest")
+        //             }
+        //         }
+        //     }
+        // }
     }
     
     post {
