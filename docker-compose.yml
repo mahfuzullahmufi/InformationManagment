@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: InformationCollector/Dockerfile
     ports:
-      - 8003:8003
+      - 8060:8080
     depends_on:
       - infoappdb
     environment:

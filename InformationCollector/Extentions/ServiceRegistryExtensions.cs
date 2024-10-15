@@ -63,7 +63,7 @@ namespace InformationManagment.Api.Extentions
                 .AddScoped<ISendGridEmailSender, SendGridEmailSender>()
                 .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(AddOrUpdatePersonCommand).GetTypeInfo().Assembly));
 
-            // Ensure the database is created
+            //Ensure the database is created
             //using (var scope = service.BuildServiceProvider().CreateScope())
             //{
             //    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
