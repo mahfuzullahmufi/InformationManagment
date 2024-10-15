@@ -20,11 +20,20 @@ pipeline {
         }
 
         stage('Prepare Environment') {
-            steps {
-                echo 'Setting permissions for .dotnet folder...'
-                sh 'mkdir -p ~/.dotnet && chmod -R 777 ~/.dotnet'
-            }
-        }
+			steps {
+				echo 'Checking if .dotnet folder exists and setting permissions...'
+				sh '''
+					if [ ! -d "$HOME/.dotnet" ]; then
+						echo ".dotnet folder not found, creating..."
+						mkdir -p ~/.dotnet
+					else
+						echo ".dotnet folder already exists, skipping creation."
+					fi
+					chmod -R 777 ~/.dotnet
+				'''
+			}
+		}
+
         
         stage('Build Application') {
             steps {
