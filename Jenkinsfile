@@ -70,7 +70,7 @@ pipeline {
                     echo 'Deploying to the Ubuntu server...'
                     
                     // SSH to your server and deploy the updated Docker image
-                    sshagent(['your-ssh-credentials-id']) { // Use the ID from the SSH credentials created earlier
+                    sshagent(['server-ssh']) { // Use the ID from the SSH credentials created earlier
                         sh """
                         ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
                         cd /root/docker-files/info-manage &&
