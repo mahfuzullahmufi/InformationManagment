@@ -1,13 +1,14 @@
 pipeline {
     agent {
-       label 'master'
+        docker {
+            image 'mcr.microsoft.com/dotnet/sdk:8.0' // The .NET SDK Docker image
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker commands inside the container
+        }
     }
     
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
         DOCKER_HUB_CREDENTIALS = "docker-hub"
-        SERVER_USER = "your_ubuntu_username"
-        SERVER_IP = "your_ubuntu_server_ip"
     }
     
     stages {
@@ -15,7 +16,7 @@ pipeline {
        stage('Test Docker') {
             steps {
                 echo "Testing the Docker..."
-                sh '/usr/bin/docker --version'
+                sh 'docker --version'
                 //sh 'docker ps'
             }
         }
