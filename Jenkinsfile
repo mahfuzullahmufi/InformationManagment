@@ -44,6 +44,14 @@ pipeline {
             }
         }
 
+        stage('Test Docker') {
+            steps {
+                echo "Testing the Docker..."
+                sh 'docker --version'
+                sh 'docker ps'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
