@@ -2,9 +2,25 @@ pipeline {
     agent {
         docker { 
             image 'mcr.microsoft.com/dotnet/sdk:8.0' 
-            //args '--user root -v /var/run/docker.sock:/var/run/docker.sock' 
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock' 
         }
     }
+
+     stage('Test Docker') {
+            steps {
+                echo "Testing the Docker..."
+                sh 'sudo docker --version'
+                sh 'sudo docker ps'
+            }
+        }
+
+     stage('Test Docker') {
+            steps {
+                echo "Testing the Docker..."
+                sh 'docker --version'
+                sh 'docker ps'
+            }
+        }
     
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
@@ -41,14 +57,6 @@ pipeline {
                 echo 'Restoring and building the application...'
                 sh 'dotnet restore InformationCollector/InformationManagement.Api.csproj'
                 sh 'dotnet build InformationCollector/InformationManagement.Api.csproj -c Release'
-            }
-        }
-
-        stage('Test Docker') {
-            steps {
-                echo "Testing the Docker..."
-                sh 'docker --version'
-                sh 'docker ps'
             }
         }
 
