@@ -5,8 +5,16 @@ pipeline {
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock' 
         }
     }
-
-     stage('Test Docker') {
+    
+    environment {
+        DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
+        DOCKER_HUB_CREDENTIALS = "docker-hub"
+        SERVER_USER = "your_ubuntu_username"
+        SERVER_IP = "your_ubuntu_server_ip"
+    }
+    
+    stages {
+         stage('Test Docker') {
             steps {
                 echo "Testing the Docker..."
                 sh 'sudo docker --version'
@@ -21,15 +29,7 @@ pipeline {
                 sh 'docker ps'
             }
         }
-    
-    environment {
-        DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
-        DOCKER_HUB_CREDENTIALS = "docker-hub"
-        SERVER_USER = "your_ubuntu_username"
-        SERVER_IP = "your_ubuntu_server_ip"
-    }
-    
-    stages {
+        
         stage('Clone Repository') {
             steps {
                 echo 'Cloning repository...'
