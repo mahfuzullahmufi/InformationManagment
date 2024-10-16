@@ -14,15 +14,8 @@ pipeline {
     }
     
     stages {
-         stage('Test Docker by root') {
-            steps {
-                echo "Testing the Docker..."
-                sh 'sudo docker --version'
-                sh 'sudo docker ps'
-            }
-        }
-
-     stage('Test Docker') {
+         
+       stage('Test Docker') {
             steps {
                 echo "Testing the Docker..."
                 sh 'docker --version'
