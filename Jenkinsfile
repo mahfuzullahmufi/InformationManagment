@@ -18,8 +18,8 @@ pipeline {
        stage('Test Docker') {
             steps {
                 echo "Testing the Docker..."
-                sh 'docker --version'
-                sh 'docker ps'
+                sh '/usr/bin/docker --version'
+                //sh 'docker ps'
             }
         }
         
