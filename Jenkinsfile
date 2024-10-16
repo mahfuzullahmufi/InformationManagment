@@ -68,16 +68,15 @@ pipeline {
                 script {
                     def imageTag = "ci-${env.BUILD_NUMBER}"
                     echo 'Deploying to the Ubuntu server...'
-                    
-                    // SSH to your server and deploy the updated Docker image
-                    sh """
-                    ssh -o StrictHostKeyChecking=no -i /path/to/your/private/key ${SERVER_USER}@${SERVER_IP} '
-                    cd /root/docker-files/info-manage &&
-                    docker-compose down &&
-                    docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
-                    docker-compose up -d
-                    '
-                    """
+                    sshagent(['server-ssh']) {
+                        sh """
+                        ssh ${SERVER_USER}@${SERVER_IP} '
+                        cd /root/docker-files/info-manage &&
+                        docker-compose down &&
+                        docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
+                        docker-compose up -d'
+                        """
+                    }
                 }
             }
         }
