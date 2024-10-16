@@ -71,10 +71,10 @@ pipeline {
                     sshagent(['server-ssh']) {
                         sh """
                         ssh ${SERVER_USER}@${SERVER_IP} '
-                        docker stop info-manage-app
-                        docker rm -f info-manage-app || true &&
-                        docker run -d --name info-manage-app -p 8060:8080 --env DB_HOST=infoappdb --env DB_NAME=InformationManagement --env DB_SA_PASSWORD=password@12345# --network info-manage_info-network ${DOCKER_HUB_REPO}:${imageTag}
-                        '
+                        cd /root/docker-files/info-manage &&
+                        docker-compose down &&
+                        docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
+                        docker-compose up -d'
                         """
                     }
                 }
