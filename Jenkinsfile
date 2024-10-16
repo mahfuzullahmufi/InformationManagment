@@ -70,16 +70,14 @@ pipeline {
                     echo 'Deploying to the Ubuntu server...'
                     
                     // SSH to your server and deploy the updated Docker image
-                    sshagent(['server-ssh']) { // Use the ID from the SSH credentials created earlier
-                        sh """
-                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
-                        cd /root/docker-files/info-manage &&
-                        docker-compose down &&
-                        docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
-                        docker-compose up -d
-                        '
-                        """
-                    }
+                    sh """
+                    ssh -o StrictHostKeyChecking=no -i /path/to/your/private/key ${SERVER_USER}@${SERVER_IP} '
+                    cd /root/docker-files/info-manage &&
+                    docker-compose down &&
+                    docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
+                    docker-compose up -d
+                    '
+                    """
                 }
             }
         }
