@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/dotnet/sdk:8.0' // The .NET SDK Docker image
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Allow Docker commands inside the container
-        }
-    }
+    agent any 
     
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
