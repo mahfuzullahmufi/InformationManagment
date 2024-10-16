@@ -72,9 +72,11 @@ pipeline {
                         sh """
                         ssh ${SERVER_USER}@${SERVER_IP} '
                         cd /root/docker-files/info-manage &&
+                        export TAG=${imageTag} &&
                         docker-compose down &&
-                        docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
-                        docker-compose up -d'
+                        docker-compose pull mahfuzullahmufi/informationmanagementapi:${imageTag} &&
+                        docker-compose up -d
+                        '
                         """
                     }
                 }
