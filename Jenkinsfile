@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker { 
-            image 'mcr.microsoft.com/dotnet/sdk:8.0' 
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock' 
-        }
-    }
+    agent any
     
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
