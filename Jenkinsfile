@@ -9,6 +9,8 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
         DOCKER_HUB_CREDENTIALS = "docker-hub"
+        SERVER_USER = "your_ubuntu_username"
+        SERVER_IP = "your_ubuntu_server_ip"
     }
     
     stages {
@@ -20,21 +22,20 @@ pipeline {
         }
 
         stage('Prepare Environment') {
-			steps {
-				echo 'Checking if .dotnet folder exists and setting permissions...'
-				sh '''
-					if [ ! -d "$HOME/.dotnet" ]; then
-						echo ".dotnet folder not found, creating..."
-						mkdir -p ~/.dotnet
-					else
-						echo ".dotnet folder already exists, skipping creation."
-					fi
-					chmod -R 777 ~/.dotnet
-				'''
-			}
-		}
+            steps {
+                echo 'Checking if .dotnet folder exists and setting permissions...'
+                sh '''
+                    if [ ! -d "$HOME/.dotnet" ]; then
+                        echo ".dotnet folder not found, creating..."
+                        mkdir -p ~/.dotnet
+                    else
+                        echo ".dotnet folder already exists, skipping creation."
+                    fi
+                    chmod -R 777 ~/.dotnet
+                '''
+            }
+        }
 
-        
         stage('Build Application') {
             steps {
                 echo 'Restoring and building the application...'
@@ -42,31 +43,34 @@ pipeline {
                 sh 'dotnet build InformationCollector/InformationManagement.Api.csproj -c Release'
             }
         }
-        
-        // stage('Publish Application') {
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageTag = "ci-${env.BUILD_NUMBER}"
+                    echo "Building the Docker image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "docker build -t mahfuzullahmufi/informationmanagementapi:${imageTag} -f InformationCollector/Dockerfile ."
+                        sh 'echo $PASS | docker login -u $USER --password-stdin'
+                        sh "docker push mahfuzullahmufi/informationmanagementapi:${imageTag}"
+                    }
+                }
+            }
+        }
+
+        // stage('Deploy to Server') {
         //     steps {
-        //         echo 'Publishing the application...'
-        //         sh 'dotnet publish InformationCollector/InformationManagement.Api.csproj -c Release -o /app/publish /p:UseAppHost=false'
-        //     }
-        // }
-        
-        // stage('Build Docker Image') {
-        //     steps {
-        //         echo 'Building Docker image...'
         //         script {
-        //             def imageTag = "CI${env.BUILD_NUMBER}"
-        //             app = docker.build("${env.DOCKER_HUB_REPO}:${imageTag}")
-        //         }
-        //     }
-        // }
-        
-        // stage('Push Docker Image') {
-        //     steps {
-        //         echo 'Pushing Docker image to Docker Hub...'
-        //         script {
-        //             docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB_CREDENTIALS) {
-        //                 app.push("${env.BUILD_NUMBER}")
-        //                 app.push("latest")
+        //             def imageTag = "ci-${env.BUILD_NUMBER}"
+        //             echo 'Deploying to the Ubuntu server...'
+        //             sshagent(['your-ssh-credentials-id']) {
+        //                 sh """
+        //                 ssh ${SERVER_USER}@${SERVER_IP} '
+        //                 cd /path/to/your/docker-compose/directory &&
+        //                 docker-compose down &&
+        //                 docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
+        //                 docker-compose up -d'
+        //                 """
         //             }
         //         }
         //     }
