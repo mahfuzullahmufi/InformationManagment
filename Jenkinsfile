@@ -4,6 +4,9 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
         DOCKER_HUB_CREDENTIALS = "docker-hub"
+        SERVER_USER = 'root'  // SSH username
+        SERVER_IP = '139.59.88.36'       // IP of your Ubuntu server
+        DOCKER_COMPOSE_PATH = '/root/docker-files/info-manage/docker-compose.yml'
     }
     
     stages {
@@ -60,23 +63,26 @@ pipeline {
             }
         }
 
-        // stage('Deploy to Server') {
-        //     steps {
-        //         script {
-        //             def imageTag = "ci-${env.BUILD_NUMBER}"
-        //             echo 'Deploying to the Ubuntu server...'
-        //             sshagent(['your-ssh-credentials-id']) {
-        //                 sh """
-        //                 ssh ${SERVER_USER}@${SERVER_IP} '
-        //                 cd /path/to/your/docker-compose/directory &&
-        //                 docker-compose down &&
-        //                 docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
-        //                 docker-compose up -d'
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Deploy to Server') {
+            steps {
+                script {
+                    def imageTag = "ci-${env.BUILD_NUMBER}"
+                    echo 'Deploying to the Ubuntu server...'
+                    
+                    // SSH to your server and deploy the updated Docker image
+                    sshagent(['your-ssh-credentials-id']) { // Use the ID from the SSH credentials created earlier
+                        sh """
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        cd /root/docker-files/info-manage &&
+                        docker-compose down &&
+                        docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
+                        docker-compose up -d
+                        '
+                        """
+                    }
+                }
+            }
+        }
     }
     
     post {
