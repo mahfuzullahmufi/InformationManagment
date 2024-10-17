@@ -5,7 +5,14 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InformationManagement.Api", "InformationCollector\InformationManagement.Api.csproj", "{65FEF316-F1B7-4E83-9F6E-FCEC70AF8415}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InformationManagment.Core", "InformationManagment.Core\InformationManagment.Core.csproj", "{D36FBDBF-BAFB-413B-8274-9C11967DBA98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InformationManagment.Core", "InformationManagment.Core\InformationManagment.Core.csproj", "{D36FBDBF-BAFB-413B-8274-9C11967DBA98}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6235A269-E426-47BC-9322-BBC225BC3971}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9AE2334C-C1D5-4A61-9092-F4AF30CC79CA}"
+	ProjectSection(SolutionItems) = preProject
+		Jenkinsfile.txt = Jenkinsfile.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +28,10 @@ Global
 		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D36FBDBF-BAFB-413B-8274-9C11967DBA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6235A269-E426-47BC-9322-BBC225BC3971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6235A269-E426-47BC-9322-BBC225BC3971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6235A269-E426-47BC-9322-BBC225BC3971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6235A269-E426-47BC-9322-BBC225BC3971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

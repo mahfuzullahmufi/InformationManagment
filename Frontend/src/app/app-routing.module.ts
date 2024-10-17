@@ -4,6 +4,7 @@ import { AuthGuard } from './authentication/auth.guard';
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { StartupPageComponent } from './dashboard/startup-page/startup-page.component';
 import { NotFoundComponent } from './home/configuration/not-found/not-found.component';
+import { ErrorPageComponent } from './authentication/error-page/error-page.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
   },
   { path: 'auth', loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule) },
   { path: 'configuration/not-found', component: NotFoundComponent },
+  { path: 'auth/error', component: ErrorPageComponent },
   { path: '**', redirectTo: 'configuration/not-found', pathMatch: 'full' }
 ];
 
