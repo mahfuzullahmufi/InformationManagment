@@ -1,19 +1,24 @@
 pipeline {
-    agent {
-        docker { 
-            image 'mcr.microsoft.com/dotnet/sdk:8.0' 
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock' 
-        }
-    }
+    agent any 
     
     environment {
         DOCKER_HUB_REPO = "mahfuzullahmufi/informationmanagementapi"
         DOCKER_HUB_CREDENTIALS = "docker-hub"
-        SERVER_USER = "your_ubuntu_username"
-        SERVER_IP = "your_ubuntu_server_ip"
+        SERVER_USER = 'root'  // SSH username
+        SERVER_IP = '139.59.88.36'       // IP of your Ubuntu server
+        DOCKER_COMPOSE_PATH = '/root/docker-files/info-manage/docker-compose.yml'
     }
     
     stages {
+         
+       stage('Test Docker') {
+            steps {
+                echo "Testing the Docker..."
+                sh 'docker --version'
+                //sh 'docker ps'
+            }
+        }
+        
         stage('Clone Repository') {
             steps {
                 echo 'Cloning repository...'
@@ -58,23 +63,24 @@ pipeline {
             }
         }
 
-        // stage('Deploy to Server') {
-        //     steps {
-        //         script {
-        //             def imageTag = "ci-${env.BUILD_NUMBER}"
-        //             echo 'Deploying to the Ubuntu server...'
-        //             sshagent(['your-ssh-credentials-id']) {
-        //                 sh """
-        //                 ssh ${SERVER_USER}@${SERVER_IP} '
-        //                 cd /path/to/your/docker-compose/directory &&
-        //                 docker-compose down &&
-        //                 docker-compose pull ${DOCKER_HUB_REPO}:${imageTag} &&
-        //                 docker-compose up -d'
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Deploy to Server') {
+            steps {
+                script {
+                    def imageTag = "ci-${env.BUILD_NUMBER}"
+                    echo 'Deploying to the Ubuntu server...'
+                    sshagent(['server-ssh']) {
+                        sh """
+                        ssh ${SERVER_USER}@${SERVER_IP} '
+                        docker stop info-manage-app || true &&
+                        docker rm info-manage-app || true &&
+                        docker run -d --name info-manage-app -p 8060:8080 --env DB_HOST=infoappdb --env DB_NAME=InformationManagement --env DB_SA_PASSWORD=password@12345# --network info-network mahfuzullahmufi/informationmanagementapi:${imageTag}
+                        '
+                        """
+                    }
+                }
+            }
+        }
+
     }
     
     post {
