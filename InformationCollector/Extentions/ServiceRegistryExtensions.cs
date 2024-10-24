@@ -55,8 +55,8 @@ namespace InformationManagment.Api.Extentions
             service
                 .AddDbContext<DatabaseContext>(options =>
                 {
-                    //options.UseSqlServer(AppSettings.Settings.SqlConnection);
-                    options.UseSqlServer(connectionString);
+                    options.UseSqlServer(AppSettings.Settings.SqlConnection);
+                    //options.UseSqlServer(connectionString);
                 })
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IAuthService, AuthService>()
@@ -64,11 +64,11 @@ namespace InformationManagment.Api.Extentions
                 .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(AddOrUpdatePersonCommand).GetTypeInfo().Assembly));
 
             //Ensure the database is created
-            using (var scope = service.BuildServiceProvider().CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                dbContext.EnsureDatabaseCreated(dbHost, dbName, dbPassword);
-            }
+            //using (var scope = service.BuildServiceProvider().CreateScope())
+            //{
+            //    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            //    dbContext.EnsureDatabaseCreated(dbHost, dbName, dbPassword);
+            //}
 
             service.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
