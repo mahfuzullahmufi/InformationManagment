@@ -5,9 +5,12 @@ using InformationManagment.Core.Models.Auth;
 using InformationManagment.Core.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using QRCoder;
+using System.Drawing.Imaging;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 
 namespace InformationManagment.Core.Handler.AuthHandler
 {
@@ -274,5 +277,63 @@ namespace InformationManagment.Core.Handler.AuthHandler
 
             return userRoles;
         }
+
+        #region 2FA
+
+        public async Task<(string Key, string QrCodeImage)> SetupTwoFactorAuthenticationAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new ArgumentException("Invalid user ID");
+
+            // Generate an authenticator key if not already set
+            var key = await _userManager.GetAuthenticatorKeyAsync(user);
+            if (string.IsNullOrEmpty(key))
+            {
+                await _userManager.ResetAuthenticatorKeyAsync(user);
+                key = await _userManager.GetAuthenticatorKeyAsync(user);
+            }
+
+            // Generate the QR code URI
+            var appName = "Information-Management"; // Customize this to your app's name
+            var qrCodeUri = GenerateQrCodeUri(appName, user.Email, key);
+
+            // Generate QR code image as a base64 string
+            var qrCodeImage = GenerateQrCodeImageBase64(qrCodeUri);
+
+            return (Key: key, QrCodeImage: qrCodeImage);
+        }
+
+        private string GenerateQrCodeUri(string appName, string userEmail, string key)
+        {
+            // Generates a URI that Google Authenticator or other apps can scan
+            return $"otpauth://totp/{appName}:{userEmail}?secret={key}&issuer={appName}&digits=6";
+        }
+
+        private string GenerateQrCodeImageBase64(string qrCodeUri)
+        {
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(qrCodeUri, QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new QRCode(qrCodeData);
+
+            using var qrBitmap = qrCode.GetGraphic(20); // 20 is the pixel size of each module
+            using var stream = new MemoryStream();
+            qrBitmap.Save(stream, ImageFormat.Png);
+
+            // Convert the image to a base64 string
+            return Convert.ToBase64String(stream.ToArray());
+        }
+
+        public async Task<bool> VerifyTwoFactorAuthenticationAsync(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new ArgumentException("Invalid user ID");
+
+            // Validate the two-factor code
+            var isTokenValid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultAuthenticatorProvider, code);
+
+            return isTokenValid;
+        }
+
+        #endregion
     }
 }

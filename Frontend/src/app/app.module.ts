@@ -12,6 +12,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { LayoutModule } from './layout/layout.module';
 import { AuthInterceptor } from './authentication/auth.interceptor';
+import { AuthModule } from '@auth0/auth0-angular';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,16 @@ import { AuthInterceptor } from './authentication/auth.interceptor';
         NgxExtendedPdfViewerModule,
         NbActionsModule,
         NbUserModule,
-        LayoutModule
+        LayoutModule,
+        AuthModule.forRoot({
+            domain: 'ezval.us.auth0.com',
+            clientId: 'WxhDJm0VvBk8axLsyUJ8h8DBS5jfNs6I',
+            authorizationParams: {
+                redirect_uri: window.location.origin,
+            },
+            cacheLocation: 'localstorage',
+            useRefreshTokens: true,
+        }),
     ],
     providers: [
         provideHttpClient(withInterceptorsFromDi()),

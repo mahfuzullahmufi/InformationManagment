@@ -12,5 +12,8 @@ namespace InformationManagment.Core.Handler.AuthHandler
         Task<ResponseDto> ChangePassword(ChangePasswordDto changePasswordDto);
         Task<ResponseDto> UpdateUserDetails(UserDto userDto);
         Task<UserDto> GetUserDetails(string userId);
+
+        Task<(string Key, string QrCodeImage)> SetupTwoFactorAuthenticationAsync(string userId);
+        Task<bool> VerifyTwoFactorAuthenticationAsync(string userId, string code);
     }
 }

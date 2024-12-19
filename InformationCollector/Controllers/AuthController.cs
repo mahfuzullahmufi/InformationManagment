@@ -1,6 +1,7 @@
 ﻿using InformationManagment.Core.Handler.AuthHandler;
 using InformationManagment.Core.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InformationManagment.Api.Controllers
@@ -74,5 +75,26 @@ namespace InformationManagment.Api.Controllers
             var result = await _authService.GetUserDetails(userId);
             return Ok(result);
         }
+
+        [HttpGet("setup-2fa")]
+        public async Task<IActionResult> SetupTwoFactorAuthentication(string userId)
+        {
+            var (key, qrCodeImage) = await _authService.SetupTwoFactorAuthenticationAsync(userId);
+
+            return Ok(new { Key = key, QrCodeImage = qrCodeImage });
+        }
+
+        [HttpPost("verify-2fa")]
+        public async Task<IActionResult> VerifyTwoFactorAuthentication(string userId, string code)
+        {
+            var result = await _authService.VerifyTwoFactorAuthenticationAsync(userId, code);
+            if (!result)
+            {
+                return BadRequest(new { message = "Invalid 2FA code" });
+            }
+
+            return Ok(new { message = "2FA verification successful" });
+        }
+
     }
 }
