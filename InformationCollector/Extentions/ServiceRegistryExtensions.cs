@@ -47,28 +47,15 @@ namespace InformationManagment.Api.Extentions
                 });
             });
 
-            var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-            var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-            var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-            var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};TrustServerCertificate=True;";
-
             service
                 .AddDbContext<DatabaseContext>(options =>
                 {
-                    //options.UseSqlServer(AppSettings.Settings.SqlConnection);
-                    options.UseSqlServer(connectionString);
+                    options.UseSqlServer(AppSettings.Settings.SqlConnection);
                 })
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IAuthService, AuthService>()
                 .AddScoped<ISendGridEmailSender, SendGridEmailSender>()
                 .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(AddOrUpdatePersonCommand).GetTypeInfo().Assembly));
-
-            //Ensure the database is created
-            using (var scope = service.BuildServiceProvider().CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                dbContext.EnsureDatabaseCreated(dbHost, dbName, dbPassword);
-            }
 
             service.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -118,28 +105,6 @@ namespace InformationManagment.Api.Extentions
 
             return service;
         }
-
-        public static void EnsureDatabaseCreated(this DatabaseContext dbContext, string dbHost, string dbName, string dbPassword)
-        {
-            // Create connection string for master database
-            var masterConnectionString = $"Data Source={dbHost};Initial Catalog=master;User ID=sa;Password={dbPassword};TrustServerCertificate=True;";
-
-            using (var connection = new SqlConnection(masterConnectionString))
-            {
-                connection.Open();
-
-                // Check if the database exists
-                var cmdText = $"IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = '{dbName}') CREATE DATABASE [{dbName}]";
-                using (var command = new SqlCommand(cmdText, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            }
-
-            // Ensure EF Core migrations are applied and schema is created
-            dbContext.Database.Migrate();
-        }
-    
 
     public static void AddRoles(this IServiceCollection services)
         {
